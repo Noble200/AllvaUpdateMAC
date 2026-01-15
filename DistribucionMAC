@@ -1,0 +1,85 @@
+Resumen Detallado: Distribución de Apps macOS
+El Problema
+Cuando compilas tu app en tu Mac, funciona perfectamente porque macOS la marca como "de confianza" (tú la creaste). Pero cuando la transfieres a otra Mac, el sistema de seguridad Gatekeeper la bloquea mostrando:
+"La aplicación está dañada y no puede abrirse"
+"No se puede verificar el desarrollador"
+Esto ocurre porque Apple requiere que todas las apps distribuidas estén firmadas y notarizadas.
+Comparación: Versión Gratuita vs Paga
+Aspecto	Sin Firma (Gratis)	Con Firma + Notarización ($99/año)
+Costo	$0	$99 USD/año (Apple Developer Program)
+Experiencia del usuario	Debe ejecutar un instalador especial o comando en Terminal	Instala como cualquier app normal
+Mensaje de macOS	"App dañada" o "desarrollador no verificado"	Ninguno - se abre sin problemas
+Confianza percibida	Puede parecer sospechoso a usuarios	Profesional y confiable
+Requisitos técnicos	Solo el script de build	Certificado + proceso de notarización
+Distribución App Store	No permitida	Posible (requiere pasos adicionales)
+Opción 1: Versión Gratuita (Sin firma)
+Qué creé para ti:
+build-release-macos.sh - Script de compilación que:
+Detecta si tu Mac es Intel (osx-x64) o Apple Silicon (osx-arm64)
+Compila la app con dotnet publish
+Crea el bundle .app con estructura correcta de macOS
+Genera Info.plist con metadata de la app
+Empaqueta todo en un .dmg
+Instalador-AllvaSystem.command - Instalador automático que:
+El usuario hace doble clic
+Copia la app a /Applications/
+Ejecuta xattr -cr para quitar la cuarentena
+Elimina el error de "app dañada"
+Pregunta si abrir la app al terminar
+entitlements.plist - Permisos necesarios para apps .NET (para uso futuro con firma)
+Contenido del DMG generado:
+
+AllvaSystem-Instalador.dmg
+├── AllvaSystem.app              ← La aplicación
+├── Instalador-AllvaSystem.command  ← Doble clic para instalar
+├── Applications                 ← Acceso directo para drag & drop
+└── LEEME.txt                    ← Instrucciones para el usuario
+Cómo usar:
+
+cd /Users/ruso/Desktop/Allva/AllvaSystem-4a8c6b90642a4bcb0df5fdde2cc0b0b2d5ce52c2
+./build-release-macos.sh 1.1.2
+Proceso para el usuario final:
+Descargar el .dmg
+Abrirlo
+Doble clic en "Instalador-AllvaSystem.command"
+Ingresar contraseña de Mac si se solicita
+La app queda instalada y lista
+Alternativa manual (sin instalador):
+
+xattr -cr /Applications/AllvaSystem.app
+Opción 2: Versión Paga (Con firma y notarización)
+Requisitos:
+Apple Developer Account - $99 USD/año en developer.apple.com
+Certificado "Developer ID Application" - Se crea en el portal de Apple
+App-Specific Password - Se genera en appleid.apple.com
+Proceso de firma y notarización:
+Firmar la app con codesign:
+
+codesign --force --deep --sign "Developer ID Application: Tu Nombre (TEAMID)" \
+    --options runtime \
+    --entitlements entitlements.plist \
+    AllvaSystem.app
+Enviar a Apple para notarización con notarytool:
+
+xcrun notarytool submit AllvaSystem.zip \
+    --apple-id "tu@email.com" \
+    --password "xxxx-xxxx-xxxx-xxxx" \
+    --team-id "TUTEAMID" \
+    --wait
+Aplicar el "staple" (sello de notarización):
+
+xcrun stapler staple AllvaSystem.app
+Resultado:
+La app se instala en cualquier Mac sin ningún mensaje de advertencia, como cualquier app profesional.
+¿Cuál elegir?
+Situación	Recomendación
+App interna para tu empresa/equipo	Gratuita - El instalador funciona bien
+Pocos usuarios que confían en ti	Gratuita - Explícales el proceso
+Distribución masiva / público general	Paga - Más profesional
+Vender la app comercialmente	Paga - Obligatorio para credibilidad
+Publicar en Mac App Store	Paga - Es requisito de Apple
+Archivos creados en tu proyecto
+Archivo	Propósito
+build-release-macos.sh	Compilar y empaquetar para macOS
+Instalador-AllvaSystem.command	Instalador automático para usuarios
+entitlements.plist	Permisos para firma de código
