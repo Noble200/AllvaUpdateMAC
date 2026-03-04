@@ -1,0 +1,110 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.EdicionFrontOfficeView"
+             x:DataType="vm:EdicionFrontOfficeViewModel">
+
+    <UserControl.DataContext>
+        <vm:EdicionFrontOfficeViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Styles>
+        <!-- Estilo para tabs -->
+        <Style Selector="Button.tab-button">
+            <Setter Property="Background" Value="#E8E8E8"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="CornerRadius" Value="8,8,0,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,4,0"/>
+        </Style>
+
+        <Style Selector="Button.tab-button /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#E8E8E8"/>
+        </Style>
+
+        <Style Selector="Button.tab-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#D0D0D0"/>
+        </Style>
+
+        <Style Selector="Button.tab-button-active">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="CornerRadius" Value="8,8,0,0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="0,0,4,0"/>
+        </Style>
+
+        <Style Selector="Button.tab-button-active /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#0b5394"/>
+        </Style>
+
+        <Style Selector="Button.tab-button-active:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Border CornerRadius="12,12,0,0" ClipToBounds="True">
+        <Grid RowDefinitions="Auto,*">
+
+            <!-- TABS -->
+            <Border Grid.Row="0"
+                    Background="#F8F9FA"
+                    CornerRadius="12,12,0,0"
+                    Padding="24,12,24,0">
+                <StackPanel Orientation="Horizontal">
+                <Button Content="Cuentas Bancarias"
+                        Classes.tab-button="{Binding !EsTabCuentasBancarias}"
+                        Classes.tab-button-active="{Binding EsTabCuentasBancarias}"
+                        Command="{Binding CambiarTabCommand}"
+                        CommandParameter="cuentas"/>
+
+                <Button Content="Centro Ayuda"
+                        Classes.tab-button="{Binding !EsTabCentroAyuda}"
+                        Classes.tab-button-active="{Binding EsTabCentroAyuda}"
+                        Command="{Binding CambiarTabCommand}"
+                        CommandParameter="ayuda"/>
+
+                <Button Content="Últimas Noticias"
+                        Classes.tab-button="{Binding !EsTabUltimasNoticias}"
+                        Classes.tab-button-active="{Binding EsTabUltimasNoticias}"
+                        Command="{Binding CambiarTabCommand}"
+                        CommandParameter="noticias"/>
+
+                <Button Content="Pack Alimentos"
+                        Classes.tab-button="{Binding !EsTabPackAlimentos}"
+                        Classes.tab-button-active="{Binding EsTabPackAlimentos}"
+                        Command="{Binding CambiarTabCommand}"
+                        CommandParameter="alimentos"/>
+
+                <Button Content="Pack Viajes"
+                        Classes.tab-button="{Binding !EsTabPackViajes}"
+                        Classes.tab-button-active="{Binding EsTabPackViajes}"
+                        Command="{Binding CambiarTabCommand}"
+                        CommandParameter="viajes"/>
+            </StackPanel>
+        </Border>
+
+            <!-- CONTENIDO DE TABS -->
+            <Border Grid.Row="1"
+                    Background="White"
+                    BorderBrush="#0b5394"
+                    BorderThickness="0,2,0,0">
+                <ContentControl Content="{Binding VistaActual}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"/>
+            </Border>
+
+        </Grid>
+    </Border>
+
+</UserControl>

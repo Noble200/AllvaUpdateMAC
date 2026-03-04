@@ -1,0 +1,124 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+        x:Class="Allva.Desktop.Views.UserBoton.CambioDirectoContrasenaView"
+        Title="Cambiar Contrasena"
+        Width="500"
+        Height="450"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#F5F5F5">
+
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="14,12"/>
+            <Setter Property="FontSize" Value="15"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="#0b5394" Padding="25,18">
+            <TextBlock Text="Cambiar Contrasena"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <StackPanel Grid.Row="1" Margin="40,30" Spacing="22">
+
+            <!-- Icono -->
+            <Border Background="#E8F4FD"
+                    Width="70" Height="70"
+                    CornerRadius="35"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="🔐"
+                           FontSize="32"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+
+            <!-- Contrasena actual -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="Contrasena actual"
+                           FontSize="14"
+                           Foreground="#595959"/>
+                <TextBox x:Name="ContrasenaActualTextBox"
+                         PasswordChar="*"
+                         Watermark="Ingresa tu contrasena actual"/>
+            </StackPanel>
+
+            <!-- Nueva contrasena -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="Nueva contrasena"
+                           FontSize="14"
+                           Foreground="#595959"/>
+                <TextBox x:Name="NuevaContrasenaTextBox"
+                         PasswordChar="*"
+                         Watermark="Minimo 6 caracteres"/>
+            </StackPanel>
+
+            <!-- Confirmar contrasena -->
+            <StackPanel Spacing="8">
+                <TextBlock Text="Confirmar nueva contrasena"
+                           FontSize="14"
+                           Foreground="#595959"/>
+                <TextBox x:Name="ConfirmarContrasenaTextBox"
+                         PasswordChar="*"
+                         Watermark="Repite la nueva contrasena"/>
+            </StackPanel>
+
+            <!-- Mensaje de estado -->
+            <TextBlock x:Name="MensajeEstado"
+                       Text=""
+                       FontSize="14"
+                       TextWrapping="Wrap"
+                       HorizontalAlignment="Center"
+                       IsVisible="False"/>
+
+        </StackPanel>
+
+        <!-- BOTONES -->
+        <Border Grid.Row="2" Background="White" Padding="30,20" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Button x:Name="CancelarBtn"
+                        Grid.Column="1"
+                        Content="Cancelar"
+                        Background="White"
+                        Foreground="#666666"
+                        BorderBrush="#CCCCCC"
+                        BorderThickness="1"
+                        Padding="30,14"
+                        FontSize="15"
+                        CornerRadius="6"
+                        Margin="0,0,15,0"
+                        Click="Cancelar_Click"
+                        Cursor="Hand"/>
+
+                <Button x:Name="GuardarBtn"
+                        Grid.Column="2"
+                        Content="Guardar"
+                        Background="#0b5394"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Padding="30,14"
+                        FontSize="15"
+                        CornerRadius="6"
+                        Click="Guardar_Click"
+                        Cursor="Hand"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

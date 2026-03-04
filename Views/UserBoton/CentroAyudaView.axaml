@@ -1,0 +1,251 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels.UserBoton"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="Allva.Desktop.Views.UserBoton.CentroAyudaView"
+             x:DataType="vm:CentroAyudaViewModel"
+             Background="#ffd966">
+
+    <Design.DataContext>
+        <vm:CentroAyudaViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <!-- Estilo para items de FAQ -->
+        <Style Selector="Button.faq-item">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#E5E5E5"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="16,14"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="CornerRadius" Value="0"/>
+        </Style>
+        <Style Selector="Button.faq-item:pointerover">
+            <Setter Property="Background" Value="#F8F8F8"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Border Background="#ffd966" Padding="20">
+            <Border Background="#ffffff"
+                    CornerRadius="16"
+                    Padding="0"
+                    BoxShadow="0 4 20 0 #40000000">
+
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Header con titulo CENTRO DE AYUDA -->
+                    <Border Grid.Row="0"
+                            Background="#0b5394"
+                            CornerRadius="16,16,0,0"
+                            Padding="24,16">
+                        <TextBlock Text="CENTRO DE AYUDA"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#ffffff"
+                                   LetterSpacing="0.5"/>
+                    </Border>
+
+                    <!-- Contenido principal -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="24,20" Spacing="24">
+
+                            <!-- Seccion Manual de Usuario -->
+                            <Border Background="#F8F9FA"
+                                    CornerRadius="10"
+                                    Padding="16">
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <!-- Icono documento -->
+                                    <Border Grid.Column="0"
+                                            Width="40" Height="40"
+                                            CornerRadius="8"
+                                            Background="#E8F4FC"
+                                            Margin="0,0,14,0"
+                                            VerticalAlignment="Center">
+                                        <Viewbox Width="20" Height="20"
+                                                 HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center">
+                                            <Path Data="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                                                  Fill="#0b5394"
+                                                  Width="24" Height="24"/>
+                                        </Viewbox>
+                                    </Border>
+
+                                    <!-- Texto -->
+                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                        <TextBlock Text="Manual de Usuario"
+                                                   FontSize="14"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#1a1a1a"/>
+                                        <TextBlock Text="Descarga el manual completo con instrucciones detalladas"
+                                                   FontSize="12"
+                                                   Foreground="#666666"/>
+                                    </StackPanel>
+
+                                    <!-- Boton Descargar -->
+                                    <Button Grid.Column="2"
+                                            Command="{Binding DescargarManualCommand}"
+                                            IsEnabled="{Binding TieneManual}"
+                                            VerticalAlignment="Center"
+                                            Background="#0b5394"
+                                            Foreground="White"
+                                            Padding="16,10"
+                                            CornerRadius="6"
+                                            Cursor="Hand">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="Descargar" FontWeight="Medium" FontSize="13"/>
+                                            <TextBlock Text="›" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                            <!-- Seccion Telefonos de contacto -->
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Teléfonos de contacto"
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Foreground="#1a1a1a"/>
+
+                                <!-- Grid de telefonos -->
+                                <Border Background="#F8F9FA"
+                                        CornerRadius="10"
+                                        Padding="4">
+                                    <ItemsControl ItemsSource="{Binding Telefonos}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <UniformGrid Columns="2"/>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="Transparent"
+                                                        Padding="12">
+                                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                                        <!-- Icono telefono amarillo -->
+                                                        <Border Width="36" Height="36"
+                                                                CornerRadius="18"
+                                                                Background="#ffd966"
+                                                                VerticalAlignment="Center">
+                                                            <Path Data="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"
+                                                                  Fill="#0b5394"
+                                                                  Width="18" Height="18"
+                                                                  Stretch="Uniform"
+                                                                  HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <StackPanel Spacing="1" VerticalAlignment="Center">
+                                                            <TextBlock Text="{Binding Nombre}"
+                                                                       FontSize="12"
+                                                                       Foreground="#666666"/>
+                                                            <TextBlock Text="{Binding Numero}"
+                                                                       FontSize="14"
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="#1a1a1a"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Border>
+
+                                <!-- Mensaje si no hay telefonos -->
+                                <Border Background="#F8F9FA"
+                                        CornerRadius="10"
+                                        Padding="16"
+                                        IsVisible="{Binding !Telefonos.Count}">
+                                    <TextBlock Text="No hay teléfonos de contacto configurados"
+                                               FontSize="13"
+                                               Foreground="#666666"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Preguntas Frecuentes -->
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="Preguntas Frecuentes"
+                                           FontSize="15"
+                                           FontWeight="SemiBold"
+                                           Foreground="#1a1a1a"/>
+
+                                <!-- Lista de preguntas -->
+                                <Border Background="#F8F9FA"
+                                        CornerRadius="10"
+                                        ClipToBounds="True">
+                                    <ItemsControl ItemsSource="{Binding PreguntasFrecuentes}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:PreguntaFrecuenteUI">
+                                                <StackPanel>
+                                                    <!-- Pregunta clickeable -->
+                                                    <Button Classes="faq-item"
+                                                            Command="{Binding $parent[ItemsControl].((vm:CentroAyudaViewModel)DataContext).TogglePreguntaCommand}"
+                                                            CommandParameter="{Binding Id}">
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                            <TextBlock Grid.Column="0"
+                                                                       Text="{Binding Pregunta}"
+                                                                       FontSize="13"
+                                                                       Foreground="#333333"
+                                                                       TextWrapping="Wrap"
+                                                                       VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1"
+                                                                       Text="›"
+                                                                       FontSize="18"
+                                                                       Foreground="#CCCCCC"
+                                                                       VerticalAlignment="Center"
+                                                                       Margin="12,0,0,0"/>
+                                                        </Grid>
+                                                    </Button>
+
+                                                    <!-- Respuestas expandibles -->
+                                                    <Border IsVisible="{Binding EstaExpandida}"
+                                                            Background="#FFFFFF"
+                                                            Padding="16,12"
+                                                            BorderBrush="#E5E5E5"
+                                                            BorderThickness="0,0,0,1">
+                                                        <ItemsControl ItemsSource="{Binding Respuestas}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,4">
+                                                                        <Border Width="4"
+                                                                                Background="#0b5394"
+                                                                                CornerRadius="2"
+                                                                                VerticalAlignment="Stretch"/>
+                                                                        <TextBlock Text="{Binding}"
+                                                                                   FontSize="12"
+                                                                                   Foreground="#555555"
+                                                                                   TextWrapping="Wrap"
+                                                                                   LineHeight="18"/>
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </Border>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Border>
+
+                                <!-- Mensaje si no hay preguntas -->
+                                <Border Background="#F8F9FA"
+                                        CornerRadius="10"
+                                        Padding="16"
+                                        IsVisible="{Binding !PreguntasFrecuentes.Count}">
+                                    <TextBlock Text="No hay preguntas frecuentes configuradas"
+                                               FontSize="13"
+                                               Foreground="#666666"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,142 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="520"
+        x:Class="Allva.Desktop.Views.RecuperarContrasenaView"
+        Title="Recuperar Contrasena"
+        MinWidth="400"
+        MinHeight="450"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#F5F5F5">
+
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,14"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="#0b5394" Padding="30,22">
+            <TextBlock Text="Recuperar Contrasena"
+                       FontSize="22"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <StackPanel Grid.Row="1" Margin="50,30" Spacing="24">
+
+            <!-- Mensaje -->
+                <StackPanel Spacing="14" HorizontalAlignment="Center">
+                    <TextBlock Text="Recuperacion por correo electronico"
+                               FontSize="22"
+                               FontWeight="SemiBold"
+                               Foreground="#333333"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="Ingresa tu usuario para enviarte un codigo de verificacion a tu correo registrado."
+                               FontSize="16"
+                               Foreground="#666666"
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
+                               MaxWidth="480"/>
+                </StackPanel>
+
+                <!-- Campo de usuario -->
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Usuario"
+                               FontSize="15"
+                               FontWeight="Medium"
+                               Foreground="#595959"/>
+                    <TextBox x:Name="NumeroUsuarioTextBox"
+                             Watermark="Ej: JOSE_MEREZ"
+                             MinWidth="350"/>
+                </StackPanel>
+
+                <!-- Email encontrado (se muestra después de buscar) -->
+                <Border x:Name="EmailEncontradoPanel"
+                        Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="22"
+                        IsVisible="False">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="Correo de destino:"
+                                   FontSize="15"
+                                   Foreground="#808080"/>
+                        <TextBlock x:Name="EmailDestinoText"
+                                   Text="usuario@ejemplo.com"
+                                   FontSize="20"
+                                   FontWeight="SemiBold"
+                                   Foreground="#0b5394"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Mensaje de estado -->
+                <TextBlock x:Name="MensajeEstado"
+                           Text=""
+                           FontSize="15"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"
+                           IsVisible="False"/>
+
+                <!-- Indicador de carga -->
+                <StackPanel x:Name="LoadingPanel"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Spacing="12"
+                            IsVisible="False">
+                    <TextBlock Text="Procesando..."
+                               FontSize="16"
+                               Foreground="#666666"/>
+                </StackPanel>
+
+        </StackPanel>
+
+        <!-- BOTONES -->
+        <Border Grid.Row="2" Background="White" Padding="30,22" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Button x:Name="CancelarBtn"
+                        Grid.Column="1"
+                        Content="Cancelar"
+                        Background="White"
+                        Foreground="#666666"
+                        BorderBrush="#CCCCCC"
+                        BorderThickness="1"
+                        Padding="35,16"
+                        FontSize="16"
+                        CornerRadius="8"
+                        Margin="0,0,18,0"
+                        Click="Cancelar_Click"
+                        Cursor="Hand"/>
+
+                <Button x:Name="EnviarBtn"
+                        Grid.Column="2"
+                        Content="Buscar Usuario"
+                        Background="#0b5394"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Padding="35,16"
+                        FontSize="16"
+                        CornerRadius="8"
+                        Click="Enviar_Click"
+                        Cursor="Hand"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

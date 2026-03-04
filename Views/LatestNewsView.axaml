@@ -1,0 +1,727 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Allva.Desktop.Views.LatestNewsView"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             x:DataType="vm:LatestNewsViewModel"
+             Name="NewsUserControl"
+             Background="#FFD966">
+
+    <Design.DataContext>
+        <vm:LatestNewsViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <!-- Estilo para botones de navegación del carrusel -->
+        <Style Selector="Button.carrusel-nav">
+            <Setter Property="Background" Value="#80000000"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,20"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Opacity" Value="0.7"/>
+        </Style>
+        <Style Selector="Button.carrusel-nav:pointerover">
+            <Setter Property="Background" Value="#CC000000"/>
+            <Setter Property="Opacity" Value="1"/>
+        </Style>
+
+        <!-- Estilo para botón Ver más en tarjetas -->
+        <Style Selector="Button.ver-mas-btn">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="9"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.ver-mas-btn:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+
+        <!-- Estilo para botón Leer más en comunicaciones -->
+        <Style Selector="Button.leer-mas-comunicacion">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.leer-mas-comunicacion:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+
+        <!-- Estilo para botón Enlace en tarjetas expandidas -->
+        <Style Selector="Button.enlace-btn">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.enlace-btn:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+        <!-- Estilo para skeleton loading con animación de pulso -->
+        <Style Selector="Border.skeleton">
+            <Style.Animations>
+                <Animation Duration="0:0:1.2" IterationCount="INFINITE" PlaybackDirection="Alternate">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.3"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.7"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Estilo para spinner circular -->
+        <Style Selector="Border.spinner">
+            <Setter Property="RenderTransformOrigin" Value="50%,50%"/>
+            <Style.Animations>
+                <Animation Duration="0:0:0.8" IterationCount="INFINITE">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="RotateTransform.Angle" Value="0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="RotateTransform.Angle" Value="360"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </UserControl.Styles>
+
+    <!-- ScrollViewer para scroll vertical -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <!-- Viewbox para escalar todo proporcionalmente basado en el ancho -->
+        <Viewbox Stretch="Uniform" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <StackPanel Spacing="14" Margin="0" Width="1100">
+
+            <!-- PANEL 1: Últimas Noticias (fondo blanco) -->
+            <Border Background="White" CornerRadius="8" Padding="20,16" BoxShadow="0 2 8 0 #20000000">
+              <Grid RowDefinitions="Auto,Auto">
+
+        <!-- TÍTULO DE SECCIÓN con icono -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="0,0,0,16">
+            <Border Background="#FFD966"
+                    CornerRadius="4"
+                    Width="28" Height="28"
+                    VerticalAlignment="Center">
+                <Image Source="/Assets/Aviso.png"
+                       Width="24" Height="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+            </Border>
+            <TextBlock Text="ESPACIO PUBLICITARIO"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="#0b5394"
+                       VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- SKELETON LOADING para Panel 1 con spinner -->
+        <Grid Grid.Row="1" Margin="0,0,0,16" IsVisible="{Binding CargandoNoticias}">
+            <Grid ColumnDefinitions="Auto,*" Opacity="0.5">
+                <Grid Grid.Column="0"
+                      RowDefinitions="Auto,12,Auto"
+                      ColumnDefinitions="*,12,*"
+                      Margin="0,0,20,0">
+                    <Border Classes="skeleton" Grid.Row="0" Grid.Column="0" Background="#EEEEEE" CornerRadius="8" Width="345" Height="200"/>
+                    <Border Classes="skeleton" Grid.Row="0" Grid.Column="2" Background="#EEEEEE" CornerRadius="8" Width="345" Height="200"/>
+                    <Border Classes="skeleton" Grid.Row="2" Grid.Column="0" Background="#EEEEEE" CornerRadius="8" Width="345" Height="200"/>
+                    <Border Classes="skeleton" Grid.Row="2" Grid.Column="2" Background="#EEEEEE" CornerRadius="8" Width="345" Height="200"/>
+                </Grid>
+                <Border Grid.Column="1" Classes="skeleton" Background="#EEEEEE" CornerRadius="8" Height="412" VerticalAlignment="Top"/>
+            </Grid>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+                <Border Classes="spinner" Width="40" Height="40"
+                        BorderBrush="#0b5394" BorderThickness="4,4,4,0"
+                        CornerRadius="20" Background="Transparent"
+                        HorizontalAlignment="Center">
+                    <Border.RenderTransform>
+                        <RotateTransform/>
+                    </Border.RenderTransform>
+                </Border>
+                <TextBlock Text="Cargando noticias..."
+                           Foreground="#0b5394" FontSize="13" FontWeight="SemiBold"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- SECCIÓN PRINCIPAL: Grid 2x2 rectangular + Carrusel -->
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*" Margin="0,0,0,16"
+              IsVisible="{Binding !CargandoNoticias}">
+
+            <!-- COLUMNA IZQUIERDA: Grid 2x2 de Noticias Rectangulares -->
+            <Grid Grid.Column="0"
+                  RowDefinitions="Auto,12,Auto"
+                  ColumnDefinitions="*,12,*"
+                  Margin="0,0,20,0">
+
+                <!-- Noticia 1 (fila 0, col 0) -->
+                <StackPanel Grid.Row="0" Grid.Column="0" Spacing="0"
+                            IsVisible="{Binding TieneNoticia1}">
+                    <Border CornerRadius="{Binding NoticiasCuadradas[0].EstaExpandida, Converter={StaticResource BoolToCardCornerRadiusConverter}}"
+                            ClipToBounds="True"
+                            Background="White"
+                            Width="345" Height="200">
+                        <Grid>
+                            <Image Source="{Binding NoticiasCuadradas[0].ImagenBitmap}"
+                                   Stretch="Uniform"/>
+                            <Border Background="#AAFFD966"
+                                    Padding="8,4"
+                                    CornerRadius="6"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Margin="8">
+                                <TextBlock Text="Publicidad"
+                                           Foreground="#333333"
+                                           FontSize="9"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                            <Button Content="{Binding NoticiasCuadradas[0].TextoBotonExpandir}"
+                                    Command="{Binding NoticiasCuadradas[0].ToggleExpandirCommand}"
+                                    Classes="ver-mas-btn"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Margin="10,0,0,8"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Panel expandible con detalles -->
+                    <Border Background="White"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="0,0,8,8"
+                            Padding="16"
+                            Width="345"
+                            MaxHeight="{Binding NoticiasCuadradas[0].MaxHeightPanel}"
+                            Opacity="{Binding NoticiasCuadradas[0].OpacidadPanel}"
+                            IsHitTestVisible="{Binding NoticiasCuadradas[0].EstaExpandida}"
+                            ClipToBounds="True">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="MaxHeight" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                            </Transitions>
+                        </Border.Transitions>
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="{Binding NoticiasCuadradas[0].Titulo}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[0].Descripcion}"
+                                       FontSize="12"
+                                       Foreground="#666666"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[0].Contenido}"
+                                       FontSize="11"
+                                       Foreground="#333333"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="Enlace"
+                                       FontSize="12"
+                                       Foreground="#0b5394"
+                                       TextDecorations="Underline"
+                                       Cursor="Hand"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,4,0,0"
+                                       IsVisible="{Binding NoticiasCuadradas[0].TieneEnlace}"
+                                       PointerPressed="EnlaceNoticia_PointerPressed"
+                                       Tag="{Binding NoticiasCuadradas[0]}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Noticia 2 (fila 0, col 2) -->
+                <StackPanel Grid.Row="0" Grid.Column="2" Spacing="0"
+                            IsVisible="{Binding TieneNoticia2}">
+                    <Border CornerRadius="{Binding NoticiasCuadradas[1].EstaExpandida, Converter={StaticResource BoolToCardCornerRadiusConverter}}"
+                            ClipToBounds="True"
+                            Background="White"
+                            Width="345" Height="200">
+                        <Grid>
+                            <Image Source="{Binding NoticiasCuadradas[1].ImagenBitmap}"
+                                   Stretch="Uniform"/>
+                            <Border Background="#AAFFD966"
+                                    Padding="8,4"
+                                    CornerRadius="6"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Margin="8">
+                                <TextBlock Text="Publicidad"
+                                           Foreground="#333333"
+                                           FontSize="9"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                            <Button Content="{Binding NoticiasCuadradas[1].TextoBotonExpandir}"
+                                    Command="{Binding NoticiasCuadradas[1].ToggleExpandirCommand}"
+                                    Classes="ver-mas-btn"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Margin="10,0,0,8"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Background="White"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="0,0,8,8"
+                            Padding="16"
+                            Width="345"
+                            MaxHeight="{Binding NoticiasCuadradas[1].MaxHeightPanel}"
+                            Opacity="{Binding NoticiasCuadradas[1].OpacidadPanel}"
+                            IsHitTestVisible="{Binding NoticiasCuadradas[1].EstaExpandida}"
+                            ClipToBounds="True">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="MaxHeight" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                            </Transitions>
+                        </Border.Transitions>
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="{Binding NoticiasCuadradas[1].Titulo}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[1].Descripcion}"
+                                       FontSize="12"
+                                       Foreground="#666666"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[1].Contenido}"
+                                       FontSize="11"
+                                       Foreground="#333333"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="Enlace"
+                                       FontSize="12"
+                                       Foreground="#0b5394"
+                                       TextDecorations="Underline"
+                                       Cursor="Hand"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,4,0,0"
+                                       IsVisible="{Binding NoticiasCuadradas[1].TieneEnlace}"
+                                       PointerPressed="EnlaceNoticia_PointerPressed"
+                                       Tag="{Binding NoticiasCuadradas[1]}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Noticia 3 (fila 2, col 0) -->
+                <StackPanel Grid.Row="2" Grid.Column="0" Spacing="0"
+                            IsVisible="{Binding TieneNoticia3}">
+                    <Border CornerRadius="{Binding NoticiasCuadradas[2].EstaExpandida, Converter={StaticResource BoolToCardCornerRadiusConverter}}"
+                            ClipToBounds="True"
+                            Background="White"
+                            Width="345" Height="200">
+                        <Grid>
+                            <Image Source="{Binding NoticiasCuadradas[2].ImagenBitmap}"
+                                   Stretch="Uniform"/>
+                            <Border Background="#AAFFD966"
+                                    Padding="8,4"
+                                    CornerRadius="6"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Margin="8">
+                                <TextBlock Text="Publicidad"
+                                           Foreground="#333333"
+                                           FontSize="9"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                            <Button Content="{Binding NoticiasCuadradas[2].TextoBotonExpandir}"
+                                    Command="{Binding NoticiasCuadradas[2].ToggleExpandirCommand}"
+                                    Classes="ver-mas-btn"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Margin="10,0,0,8"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Background="White"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="0,0,8,8"
+                            Padding="16"
+                            Width="345"
+                            MaxHeight="{Binding NoticiasCuadradas[2].MaxHeightPanel}"
+                            Opacity="{Binding NoticiasCuadradas[2].OpacidadPanel}"
+                            IsHitTestVisible="{Binding NoticiasCuadradas[2].EstaExpandida}"
+                            ClipToBounds="True">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="MaxHeight" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                            </Transitions>
+                        </Border.Transitions>
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="{Binding NoticiasCuadradas[2].Titulo}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[2].Descripcion}"
+                                       FontSize="12"
+                                       Foreground="#666666"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[2].Contenido}"
+                                       FontSize="11"
+                                       Foreground="#333333"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="Enlace"
+                                       FontSize="12"
+                                       Foreground="#0b5394"
+                                       TextDecorations="Underline"
+                                       Cursor="Hand"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,4,0,0"
+                                       IsVisible="{Binding NoticiasCuadradas[2].TieneEnlace}"
+                                       PointerPressed="EnlaceNoticia_PointerPressed"
+                                       Tag="{Binding NoticiasCuadradas[2]}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Noticia 4 (fila 2, col 2) -->
+                <StackPanel Grid.Row="2" Grid.Column="2" Spacing="0"
+                            IsVisible="{Binding TieneNoticia4}">
+                    <Border CornerRadius="{Binding NoticiasCuadradas[3].EstaExpandida, Converter={StaticResource BoolToCardCornerRadiusConverter}}"
+                            ClipToBounds="True"
+                            Background="White"
+                            Width="345" Height="200">
+                        <Grid>
+                            <Image Source="{Binding NoticiasCuadradas[3].ImagenBitmap}"
+                                   Stretch="Uniform"/>
+                            <Border Background="#AAFFD966"
+                                    Padding="8,4"
+                                    CornerRadius="6"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"
+                                    Margin="8">
+                                <TextBlock Text="Publicidad"
+                                           Foreground="#333333"
+                                           FontSize="9"
+                                           FontWeight="SemiBold"/>
+                            </Border>
+                            <Button Content="{Binding NoticiasCuadradas[3].TextoBotonExpandir}"
+                                    Command="{Binding NoticiasCuadradas[3].ToggleExpandirCommand}"
+                                    Classes="ver-mas-btn"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Margin="10,0,0,8"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Background="White"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="0,0,8,8"
+                            Padding="16"
+                            Width="345"
+                            MaxHeight="{Binding NoticiasCuadradas[3].MaxHeightPanel}"
+                            Opacity="{Binding NoticiasCuadradas[3].OpacidadPanel}"
+                            IsHitTestVisible="{Binding NoticiasCuadradas[3].EstaExpandida}"
+                            ClipToBounds="True">
+                        <Border.Transitions>
+                            <Transitions>
+                                <DoubleTransition Property="MaxHeight" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                            </Transitions>
+                        </Border.Transitions>
+                        <StackPanel Spacing="10">
+                            <TextBlock Text="{Binding NoticiasCuadradas[3].Titulo}"
+                                       FontSize="15"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[3].Descripcion}"
+                                       FontSize="12"
+                                       Foreground="#666666"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding NoticiasCuadradas[3].Contenido}"
+                                       FontSize="11"
+                                       Foreground="#333333"
+                                       TextWrapping="Wrap"/>
+                            <TextBlock Text="Enlace"
+                                       FontSize="12"
+                                       Foreground="#0b5394"
+                                       TextDecorations="Underline"
+                                       Cursor="Hand"
+                                       HorizontalAlignment="Left"
+                                       Margin="0,4,0,0"
+                                       IsVisible="{Binding NoticiasCuadradas[3].TieneEnlace}"
+                                       PointerPressed="EnlaceNoticia_PointerPressed"
+                                       Tag="{Binding NoticiasCuadradas[3]}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+
+            <!-- COLUMNA DERECHA: Carrusel -->
+            <Border Grid.Column="1"
+                    CornerRadius="8"
+                    ClipToBounds="True"
+                    Background="White"
+                    BoxShadow="0 2 12 0 #30000000"
+                    Height="412"
+                    VerticalAlignment="Top">
+                <Grid>
+                    <!-- Imagen del carrusel -->
+                    <Image Source="{Binding NoticiaCarruselActual.ImagenBitmap}"
+                           Stretch="Uniform"/>
+
+                    <!-- Video inline (se muestra encima de la imagen cuando hay video) -->
+                    <Image Source="{Binding VideoFrame}"
+                           Stretch="Uniform"
+                           IsVisible="{Binding MostrandoVideo}"/>
+
+                    <!-- Etiqueta Publicidad -->
+                    <Border Background="#AAFFD966"
+                            Padding="8,4"
+                            CornerRadius="6"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Margin="8"
+                            BoxShadow="0 2 4 0 #20000000">
+                        <TextBlock Text="Publicidad"
+                                   Foreground="#333333"
+                                   FontSize="9"
+                                   FontWeight="SemiBold"/>
+                    </Border>
+
+                    <!-- Indicadores de paginación (puntos) -->
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Margin="0,0,0,12"
+                                Spacing="6"
+                                IsVisible="{Binding TieneMultiplesSlides}">
+                        <ItemsControl ItemsSource="{Binding NoticiasCarrusel}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" Spacing="6"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:NoticiaItem">
+                                    <Ellipse Width="8" Height="8"
+                                             Fill="{Binding EsSlideActivo, Converter={StaticResource BoolToDotColorConverter}}"
+                                             Cursor="Hand"
+                                             Tapped="DotIndicator_Tapped"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- Flechas de navegación -->
+                    <Button Content="‹"
+                            Command="{Binding RetrocederCarruselCommand}"
+                            Classes="carrusel-nav"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="6,0,0,0"
+                            IsVisible="{Binding TieneMultiplesSlides}"/>
+                    <Button Content="›"
+                            Command="{Binding AvanzarCarruselCommand}"
+                            Classes="carrusel-nav"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0,0,6,0"
+                            IsVisible="{Binding TieneMultiplesSlides}"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+              </Grid>
+            </Border>
+
+            <!-- PANEL 2: Comunicaciones del Sistema (fondo blanco separado) -->
+            <Border Background="White" CornerRadius="8" Padding="20,16" BoxShadow="0 2 8 0 #20000000">
+        <StackPanel Spacing="12">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <Border Background="#FFD966"
+                        CornerRadius="4"
+                        Width="28" Height="28"
+                        VerticalAlignment="Center">
+                    <Image Source="/Assets/campana.png"
+                           Width="24" Height="24"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="COMUNICACIONES DEL SISTEMA"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- SKELETON LOADING para Comunicaciones con spinner -->
+            <Grid IsVisible="{Binding CargandoNoticias}">
+                <StackPanel Spacing="12" Opacity="0.5">
+                    <Border Classes="skeleton" Background="#F5F5F5" CornerRadius="8" Padding="16,14">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Grid.Column="0" Background="#E0E0E0" CornerRadius="20" Width="40" Height="40" Margin="0,0,16,0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="6">
+                                <Border Background="#E0E0E0" CornerRadius="4" Height="14" Width="180" HorizontalAlignment="Left"/>
+                                <Border Background="#EEEEEE" CornerRadius="4" Height="12" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" Background="#E0E0E0" CornerRadius="4" Width="80" Height="36" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <Border Classes="skeleton" Background="#F5F5F5" CornerRadius="8" Padding="16,14">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Grid.Column="0" Background="#E0E0E0" CornerRadius="20" Width="40" Height="40" Margin="0,0,16,0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="6">
+                                <Border Background="#E0E0E0" CornerRadius="4" Height="14" Width="220" HorizontalAlignment="Left"/>
+                                <Border Background="#EEEEEE" CornerRadius="4" Height="12" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" Background="#E0E0E0" CornerRadius="4" Width="80" Height="36" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    <Border Classes="skeleton" Background="#F5F5F5" CornerRadius="8" Padding="16,14">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Border Grid.Column="0" Background="#E0E0E0" CornerRadius="20" Width="40" Height="40" Margin="0,0,16,0"/>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="6">
+                                <Border Background="#E0E0E0" CornerRadius="4" Height="14" Width="160" HorizontalAlignment="Left"/>
+                                <Border Background="#EEEEEE" CornerRadius="4" Height="12" HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                            <Border Grid.Column="2" Background="#E0E0E0" CornerRadius="4" Width="80" Height="36" Margin="16,0,0,0" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+                    <Border Classes="spinner" Width="32" Height="32"
+                            BorderBrush="#0b5394" BorderThickness="3,3,3,0"
+                            CornerRadius="16" Background="Transparent"
+                            HorizontalAlignment="Center">
+                        <Border.RenderTransform>
+                            <RotateTransform/>
+                        </Border.RenderTransform>
+                    </Border>
+                    <TextBlock Text="Cargando..."
+                               Foreground="#0b5394" FontSize="11" FontWeight="SemiBold"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- ScrollViewer para las comunicaciones con altura máxima -->
+            <ScrollViewer MaxHeight="300" VerticalScrollBarVisibility="Auto"
+                          IsVisible="{Binding !CargandoNoticias}">
+                <StackPanel Spacing="12">
+                    <ItemsControl ItemsSource="{Binding ComunicacionesSistema}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Spacing="12"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:NoticiaItem">
+                                <StackPanel Spacing="0">
+                                    <Border Background="{Binding ColorComunicacionFondoBrush}"
+                                            CornerRadius="8"
+                                            Padding="16,14"
+                                            BoxShadow="0 1 4 0 #15000000">
+                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                            <Border Grid.Column="0"
+                                                    Background="Transparent"
+                                                    CornerRadius="20"
+                                                    Width="40" Height="40"
+                                                    Margin="0,0,16,0"
+                                                    VerticalAlignment="Center"
+                                                    ClipToBounds="True">
+                                                <Image Source="{Binding IconoComunicacionBitmap}"
+                                                       Width="56" Height="56"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <StackPanel Grid.Column="1"
+                                                        VerticalAlignment="Center"
+                                                        Spacing="4">
+                                                <TextBlock Text="{Binding Titulo}"
+                                                           FontWeight="Bold"
+                                                           Foreground="{Binding ColorComunicacionTextoBrush}"
+                                                           FontSize="14"/>
+                                                <TextBlock Text="{Binding Descripcion}"
+                                                           Foreground="#666666"
+                                                           FontSize="13"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="2"/>
+                                            </StackPanel>
+
+                                            <Button Grid.Column="2"
+                                                    Content="{Binding TextoBotonExpandir}"
+                                                    Command="{Binding ToggleExpandirCommand}"
+                                                    Classes="leer-mas-comunicacion"
+                                                    VerticalAlignment="Center"
+                                                    Margin="16,0,0,0"/>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Panel expandible con contenido completo -->
+                                    <Border Background="White"
+                                            BorderBrush="#E0E0E0"
+                                            BorderThickness="1"
+                                            CornerRadius="0,0,8,8"
+                                            Padding="16"
+                                            MaxHeight="{Binding MaxHeightPanel}"
+                                            Opacity="{Binding OpacidadPanel}"
+                                            IsHitTestVisible="{Binding EstaExpandida}"
+                                            ClipToBounds="True"
+                                            BoxShadow="0 4 8 0 #20000000">
+                                        <Border.Transitions>
+                                            <Transitions>
+                                                <DoubleTransition Property="MaxHeight" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                                                <DoubleTransition Property="Opacity" Duration="0:0:0.6" Easing="CubicEaseInOut"/>
+                                            </Transitions>
+                                        </Border.Transitions>
+                                        <StackPanel Spacing="12">
+                                            <TextBlock Text="{Binding Contenido}"
+                                                       FontSize="13"
+                                                       Foreground="#333333"
+                                                       TextWrapping="Wrap"/>
+                                            <TextBlock Text="Enlace"
+                                                       FontSize="13"
+                                                       Foreground="#0b5394"
+                                                       TextDecorations="Underline"
+                                                       Cursor="Hand"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="0,4,0,0"
+                                                       IsVisible="{Binding TieneEnlace}"
+                                                       PointerPressed="EnlaceNoticia_PointerPressed"
+                                                       Tag="{Binding}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock Text="No hay comunicaciones del sistema"
+                               Foreground="#999999"
+                               FontSize="13"
+                               FontStyle="Italic"
+                               HorizontalAlignment="Center"
+                               Margin="0,8"
+                               IsVisible="{Binding ComunicacionesSistema.Count, Converter={StaticResource EqualToZeroConverter}}"/>
+                </StackPanel>
+            </ScrollViewer>
+        </StackPanel>
+            </Border>
+
+            </StackPanel>
+        </Viewbox>
+    </ScrollViewer>
+
+</UserControl>

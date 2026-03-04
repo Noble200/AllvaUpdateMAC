@@ -1,0 +1,239 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels.UserBoton"
+             xmlns:models="using:Allva.Desktop.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="Allva.Desktop.Views.UserBoton.CuentasBancariasView"
+             x:DataType="vm:CuentasBancariasViewModel"
+             Background="#ffd966">
+
+    <Design.DataContext>
+        <vm:CuentasBancariasViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <!-- Boton copiar con borde -->
+        <Style Selector="Button.copy-btn">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="14,6"/>
+            <Setter Property="CornerRadius" Value="14"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.copy-btn:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+        <!-- Boton secundario gris -->
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="#F5F5F5"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#EBEBEB"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Border Background="#ffd966" Padding="20">
+            <Border Background="#ffffff"
+                    CornerRadius="16"
+                    Padding="0"
+                    BoxShadow="0 4 20 0 #40000000">
+
+                <Grid RowDefinitions="Auto,*,Auto">
+                    <!-- Header con titulo CUENTAS BANCARIAS -->
+                    <Border Grid.Row="0"
+                            Background="#0b5394"
+                            CornerRadius="16,16,0,0"
+                            Padding="24,16">
+                        <TextBlock Text="CUENTAS BANCARIAS"
+                                   FontSize="15"
+                                   FontWeight="SemiBold"
+                                   Foreground="#ffffff"
+                                   LetterSpacing="0.5"/>
+                    </Border>
+
+                    <!-- Contenido principal con scroll -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Margin="24,20" Spacing="20">
+
+                            <!-- Notificacion de copiado -->
+                            <Border Background="#10B981"
+                                    CornerRadius="8"
+                                    Padding="12,10"
+                                    IsVisible="{Binding MostrarMensajeCopiado}"
+                                    HorizontalAlignment="Stretch">
+                                <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                    <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+                                          Fill="White"
+                                          Width="16" Height="16"
+                                          Stretch="Uniform"/>
+                                    <TextBlock Text="{Binding MensajeCopiado}"
+                                               Foreground="White"
+                                               FontWeight="Medium"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Lista de grupos de cuentas por modulo -->
+                            <ItemsControl ItemsSource="{Binding GruposCuentas}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="models:GrupoCuentasBancarias">
+                                        <!-- Tarjeta para cada grupo con sombra -->
+                                        <Border Background="#FFFFFF"
+                                                CornerRadius="12"
+                                                Padding="0"
+                                                Margin="0,0,0,20"
+                                                BorderBrush="#E0E0E0"
+                                                BorderThickness="1"
+                                                BoxShadow="0 2 8 0 #20000000">
+                                            <StackPanel>
+                                                <!-- Header del grupo con fondo azul claro -->
+                                                <Border Background="#E8F4FC"
+                                                        CornerRadius="12,12,0,0"
+                                                        Padding="20,14">
+                                                    <TextBlock Text="{Binding NombreModulo}"
+                                                               FontSize="14"
+                                                               FontWeight="Bold"
+                                                               Foreground="#0b5394"
+                                                               LetterSpacing="1"/>
+                                                </Border>
+
+                                                <!-- Contenido de la tabla -->
+                                                <StackPanel Margin="20,16,20,20" Spacing="0">
+                                                    <!-- Encabezados de tabla -->
+                                                    <Grid ColumnDefinitions="140,140,*,Auto" Margin="0,0,0,10">
+                                                        <TextBlock Grid.Column="0"
+                                                                   Text="BANCO"
+                                                                   FontSize="11"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="#888888"
+                                                                   LetterSpacing="0.5"/>
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="TITULAR"
+                                                                   FontSize="11"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="#888888"
+                                                                   LetterSpacing="0.5"/>
+                                                        <TextBlock Grid.Column="2"
+                                                                   Text="IBAN"
+                                                                   FontSize="11"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="#888888"
+                                                                   LetterSpacing="0.5"/>
+                                                    </Grid>
+
+                                                    <!-- Separador de encabezados -->
+                                                    <Border Height="2" Background="#0b5394" Opacity="0.3" Margin="0,0,0,4"/>
+
+                                                    <!-- Lista de cuentas -->
+                                                    <ItemsControl ItemsSource="{Binding Cuentas}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate x:DataType="models:CuentaBancariaConModulo">
+                                                                <!-- Fila de cuenta con fondo alternado y hover -->
+                                                                <Border Background="#FAFAFA"
+                                                                        CornerRadius="6"
+                                                                        Margin="0,4,0,0"
+                                                                        Padding="12,10">
+                                                                    <Grid ColumnDefinitions="128,128,*,Auto">
+                                                                        <!-- Banco -->
+                                                                        <TextBlock Grid.Column="0"
+                                                                                   Text="{Binding NombreBanco}"
+                                                                                   FontSize="13"
+                                                                                   Foreground="#333333"
+                                                                                   FontWeight="Medium"
+                                                                                   VerticalAlignment="Center"/>
+                                                                        <!-- Titular -->
+                                                                        <TextBlock Grid.Column="1"
+                                                                                   Text="{Binding Titular}"
+                                                                                   FontSize="13"
+                                                                                   Foreground="#555555"
+                                                                                   VerticalAlignment="Center"/>
+                                                                        <!-- IBAN -->
+                                                                        <TextBlock Grid.Column="2"
+                                                                                   Text="{Binding IBAN}"
+                                                                                   FontFamily="Consolas, Menlo, monospace"
+                                                                                   FontSize="13"
+                                                                                   FontWeight="SemiBold"
+                                                                                   Foreground="#0b5394"
+                                                                                   VerticalAlignment="Center"/>
+                                                                        <!-- Botones Copiar -->
+                                                                        <StackPanel Grid.Column="3"
+                                                                                    Orientation="Horizontal"
+                                                                                    Spacing="8"
+                                                                                    VerticalAlignment="Center">
+                                                                            <Button Content="Copiar IBAN"
+                                                                                    Classes="copy-btn"
+                                                                                    Command="{Binding $parent[UserControl].((vm:CuentasBancariasViewModel)DataContext).CopiarIBANCommand}"
+                                                                                    CommandParameter="{Binding}"/>
+                                                                            <Button Content="Copiar todo"
+                                                                                    Classes="copy-btn"
+                                                                                    Command="{Binding $parent[UserControl].((vm:CuentasBancariasViewModel)DataContext).CopiarTodoCommand}"
+                                                                                    CommandParameter="{Binding}"/>
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Mensaje si no hay cuentas -->
+                            <Border Background="#F8F9FA"
+                                    CornerRadius="10"
+                                    Padding="24"
+                                    IsVisible="{Binding !GruposCuentas.Count}">
+                                <StackPanel HorizontalAlignment="Center" Spacing="8">
+                                    <TextBlock Text="No hay cuentas bancarias disponibles"
+                                               FontSize="15"
+                                               FontWeight="Medium"
+                                               Foreground="#333333"
+                                               HorizontalAlignment="Center"/>
+                                    <TextBlock Text="No tienes acceso a ninguna cuenta bancaria con los módulos habilitados en tu local"
+                                               FontSize="12"
+                                               Foreground="#666666"
+                                               HorizontalAlignment="Center"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <!-- Botones inferiores -->
+                    <Border Grid.Row="2"
+                            Padding="24,16"
+                            BorderBrush="#E5E5E5"
+                            BorderThickness="0,1,0,0">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Button Grid.Column="0"
+                                    Content="Exportar"
+                                    Classes="secondary"
+                                    Command="{Binding ExportarPDFCommand}"/>
+                            <Button Grid.Column="2"
+                                    Content="Cerrar"
+                                    Classes="secondary"
+                                    Command="{Binding CerrarCommand}"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

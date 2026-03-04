@@ -1,0 +1,67 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:Allva.Desktop.Converters"
+             x:Class="Allva.Desktop.App"
+             RequestedThemeVariant="Light">
+    
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+
+    <!-- ===================================== -->
+    <!-- RECURSOS GLOBALES DE LA APLICACIÓN -->
+    <!-- ===================================== -->
+    <Application.Resources>
+        <ResourceDictionary>
+            
+            <!-- ===================================== -->
+            <!-- CONVERTERS GENERALES (Converters.cs) -->
+            <!-- ===================================== -->
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter"/>
+            <converters:BoolToBackgroundConverter x:Key="BoolToBackgroundConverter"/>
+            <converters:BoolToApiResultColorConverter x:Key="BoolToApiResultColorConverter"/>
+            <converters:NotEmptyConverter x:Key="NotEmptyConverter"/>
+            <converters:GreaterThanZeroConverter x:Key="GreaterThanZeroConverter"/>
+            <converters:EqualToZeroConverter x:Key="EqualToZeroConverter"/>
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter"/>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <converters:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter"/>
+            <converters:BoolToExpandIconConverter x:Key="BoolToExpandIconConverter"/>
+            <converters:BoolToCollapseIconConverter x:Key="BoolToCollapseIconConverter"/>
+            <converters:BoolToIconConverter x:Key="BoolToIconConverter"/>
+            <converters:NullToEmptyConverter x:Key="NullToEmptyConverter"/>
+            <converters:BoolToFormTitleConverter x:Key="BoolToFormTitleConverter"/>
+            <converters:WidthToGridHeightConverter x:Key="WidthToGridHeightConverter"/>
+            <converters:NewsGridHeightConverter x:Key="NewsGridHeightConverter"/>
+            <converters:BoolToMaxHeightConverter x:Key="BoolToMaxHeightConverter"/>
+            <converters:NewsCardWidthConverter x:Key="NewsCardWidthConverter"/>
+            <converters:BoolToDotColorConverter x:Key="BoolToDotColorConverter"/>
+            <converters:BoolToCardCornerRadiusConverter x:Key="BoolToCardCornerRadiusConverter"/>
+
+            <!-- ===================================== -->
+            <!-- CONVERTERS DE ESTADO (EstadoComercioConverters.cs) -->
+            <!-- ===================================== -->
+            <converters:EstadoActivoColorConverter x:Key="EstadoActivoColorConverter"/>
+            <converters:EstadoTextoMayusculaConverter x:Key="EstadoTextoMayusculaConverter"/>
+            <converters:EqualToOtroConverter x:Key="EqualToOtroConverter"/>
+
+            <!-- ===================================== -->
+            <!-- COLORES CORPORATIVOS ALLVA -->
+            <!-- ===================================== -->
+            <SolidColorBrush x:Key="PrimaryBlue">#0b5394</SolidColorBrush>
+            <SolidColorBrush x:Key="DarkBlue">#003366</SolidColorBrush>
+            <SolidColorBrush x:Key="PrimaryYellow">#FFD966</SolidColorBrush>
+            <SolidColorBrush x:Key="AccentYellow">#FFC600</SolidColorBrush>
+            <SolidColorBrush x:Key="DarkGray">#595959</SolidColorBrush>
+            <SolidColorBrush x:Key="LightGray">#f3f3f3</SolidColorBrush>
+            <SolidColorBrush x:Key="White">#ffffff</SolidColorBrush>
+            <SolidColorBrush x:Key="SuccessGreen">#28a745</SolidColorBrush>
+            <SolidColorBrush x:Key="DangerRed">#dc3545</SolidColorBrush>
+            <SolidColorBrush x:Key="WarningYellow">#ffc107</SolidColorBrush>
+            <SolidColorBrush x:Key="InfoBlue">#17a2b8</SolidColorBrush>
+
+        </ResourceDictionary>
+    </Application.Resources>
+    
+</Application>

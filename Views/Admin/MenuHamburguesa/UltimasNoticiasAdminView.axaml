@@ -1,0 +1,1627 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             xmlns:local="using:Allva.Desktop.Converters"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.UltimasNoticiasAdminView"
+             x:DataType="vm:UltimasNoticiasAdminViewModel">
+
+    <UserControl.DataContext>
+        <vm:UltimasNoticiasAdminViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Styles>
+        <!-- Estilo para botones de flechas -->
+        <Style Selector="Button.arrow-button">
+            <Setter Property="Background" Value="#E8E8E8"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.arrow-button /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#E8E8E8"/>
+        </Style>
+        <Style Selector="Button.arrow-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#0b5394"/>
+        </Style>
+        <Style Selector="Button.arrow-button:pointerover TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style Selector="Button.arrow-button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#F5F5F5"/>
+        </Style>
+        <Style Selector="Button.arrow-button:disabled TextBlock">
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0"
+                Background="#F8F9FA"
+                Padding="24,16"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <TextBlock Text="Últimas Noticias"
+                               FontSize="20"
+                               FontWeight="SemiBold"
+                               Foreground="#0b5394"/>
+                    <TextBlock Text="Crea y gestiona las noticias que verán los usuarios en el FrontOffice"
+                               FontSize="13"
+                               Foreground="#666666"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            Spacing="12"
+                            IsVisible="{Binding !MostrarPanelEdicion}">
+
+                    <!-- Botón Mostrar/Ocultar Imágenes -->
+                    <Button Command="{Binding ToggleMostrarImagenesCommand}"
+                            Background="#6c757d"
+                            Foreground="White"
+                            Padding="14,10"
+                            CornerRadius="6"
+                            Cursor="Hand">
+                        <TextBlock Text="{Binding TextoBotonImagenes}" FontWeight="Medium" FontSize="13"/>
+                    </Button>
+
+                    <!-- Botón Nueva Noticia -->
+                    <Button Command="{Binding NuevaNoticiaCommand}"
+                            Background="#0b5394"
+                            Foreground="White"
+                            Padding="16,10"
+                            CornerRadius="6"
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="+" FontSize="16" FontWeight="Bold"/>
+                            <TextBlock Text="Nueva Noticia" FontWeight="Medium"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Grid.Row="1">
+
+            <!-- Mensaje de estado -->
+            <Border IsVisible="{Binding HayMensaje}"
+                    Background="{Binding MensajeBackground}"
+                    Padding="16,10"
+                    CornerRadius="6"
+                    Margin="24,16,24,0"
+                    VerticalAlignment="Top"
+                    ZIndex="100">
+                <TextBlock Text="{Binding MensajeEstado}"
+                           Foreground="White"
+                           FontWeight="Medium"/>
+            </Border>
+
+            <!-- Indicador de carga -->
+            <Border IsVisible="{Binding EstaCargando}"
+                    Background="#80FFFFFF"
+                    ZIndex="99">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                    <Border Width="40" Height="40" Background="#0b5394" CornerRadius="20"/>
+                    <TextBlock Text="Cargando..." Foreground="#0b5394" FontWeight="Medium"/>
+                </StackPanel>
+            </Border>
+
+            <!-- LISTA DE NOTICIAS ORGANIZADA POR SECCIONES -->
+            <ScrollViewer IsVisible="{Binding !MostrarPanelEdicion}"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="24" Margin="24,24,24,40">
+
+                    <!-- Mensaje cuando no hay noticias -->
+                    <Border IsVisible="{Binding !Noticias.Count}"
+                            Background="White"
+                            CornerRadius="8"
+                            Padding="40"
+                            BoxShadow="0 2 8 0 #15000000">
+                        <StackPanel HorizontalAlignment="Center" Spacing="12">
+                            <TextBlock Text="No hay noticias creadas"
+                                       FontSize="16"
+                                       Foreground="#888888"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Crea tu primera noticia haciendo clic en 'Nueva Noticia'"
+                                       FontSize="13"
+                                       Foreground="#AAAAAA"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ═══════════════════════════════════════════════════════════════ -->
+                    <!-- SECCIÓN 1: NOTICIAS DESTACADAS (Grid 2x2) -->
+                    <!-- ═══════════════════════════════════════════════════════════════ -->
+                    <StackPanel Spacing="12" IsVisible="{Binding TieneNoticiasDestacadas}">
+                        <!-- Header de sección -->
+                        <Border Background="#E8F4FD"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                BorderBrush="#0b5394"
+                                BorderThickness="0,0,0,3">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                    <Border Background="#0b5394"
+                                            CornerRadius="6"
+                                            Width="32" Height="32">
+                                        <TextBlock Text="📰"
+                                                   FontSize="16"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="NOTICIAS DESTACADAS"
+                                                   FontSize="15"
+                                                   FontWeight="Bold"
+                                                   Foreground="#0b5394"/>
+                                        <TextBlock Text="Grid 2x2 rectangular en el dashboard (máximo 4 noticias)"
+                                                   FontSize="11"
+                                                   Foreground="#666666"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <Border Grid.Column="2"
+                                        Background="#0b5394"
+                                        CornerRadius="12"
+                                        Padding="10,4">
+                                    <TextBlock Text="Tipo: cuadrada"
+                                               FontSize="10"
+                                               Foreground="White"
+                                               FontWeight="Medium"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Items de noticias destacadas -->
+                        <ItemsControl ItemsSource="{Binding NoticiasDestacadas}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="10"
+                                            Margin="0,0,0,8"
+                                            Background="White"
+                                            BorderBrush="#0b5394"
+                                            BorderThickness="1.5"
+                                            Padding="16"
+                                            BoxShadow="0 1 4 0 #10000000">
+                                        <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+
+                                            <!-- Indicador de posición (1-4) -->
+                                            <Border Grid.Column="0"
+                                                    Background="#FFD966"
+                                                    CornerRadius="8"
+                                                    Width="40" Height="40"
+                                                    Margin="0,0,12,0"
+                                                    VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding PosicionDestacada}"
+                                                           FontSize="18"
+                                                           FontWeight="Bold"
+                                                           Foreground="#7a5c00"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- Imagen de la noticia -->
+                                            <Border Grid.Column="1"
+                                                    Width="120"
+                                                    Height="80"
+                                                    CornerRadius="8"
+                                                    ClipToBounds="True"
+                                                    Margin="0,0,16,0"
+                                                    Background="#F5F5F5"
+                                                    IsVisible="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).MostrarImagenesEnLista}">
+                                                <Panel>
+                                                    <TextBlock Text="Sin imagen"
+                                                               FontSize="11"
+                                                               Foreground="#BBBBBB"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               IsVisible="{Binding !TieneImagen}"/>
+                                                    <Image Source="{Binding ImagenBitmap}"
+                                                           Stretch="UniformToFill"
+                                                           IsVisible="{Binding TieneImagen}"/>
+                                                </Panel>
+                                            </Border>
+
+                                            <!-- Información de la noticia -->
+                                            <StackPanel Grid.Column="2" Spacing="6" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Titulo}"
+                                                           FontSize="15"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#0b5394"/>
+                                                <TextBlock Text="{Binding Contenido}"
+                                                           FontSize="12"
+                                                           Foreground="#666666"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="2"/>
+                                                <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                                                    <Border Background="{Binding EstadoBackground}"
+                                                            CornerRadius="4"
+                                                            Padding="8,4">
+                                                        <TextBlock Text="{Binding EstadoTexto}"
+                                                                   FontSize="10"
+                                                                   FontWeight="Medium"
+                                                                   Foreground="{Binding EstadoForeground}"/>
+                                                    </Border>
+                                                    <TextBlock FontSize="10" Foreground="#999999" VerticalAlignment="Center">
+                                                        <Run Text="Creado: "/>
+                                                        <Run Text="{Binding FechaCreacionTexto}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Panel derecho: Orden + Botones -->
+                                            <StackPanel Grid.Column="3"
+                                                        Orientation="Vertical"
+                                                        Spacing="8"
+                                                        VerticalAlignment="Center"
+                                                        Margin="16,0,0,0">
+                                                <!-- Flechas para mover posición -->
+                                                <Border Background="#F5F7FA"
+                                                        CornerRadius="8"
+                                                        Padding="8,6">
+                                                    <StackPanel Spacing="4">
+                                                        <TextBlock Text="Orden"
+                                                                   FontSize="10"
+                                                                   Foreground="#888888"
+                                                                   HorizontalAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                                            <Button Width="32" Height="32"
+                                                                    Padding="0"
+                                                                    CornerRadius="6"
+                                                                    Cursor="Hand"
+                                                                    Classes="arrow-button"
+                                                                    Tag="{Binding}"
+                                                                    Click="SubirNoticia_Click"
+                                                                    IsEnabled="{Binding PuedeSubir}"
+                                                                    ToolTip.Tip="Subir posición">
+                                                                <TextBlock Text="↑" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Button>
+                                                            <Button Width="32" Height="32"
+                                                                    Padding="0"
+                                                                    CornerRadius="6"
+                                                                    Cursor="Hand"
+                                                                    Classes="arrow-button"
+                                                                    Tag="{Binding}"
+                                                                    Click="BajarNoticia_Click"
+                                                                    IsEnabled="{Binding PuedeBajar}"
+                                                                    ToolTip.Tip="Bajar posición">
+                                                                <TextBlock Text="↓" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                                <!-- Botones de acción -->
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <Button Background="#0b5394"
+                                                            Foreground="White"
+                                                            Padding="12,8"
+                                                            CornerRadius="6"
+                                                            Cursor="Hand"
+                                                            Command="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).EditarNoticiaCommand}"
+                                                            CommandParameter="{Binding}">
+                                                        <TextBlock Text="Editar" FontWeight="Medium" FontSize="12"/>
+                                                    </Button>
+                                                    <Button Background="#dc3545"
+                                                            Foreground="White"
+                                                            Padding="12,8"
+                                                            CornerRadius="6"
+                                                            Cursor="Hand"
+                                                            Command="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).EliminarNoticiaCommand}"
+                                                            CommandParameter="{Binding}">
+                                                        <TextBlock Text="Eliminar" FontWeight="Medium" FontSize="12"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- ═══════════════════════════════════════════════════════════════ -->
+                    <!-- SECCIÓN 2: NOTICIAS DE CARRUSEL -->
+                    <!-- ═══════════════════════════════════════════════════════════════ -->
+                    <StackPanel Spacing="12" IsVisible="{Binding TieneNoticiasCarrusel}">
+                        <!-- Header de sección -->
+                        <Border Background="#FFF8E1"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                BorderBrush="#FF9800"
+                                BorderThickness="0,0,0,3">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                    <Border Background="#FF9800"
+                                            CornerRadius="6"
+                                            Width="32" Height="32">
+                                        <TextBlock Text="🎠"
+                                                   FontSize="16"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="NOTICIAS DE CARRUSEL"
+                                                   FontSize="15"
+                                                   FontWeight="Bold"
+                                                   Foreground="#E65100"/>
+                                        <TextBlock Text="Rotativo vertical en el panel derecho"
+                                                   FontSize="11"
+                                                   Foreground="#666666"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <Border Grid.Column="2"
+                                        Background="#FF9800"
+                                        CornerRadius="12"
+                                        Padding="10,4">
+                                    <TextBlock Text="Tipo: carrusel"
+                                               FontSize="10"
+                                               Foreground="White"
+                                               FontWeight="Medium"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Items de noticias de carrusel -->
+                        <ItemsControl ItemsSource="{Binding NoticiasCarrusel}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="10"
+                                            Margin="0,0,0,8"
+                                            Background="White"
+                                            BorderBrush="#FF9800"
+                                            BorderThickness="1.5"
+                                            Padding="16"
+                                            BoxShadow="0 1 4 0 #10000000">
+                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                            <!-- Imagen de la noticia -->
+                                            <Border Grid.Column="0"
+                                                    Width="140"
+                                                    Height="95"
+                                                    CornerRadius="8"
+                                                    ClipToBounds="True"
+                                                    Margin="0,0,16,0"
+                                                    Background="#F5F5F5"
+                                                    IsVisible="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).MostrarImagenesEnLista}">
+                                                <Panel>
+                                                    <TextBlock Text="Sin imagen"
+                                                               FontSize="11"
+                                                               Foreground="#BBBBBB"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"
+                                                               IsVisible="{Binding !TieneImagen}"/>
+                                                    <Image Source="{Binding ImagenBitmap}"
+                                                           Stretch="UniformToFill"
+                                                           IsVisible="{Binding TieneImagen}"/>
+                                                </Panel>
+                                            </Border>
+
+                                            <!-- Información de la noticia -->
+                                            <StackPanel Grid.Column="1" Spacing="6" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Titulo}"
+                                                           FontSize="15"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#E65100"/>
+                                                <TextBlock Text="{Binding Contenido}"
+                                                           FontSize="12"
+                                                           Foreground="#666666"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="2"/>
+                                                <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                                                    <Border Background="{Binding EstadoBackground}"
+                                                            CornerRadius="4"
+                                                            Padding="8,4">
+                                                        <TextBlock Text="{Binding EstadoTexto}"
+                                                                   FontSize="10"
+                                                                   FontWeight="Medium"
+                                                                   Foreground="{Binding EstadoForeground}"/>
+                                                    </Border>
+                                                    <TextBlock FontSize="10" Foreground="#999999" VerticalAlignment="Center">
+                                                        <Run Text="Creado: "/>
+                                                        <Run Text="{Binding FechaCreacionTexto}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Panel derecho: Orden + Botones -->
+                                            <StackPanel Grid.Column="2"
+                                                        Orientation="Vertical"
+                                                        Spacing="8"
+                                                        VerticalAlignment="Center"
+                                                        Margin="16,0,0,0">
+                                                <!-- Flechas para mover posición -->
+                                                <Border Background="#F5F7FA"
+                                                        CornerRadius="8"
+                                                        Padding="8,6">
+                                                    <StackPanel Spacing="4">
+                                                        <TextBlock Text="Orden"
+                                                                   FontSize="10"
+                                                                   Foreground="#888888"
+                                                                   HorizontalAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                                            <Button Width="32" Height="32"
+                                                                    Padding="0"
+                                                                    CornerRadius="6"
+                                                                    Cursor="Hand"
+                                                                    Classes="arrow-button"
+                                                                    Tag="{Binding}"
+                                                                    Click="SubirNoticia_Click"
+                                                                    IsEnabled="{Binding PuedeSubir}"
+                                                                    ToolTip.Tip="Subir posición">
+                                                                <TextBlock Text="↑" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Button>
+                                                            <Button Width="32" Height="32"
+                                                                    Padding="0"
+                                                                    CornerRadius="6"
+                                                                    Cursor="Hand"
+                                                                    Classes="arrow-button"
+                                                                    Tag="{Binding}"
+                                                                    Click="BajarNoticia_Click"
+                                                                    IsEnabled="{Binding PuedeBajar}"
+                                                                    ToolTip.Tip="Bajar posición">
+                                                                <TextBlock Text="↓" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                                <!-- Botones de acción -->
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <Button Background="#0b5394"
+                                                            Foreground="White"
+                                                            Padding="12,8"
+                                                            CornerRadius="6"
+                                                            Cursor="Hand"
+                                                            Command="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).EditarNoticiaCommand}"
+                                                            CommandParameter="{Binding}">
+                                                        <TextBlock Text="Editar" FontWeight="Medium" FontSize="12"/>
+                                                    </Button>
+                                                    <Button Background="#dc3545"
+                                                            Foreground="White"
+                                                            Padding="12,8"
+                                                            CornerRadius="6"
+                                                            Cursor="Hand"
+                                                            Command="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).EliminarNoticiaCommand}"
+                                                            CommandParameter="{Binding}">
+                                                        <TextBlock Text="Eliminar" FontWeight="Medium" FontSize="12"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- ═══════════════════════════════════════════════════════════════ -->
+                    <!-- SECCIÓN 3: COMUNICACIONES DEL SISTEMA -->
+                    <!-- ═══════════════════════════════════════════════════════════════ -->
+                    <StackPanel Spacing="12" IsVisible="{Binding TieneNoticiasComunicaciones}">
+                        <!-- Header de sección -->
+                        <Border Background="#FFEBEE"
+                                CornerRadius="8"
+                                Padding="16,12"
+                                BorderBrush="#d35400"
+                                BorderThickness="0,0,0,3">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                    <Border Background="#d35400"
+                                            CornerRadius="6"
+                                            Width="32" Height="32">
+                                        <TextBlock Text="📢"
+                                                   FontSize="16"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="COMUNICACIONES DEL SISTEMA"
+                                                   FontSize="15"
+                                                   FontWeight="Bold"
+                                                   Foreground="#d35400"/>
+                                        <TextBlock Text="Alertas importantes en la parte inferior del dashboard"
+                                                   FontSize="11"
+                                                   Foreground="#666666"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <Border Grid.Column="2"
+                                        Background="#d35400"
+                                        CornerRadius="12"
+                                        Padding="10,4">
+                                    <TextBlock Text="Tipo: comunicacion"
+                                               FontSize="10"
+                                               Foreground="White"
+                                               FontWeight="Medium"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Items de comunicaciones -->
+                        <ItemsControl ItemsSource="{Binding NoticiasComunicaciones}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="10"
+                                            Margin="0,0,0,8"
+                                            Background="{Binding ColorComunicacionFondo}"
+                                            BorderBrush="{Binding ColorComunicacionIcono}"
+                                            BorderThickness="1.5"
+                                            Padding="16"
+                                            BoxShadow="0 1 4 0 #10000000">
+                                        <Grid ColumnDefinitions="Auto,*,Auto">
+                                            <!-- Icono de comunicación -->
+                                            <Border Grid.Column="0"
+                                                    Background="Transparent"
+                                                    CornerRadius="20"
+                                                    Width="40" Height="40"
+                                                    Margin="0,0,16,0"
+                                                    VerticalAlignment="Center"
+                                                    ClipToBounds="True">
+                                                <Image Source="{Binding IconoComunicacionRuta}"
+                                                       Width="56" Height="56"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                            </Border>
+
+                                            <!-- Información de la comunicación -->
+                                            <StackPanel Grid.Column="1" Spacing="6" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Titulo}"
+                                                           FontSize="15"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{Binding ColorComunicacionTexto}"/>
+                                                <TextBlock Text="{Binding Descripcion}"
+                                                           FontSize="12"
+                                                           Foreground="#666666"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxLines="2"/>
+                                                <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+                                                    <Border Background="{Binding EstadoBackground}"
+                                                            CornerRadius="4"
+                                                            Padding="8,4">
+                                                        <TextBlock Text="{Binding EstadoTexto}"
+                                                                   FontSize="10"
+                                                                   FontWeight="Medium"
+                                                                   Foreground="{Binding EstadoForeground}"/>
+                                                    </Border>
+                                                    <TextBlock FontSize="10" Foreground="#999999" VerticalAlignment="Center">
+                                                        <Run Text="Creado: "/>
+                                                        <Run Text="{Binding FechaCreacionTexto}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Panel derecho: Orden + Botones -->
+                                            <StackPanel Grid.Column="2"
+                                                        Orientation="Vertical"
+                                                        Spacing="8"
+                                                        VerticalAlignment="Center"
+                                                        Margin="16,0,0,0">
+                                                <!-- Flechas para mover posición -->
+                                                <Border Background="#F5F7FA"
+                                                        CornerRadius="8"
+                                                        Padding="8,6">
+                                                    <StackPanel Spacing="4">
+                                                        <TextBlock Text="Orden"
+                                                                   FontSize="10"
+                                                                   Foreground="#888888"
+                                                                   HorizontalAlignment="Center"/>
+                                                        <StackPanel Orientation="Horizontal" Spacing="4">
+                                                            <Button Width="32" Height="32"
+                                                                    Padding="0"
+                                                                    CornerRadius="6"
+                                                                    Cursor="Hand"
+                                                                    Classes="arrow-button"
+                                                                    Tag="{Binding}"
+                                                                    Click="SubirNoticia_Click"
+                                                                    IsEnabled="{Binding PuedeSubir}"
+                                                                    ToolTip.Tip="Subir posición">
+                                                                <TextBlock Text="↑" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Button>
+                                                            <Button Width="32" Height="32"
+                                                                    Padding="0"
+                                                                    CornerRadius="6"
+                                                                    Cursor="Hand"
+                                                                    Classes="arrow-button"
+                                                                    Tag="{Binding}"
+                                                                    Click="BajarNoticia_Click"
+                                                                    IsEnabled="{Binding PuedeBajar}"
+                                                                    ToolTip.Tip="Bajar posición">
+                                                                <TextBlock Text="↓" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                                <!-- Botones de acción -->
+                                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                                    <Button Background="#0b5394"
+                                                            Foreground="White"
+                                                            Padding="12,8"
+                                                            CornerRadius="6"
+                                                            Cursor="Hand"
+                                                            Command="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).EditarNoticiaCommand}"
+                                                            CommandParameter="{Binding}">
+                                                        <TextBlock Text="Editar" FontWeight="Medium" FontSize="12"/>
+                                                    </Button>
+                                                    <Button Background="#dc3545"
+                                                            Foreground="White"
+                                                            Padding="12,8"
+                                                            CornerRadius="6"
+                                                            Cursor="Hand"
+                                                            Command="{Binding $parent[UserControl].((vm:UltimasNoticiasAdminViewModel)DataContext).EliminarNoticiaCommand}"
+                                                            CommandParameter="{Binding}">
+                                                        <TextBlock Text="Eliminar" FontWeight="Medium" FontSize="12"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- PANEL DE EDICIÓN/CREACIÓN -->
+            <ScrollViewer IsVisible="{Binding MostrarPanelEdicion}"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <Border Background="White" Padding="24">
+                    <StackPanel Spacing="20" MaxWidth="800">
+
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding TituloPanel}"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       Foreground="#0b5394"/>
+                            <Button Grid.Column="1"
+                                    Content="Cancelar"
+                                    Background="#E0E0E0"
+                                    Foreground="#333333"
+                                    Padding="16,8"
+                                    CornerRadius="6"
+                                    Cursor="Hand"
+                                    Command="{Binding CancelarEdicionCommand}"/>
+                        </Grid>
+
+                        <Border Height="1" Background="#E0E0E0"/>
+
+                        <StackPanel Spacing="16">
+                            <!-- CONFIGURACIÓN INICIAL (Estado y Tipo primero) -->
+                            <TextBlock Text="CONFIGURACIÓN DE LA NOTICIA"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#888888"/>
+
+                            <Border Background="#F8F9FA"
+                                    CornerRadius="8"
+                                    Padding="16"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1">
+                                <Grid ColumnDefinitions="*,16,*">
+                                    <StackPanel Grid.Column="0" Spacing="6">
+                                        <TextBlock Text="Tipo de Noticia *" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                        <TextBlock Text="Determina dónde aparecerá en el dashboard"
+                                                   FontSize="11"
+                                                   Foreground="#666666"/>
+                                        <ComboBox ItemsSource="{Binding TiposNoticiaDisponibles}"
+                                                  SelectedItem="{Binding TipoNoticiaSeleccionado}"
+                                                  Padding="12"
+                                                  CornerRadius="6"
+                                                  HorizontalAlignment="Stretch"/>
+                                        <Border Background="{Binding TipoNoticiaBackground}"
+                                                CornerRadius="6"
+                                                Padding="10,8"
+                                                Margin="0,4,0,0">
+                                            <TextBlock Text="{Binding TipoNoticiaDescripcion}"
+                                                       FontSize="11"
+                                                       Foreground="{Binding TipoNoticiaForeground}"
+                                                       TextWrapping="Wrap"/>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Spacing="6">
+                                        <TextBlock Text="Estado *" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                        <TextBlock Text="Controla la visibilidad de la noticia"
+                                                   FontSize="11"
+                                                   Foreground="#666666"/>
+                                        <ComboBox ItemsSource="{Binding EstadosDisponibles}"
+                                                  SelectedItem="{Binding EstadoSeleccionado}"
+                                                  Padding="12"
+                                                  CornerRadius="6"
+                                                  HorizontalAlignment="Stretch"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <Border Height="1" Background="#E0E0E0"/>
+
+                            <!-- ICONO Y COLOR DE COMUNICACIÓN (solo visible para tipo comunicacion) -->
+                            <StackPanel Spacing="12" IsVisible="{Binding MostrarOpcionesIconoColor}">
+                                <TextBlock Text="PERSONALIZACIÓN DE LA COMUNICACIÓN"
+                                           FontSize="13"
+                                           FontWeight="SemiBold"
+                                           Foreground="#888888"/>
+
+                                <Border Background="#FFF8E1"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        BorderBrush="#FFD54F"
+                                        BorderThickness="1">
+                                    <StackPanel Spacing="16">
+
+                                        <!-- Selector de Color -->
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Text="Color de la comunicación" FontWeight="SemiBold" Foreground="#333333"/>
+                                            <TextBlock Text="Define el tipo de mensaje y su color visual"
+                                                       FontSize="11"
+                                                       Foreground="#666666"/>
+                                            <ItemsControl ItemsSource="{Binding ColoresComunicacionDisponibles}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="vm:ColorComunicacionItem">
+                                                        <Button Margin="0,0,8,8"
+                                                                Padding="0"
+                                                                CornerRadius="8"
+                                                                Cursor="Hand"
+                                                                BorderThickness="2"
+                                                                Tag="{Binding Clave}"
+                                                                Click="SeleccionarColor_Click">
+                                                            <Button.BorderBrush>
+                                                                <SolidColorBrush Color="Transparent"/>
+                                                            </Button.BorderBrush>
+                                                            <Border Background="{Binding FondoBrush}"
+                                                                    CornerRadius="6"
+                                                                    Padding="12,8"
+                                                                    MinWidth="120">
+                                                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                                                    <Border Width="20" Height="20"
+                                                                            CornerRadius="10"
+                                                                            Background="{Binding IconoBrush}"/>
+                                                                    <TextBlock Text="{Binding Nombre}"
+                                                                               FontSize="12"
+                                                                               FontWeight="Medium"
+                                                                               Foreground="{Binding TextoBrush}"
+                                                                               VerticalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+
+                                        <!-- Selector de Icono -->
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Text="Icono de la comunicación" FontWeight="SemiBold" Foreground="#333333"/>
+                                            <TextBlock Text="Selecciona el icono que acompañará la comunicación"
+                                                       FontSize="11"
+                                                       Foreground="#666666"/>
+                                            <ItemsControl ItemsSource="{Binding IconosComunicacionDisponibles}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel Orientation="Horizontal"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate x:DataType="vm:IconoComunicacionItem">
+                                                        <Button Margin="0,0,8,8"
+                                                                Padding="0"
+                                                                CornerRadius="8"
+                                                                Cursor="Hand"
+                                                                BorderThickness="2"
+                                                                Tag="{Binding NombreArchivo}"
+                                                                Click="SeleccionarIcono_Click">
+                                                            <Button.BorderBrush>
+                                                                <SolidColorBrush Color="Transparent"/>
+                                                            </Button.BorderBrush>
+                                                            <Border Background="#F5F5F5"
+                                                                    CornerRadius="6"
+                                                                    Padding="8"
+                                                                    Width="80" Height="80">
+                                                                <StackPanel Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                    <Image Source="{Binding IconoBitmap}"
+                                                                           Width="40" Height="40"
+                                                                           HorizontalAlignment="Center"/>
+                                                                    <TextBlock Text="{Binding Descripcion}"
+                                                                               FontSize="9"
+                                                                               Foreground="#666666"
+                                                                               HorizontalAlignment="Center"/>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+
+                                        <!-- Vista previa del resultado -->
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="Vista previa:" FontWeight="SemiBold" Foreground="#333333" FontSize="12"/>
+                                            <Border Background="{Binding ColorSeleccionadoItem.FondoBrush, FallbackValue=#FFE0B2}"
+                                                    CornerRadius="8"
+                                                    Padding="16,14"
+                                                    BoxShadow="0 1 4 0 #15000000">
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <Border Grid.Column="0"
+                                                            Width="40" Height="40"
+                                                            CornerRadius="20"
+                                                            Margin="0,0,16,0"
+                                                            VerticalAlignment="Center"
+                                                            Background="Transparent"
+                                                            ClipToBounds="True">
+                                                        <Image Source="{Binding IconoSeleccionadoItem.IconoBitmap}"
+                                                               Width="56" Height="56"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                                        <TextBlock Text="{Binding TituloNoticia, FallbackValue='Título de ejemplo'}"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="{Binding ColorSeleccionadoItem.TextoBrush, FallbackValue=#E65100}"
+                                                                   FontSize="14"/>
+                                                        <TextBlock Text="{Binding DescripcionNoticia, FallbackValue='Descripción de la comunicación...'}"
+                                                                   Foreground="#666666"
+                                                                   FontSize="12"
+                                                                   MaxLines="2"
+                                                                   TextTrimming="CharacterEllipsis"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </StackPanel>
+
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Height="1" Background="#E0E0E0"/>
+                            </StackPanel>
+
+                            <!-- INFORMACIÓN DE LA NOTICIA -->
+                            <TextBlock Text="INFORMACIÓN DE LA NOTICIA"
+                                       FontSize="13"
+                                       FontWeight="SemiBold"
+                                       Foreground="#888888"/>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Título de la Noticia" FontWeight="Medium" Foreground="#333333"/>
+                                <TextBox Text="{Binding TituloNoticia}"
+                                         Watermark="Ej: Nueva promoción disponible"
+                                         Padding="12"
+                                         CornerRadius="6"
+                                         BorderBrush="#DDDDDD"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Categoría" FontWeight="Medium" Foreground="#333333"/>
+                                <TextBox Text="{Binding CategoriaNoticia}"
+                                         Watermark="Ej: Fri Jun 19 2020 | Category"
+                                         Padding="12"
+                                         CornerRadius="6"
+                                         BorderBrush="#DDDDDD"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Descripción breve" FontWeight="Medium" Foreground="#333333"/>
+                                <TextBox Text="{Binding DescripcionNoticia}"
+                                         Watermark="Descripción corta para la vista previa..."
+                                         Padding="12"
+                                         CornerRadius="6"
+                                         BorderBrush="#DDDDDD"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="80"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Contenido completo" FontWeight="Medium" Foreground="#333333"/>
+                                <TextBox Text="{Binding ContenidoNoticia}"
+                                         Watermark="Escribe el contenido de la noticia..."
+                                         Padding="12"
+                                         CornerRadius="6"
+                                         BorderBrush="#DDDDDD"
+                                         AcceptsReturn="True"
+                                         TextWrapping="Wrap"
+                                         Height="150"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Enlace externo (opcional)" FontWeight="Medium" Foreground="#333333"/>
+                                <TextBlock Text="Si se especifica, se mostrará un botón 'Ver más' que abrirá este enlace en el navegador"
+                                           FontSize="11"
+                                           Foreground="#888888"
+                                           FontStyle="Italic"/>
+                                <TextBox Text="{Binding EnlaceUrl}"
+                                         Watermark="https://ejemplo.com/noticia-completa"
+                                         Padding="12"
+                                         CornerRadius="6"
+                                         BorderBrush="#DDDDDD"/>
+                            </StackPanel>
+
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Imagen de la Noticia" FontWeight="Medium" Foreground="#333333"/>
+                                <TextBlock Text="Tamaño recomendado: 1200 x 675 px (proporción 16:9) para mejor calidad"
+                                           FontSize="11"
+                                           Foreground="#888888"
+                                           FontStyle="Italic"/>
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <TextBox Grid.Column="0"
+                                             Text="{Binding ImagenUrl}"
+                                             Watermark="URL de la imagen o ruta local"
+                                             Padding="12"
+                                             CornerRadius="6,0,0,6"
+                                             BorderBrush="#DDDDDD"
+                                             Margin="0,0,0,0"/>
+                                    <Button Grid.Column="1"
+                                            Content="Seleccionar"
+                                            Background="#0b5394"
+                                            Foreground="White"
+                                            Padding="16,12"
+                                            CornerRadius="0"
+                                            Cursor="Hand"
+                                            Command="{Binding SeleccionarImagenCommand}"/>
+                                    <Button Grid.Column="2"
+                                            Content="Encuadrar"
+                                            Background="#28a745"
+                                            Foreground="White"
+                                            Padding="16,12"
+                                            CornerRadius="0,6,6,0"
+                                            Cursor="Hand"
+                                            IsVisible="{Binding TieneImagenPrevia}"
+                                            Command="{Binding AbrirEncuadreCommand}"/>
+                                </Grid>
+
+                                <Border IsVisible="{Binding TieneImagenPrevia}"
+                                        Background="#F5F5F5"
+                                        CornerRadius="8"
+                                        Padding="12"
+                                        Margin="0,8,0,0">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="Imagen original:" FontSize="12" Foreground="#666666"/>
+                                        <Border MaxHeight="200"
+                                                CornerRadius="6"
+                                                ClipToBounds="True"
+                                                Background="White">
+                                            <Image Source="{Binding ImagenPrevia}"
+                                                   Stretch="Uniform"/>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- PANEL DE VISTA PREVIA - Según tipo de noticia -->
+                                <Border IsVisible="{Binding TieneImagenPrevia}"
+                                        Background="#E8F4FD"
+                                        CornerRadius="8"
+                                        Padding="16"
+                                        Margin="0,12,0,0"
+                                        BorderBrush="#0b5394"
+                                        BorderThickness="1">
+                                    <StackPanel Spacing="12">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Vista previa - Así se verá en el Dashboard"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#0b5394"/>
+                                            <TextBlock Text="Esta es una representación fiel de cómo aparecerá tu noticia"
+                                                       FontSize="11"
+                                                       Foreground="#666666"/>
+                                        </StackPanel>
+
+                                        <!-- Preview para NOTICIAS CUADRADAS (Destacadas) -->
+                                        <StackPanel IsVisible="{Binding MostrarPreviewCuadrada}" Spacing="8">
+                                            <TextBlock Text="📰 Noticia Destacada (Grid 2x2)"
+                                                       FontSize="12"
+                                                       FontWeight="Medium"
+                                                       Foreground="#0b5394"/>
+                                            <Border Background="#F5F5F5"
+                                                    CornerRadius="8"
+                                                    ClipToBounds="True"
+                                                    BoxShadow="0 2 8 0 #20000000"
+                                                    Width="345"
+                                                    Height="200"
+                                                    HorizontalAlignment="Left">
+                                                <Grid>
+                                                    <!-- Imagen con el mismo comportamiento que en el dashboard -->
+                                                    <Image Source="{Binding ImagenPrevia}"
+                                                           Stretch="Uniform"/>
+                                                    <!-- Badge Publicidad -->
+                                                    <Border Background="#AAFFD966"
+                                                            Padding="8,4"
+                                                            CornerRadius="6"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"
+                                                            Margin="8"
+                                                            BoxShadow="0 2 4 0 #20000000">
+                                                        <TextBlock Text="Publicidad"
+                                                                   Foreground="#333333"
+                                                                   FontSize="9"
+                                                                   FontWeight="SemiBold"/>
+                                                    </Border>
+                                                    <!-- Gradiente inferior -->
+                                                    <Border VerticalAlignment="Bottom" Height="50">
+                                                        <Border.Background>
+                                                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                                                <GradientStop Color="#00000000" Offset="0"/>
+                                                                <GradientStop Color="#90000000" Offset="1"/>
+                                                            </LinearGradientBrush>
+                                                        </Border.Background>
+                                                    </Border>
+                                                    <!-- Botón Ver más -->
+                                                    <Border Background="#0b5394"
+                                                            CornerRadius="4"
+                                                            Padding="10,5"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Bottom"
+                                                            Margin="12,0,0,12">
+                                                        <TextBlock Text="Ver más"
+                                                                   Foreground="White"
+                                                                   FontSize="9"
+                                                                   FontWeight="SemiBold"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                            <TextBlock Text="Vista previa: imagen rectangular 345x200px en el dashboard"
+                                                       FontSize="10"
+                                                       Foreground="#888888"/>
+                                        </StackPanel>
+
+                                        <!-- Preview para CARRUSEL -->
+                                        <StackPanel IsVisible="{Binding MostrarPreviewCarrusel}" Spacing="8">
+                                            <TextBlock Text="🎠 Carrusel de Noticias"
+                                                       FontSize="12"
+                                                       FontWeight="Medium"
+                                                       Foreground="#E65100"/>
+                                            <Border Background="White"
+                                                    CornerRadius="12"
+                                                    ClipToBounds="True"
+                                                    BoxShadow="0 4 12 0 #25000000"
+                                                    Width="280"
+                                                    HorizontalAlignment="Left">
+                                                <StackPanel>
+                                                    <!-- Imagen del carrusel - proporcional 1.91:1 -->
+                                                    <Border Height="147"
+                                                            CornerRadius="12,12,0,0"
+                                                            ClipToBounds="True"
+                                                            Background="#E8E8E8">
+                                                        <Image Source="{Binding ImagenPrevia}"
+                                                               Stretch="UniformToFill"/>
+                                                    </Border>
+                                                    <!-- Contenido simulado del carrusel -->
+                                                    <Border Padding="12" Background="White" CornerRadius="0,0,12,12">
+                                                        <StackPanel Spacing="8">
+                                                            <Border Background="#FFD966" Height="16" Width="80" HorizontalAlignment="Left" CornerRadius="4"/>
+                                                            <TextBlock Text="{Binding TituloNoticia, FallbackValue='Título de la noticia'}"
+                                                                       FontSize="14"
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="#0b5394"
+                                                                       TextTrimming="CharacterEllipsis"
+                                                                       MaxLines="2"/>
+                                                            <Border Background="#E0E0E0" Height="10" CornerRadius="2"/>
+                                                            <Border Background="#E0E0E0" Height="10" Width="180" HorizontalAlignment="Left" CornerRadius="2"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </StackPanel>
+                                            </Border>
+                                            <TextBlock Text="Imagen horizontal optimizada a 1200x628 (proporción 1.91:1)"
+                                                       FontSize="10"
+                                                       Foreground="#888888"/>
+                                        </StackPanel>
+
+                                        <!-- Preview para COMUNICACIONES -->
+                                        <StackPanel IsVisible="{Binding MostrarPreviewComunicacion}" Spacing="8">
+                                            <TextBlock Text="📢 Comunicación del Sistema"
+                                                       FontSize="12"
+                                                       FontWeight="Medium"
+                                                       Foreground="#d35400"/>
+                                            <Border Background="{Binding ColorSeleccionadoItem.FondoBrush, FallbackValue=#FFE0B2}"
+                                                    CornerRadius="12"
+                                                    BorderBrush="{Binding ColorSeleccionadoItem.IconoBrush, FallbackValue=#FF7043}"
+                                                    BorderThickness="2"
+                                                    BoxShadow="0 4 12 0 #25000000"
+                                                    Width="400"
+                                                    HorizontalAlignment="Left"
+                                                    Padding="16">
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <!-- Icono seleccionado -->
+                                                    <Border Grid.Column="0"
+                                                            Background="Transparent"
+                                                            Width="48" Height="48"
+                                                            CornerRadius="24"
+                                                            Margin="0,0,16,0"
+                                                            VerticalAlignment="Top"
+                                                            ClipToBounds="True">
+                                                        <Image Source="{Binding IconoSeleccionadoItem.IconoBitmap}"
+                                                               Width="66" Height="66"
+                                                               HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center"/>
+                                                    </Border>
+                                                    <!-- Contenido -->
+                                                    <StackPanel Grid.Column="1" Spacing="6">
+                                                        <TextBlock Text="{Binding TituloNoticia, FallbackValue='Título de la comunicación'}"
+                                                                   FontSize="15"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="{Binding ColorSeleccionadoItem.TextoBrush, FallbackValue=#E65100}"
+                                                                   TextWrapping="Wrap"/>
+                                                        <TextBlock Text="{Binding DescripcionNoticia, FallbackValue='Descripción de la comunicación...'}"
+                                                                   FontSize="12"
+                                                                   Foreground="#666666"
+                                                                   TextWrapping="Wrap"
+                                                                   MaxLines="3"/>
+                                                        <Border Background="{Binding ColorSeleccionadoItem.IconoBrush, FallbackValue=#FF7043}"
+                                                                CornerRadius="4"
+                                                                Padding="12,6"
+                                                                HorizontalAlignment="Left"
+                                                                Margin="0,4,0,0">
+                                                            <TextBlock Text="Leer más"
+                                                                       Foreground="White"
+                                                                       FontSize="11"
+                                                                       FontWeight="SemiBold"/>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                            <TextBlock Text="Las comunicaciones no requieren imagen (se muestra icono personalizado)"
+                                                       FontSize="10"
+                                                       Foreground="#888888"/>
+                                        </StackPanel>
+
+                                        <!-- Tip de encuadre (solo para tipos con imagen) -->
+                                        <Border Background="#FFF3CD"
+                                                CornerRadius="6"
+                                                Padding="10"
+                                                IsVisible="{Binding !MostrarPreviewComunicacion}">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="💡" FontSize="12"/>
+                                                <TextBlock Text="Usa el botón 'Encuadrar' para ajustar exactamente qué parte de la imagen se verá"
+                                                           Foreground="#856404"
+                                                           TextWrapping="Wrap"
+                                                           FontSize="11"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Sección de Video (solo carrusel) - Fuera del panel de vista previa para que aparezca sin imagen -->
+                            <StackPanel IsVisible="{Binding MostrarOpcionVideo}" Spacing="8"
+                                        Margin="0,12,0,0">
+                                <Border Background="#E8F0FE" CornerRadius="6" Padding="12">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="🎬 Video del Carrusel (opcional)"
+                                                   FontSize="13"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#0b5394"/>
+                                        <TextBlock Text="Agrega un video que se reproducirá automáticamente cuando esta noticia aparezca en el carrusel"
+                                                   FontSize="11"
+                                                   Foreground="#666666"/>
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Button Content="Seleccionar Video"
+                                                    Background="#0b5394"
+                                                    Foreground="White"
+                                                    Padding="16,10"
+                                                    CornerRadius="6"
+                                                    Cursor="Hand"
+                                                    Command="{Binding SeleccionarVideoCommand}"/>
+                                            <Button Content="Eliminar Video"
+                                                    Background="#d32f2f"
+                                                    Foreground="White"
+                                                    Padding="16,10"
+                                                    CornerRadius="6"
+                                                    Cursor="Hand"
+                                                    IsVisible="{Binding TieneVideo}"
+                                                    Command="{Binding EliminarVideoCommand}"/>
+                                        </StackPanel>
+                                        <Border IsVisible="{Binding TieneVideo}"
+                                                Background="#D4EDDA"
+                                                CornerRadius="4"
+                                                Padding="10,6">
+                                            <TextBlock Text="{Binding NombreVideo}"
+                                                       FontSize="12"
+                                                       Foreground="#155724"/>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                        <Border Height="1" Background="#E0E0E0" Margin="0,16"/>
+
+                        <Button Command="{Binding GuardarNoticiaCommand}"
+                                Background="#0b5394"
+                                Foreground="White"
+                                Padding="24,14"
+                                CornerRadius="8"
+                                Cursor="Hand"
+                                HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding TextoBotonGuardar}"
+                                       FontWeight="SemiBold"
+                                       FontSize="14"/>
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </ScrollViewer>
+
+        </Grid>
+
+        <!-- PANEL MODAL DE ENCUADRE -->
+        <Border Grid.Row="0" Grid.RowSpan="2"
+                IsVisible="{Binding MostrarPanelEncuadre}"
+                Background="#CC000000"
+                ZIndex="200">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="16"
+                    Margin="24"
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    MaxWidth="950"
+                    MaxHeight="800"
+                    BoxShadow="0 8 32 0 #40000000">
+                <Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto">
+                    <!-- Header -->
+                    <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="Encuadrar Imagen"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="#0b5394"/>
+                            <TextBlock Text="Selecciona el formato y ajusta el área visible de la imagen"
+                                       FontSize="11"
+                                       Foreground="#666666"/>
+                        </StackPanel>
+                        <Button Grid.Column="1"
+                                Content="X"
+                                Background="#E0E0E0"
+                                Foreground="#333333"
+                                Padding="10,6"
+                                CornerRadius="6"
+                                Cursor="Hand"
+                                Command="{Binding CerrarEncuadreCommand}"/>
+                    </Grid>
+
+                    <!-- Controles de formato y zoom -->
+                    <Border Grid.Row="1" Background="#F5F7FA" CornerRadius="8" Padding="12" Margin="0,12,0,0">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <!-- Indicador de formato (automático según tipo) -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                <Border Background="{Binding TipoNoticiaBackground}"
+                                        CornerRadius="6"
+                                        Padding="12,8">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="Formato:"
+                                                   FontWeight="Medium"
+                                                   Foreground="{Binding TipoNoticiaForeground}"
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding FormatoSeleccionado}"
+                                                   FontWeight="Bold"
+                                                   Foreground="{Binding TipoNoticiaForeground}"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Controles de Zoom de la imagen -->
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Zoom imagen:"
+                                           FontSize="11"
+                                           Foreground="#666666"
+                                           VerticalAlignment="Center"/>
+                                <Button Content="-"
+                                        Background="#E0E0E0"
+                                        Foreground="#333333"
+                                        Padding="10,4"
+                                        CornerRadius="4"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Alejar imagen"
+                                        Command="{Binding DisminuirZoomCommand}"/>
+                                <Border Background="White"
+                                        CornerRadius="4"
+                                        Padding="8,4"
+                                        MinWidth="50">
+                                    <TextBlock Text="{Binding ZoomLevel, StringFormat='{}{0:P0}'}"
+                                               FontSize="11"
+                                               FontWeight="Medium"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Content="+"
+                                        Background="#E0E0E0"
+                                        Foreground="#333333"
+                                        Padding="10,4"
+                                        CornerRadius="4"
+                                        FontSize="14"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Acercar imagen"
+                                        Command="{Binding AumentarZoomCommand}"/>
+                            </StackPanel>
+
+                            <!-- Indicador de tamaño -->
+                            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                <TextBlock Text="Tamaño final:"
+                                           FontSize="11"
+                                           Foreground="#888888"/>
+                                <TextBlock FontSize="11" Foreground="#333333" FontWeight="Medium">
+                                    <Run Text="{Binding AnchoExportacion}"/>
+                                    <Run Text=" x "/>
+                                    <Run Text="{Binding AltoExportacion}"/>
+                                    <Run Text=" px"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="2" Height="1" Background="#E0E0E0" Margin="0,12"/>
+
+                    <!-- Área de encuadre - RESPONSIVE -->
+                    <Border Grid.Row="3"
+                            Background="#2A2A2A"
+                            CornerRadius="8"
+                            Padding="8"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                        <Viewbox Stretch="Uniform"
+                                 StretchDirection="DownOnly"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center">
+                            <Grid Width="640" Height="440" ClipToBounds="True">
+                                <!-- Canvas principal que contiene todo -->
+                                <!-- ClipToBounds="False" para que el borde amarillo no se recorte en los bordes -->
+                                <Canvas Name="CropCanvas"
+                                        Width="600"
+                                        Height="400"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        ClipToBounds="False"
+                                        Background="#2A2A2A"
+                                        PointerPressed="CropCanvas_PointerPressed"
+                                        PointerMoved="CropArea_PointerMoved"
+                                        PointerReleased="CropArea_PointerReleased"
+                                        PointerWheelChanged="CropCanvas_PointerWheelChanged">
+
+                                    <!-- Imagen de fondo (oscurecida) - USA LA IMAGEN ORIGINAL -->
+                                    <!-- Tamaño fijo 600x400, zoom aplicado con ScaleTransform -->
+                                    <!-- Imagen de fondo (oscurecida) - DEBE usar RenderTransformOrigin="0,0" igual que la del crop -->
+                                    <!-- Posicionada con offsets calculados para coincidir exactamente con la imagen del crop -->
+                                    <Image Source="{Binding ImagenOriginalParaEncuadre}"
+                                           Stretch="Uniform"
+                                           Width="600"
+                                           Height="400"
+                                           Opacity="0.3"
+                                           IsHitTestVisible="False"
+                                           Name="CropBackgroundImage"
+                                           Canvas.Left="{Binding ImagenBackgroundLeftConZoom}"
+                                           Canvas.Top="{Binding ImagenBackgroundTopConZoom}"
+                                           RenderTransformOrigin="0,0">
+                                        <Image.RenderTransform>
+                                            <ScaleTransform ScaleX="{Binding ZoomLevel}" ScaleY="{Binding ZoomLevel}"/>
+                                        </Image.RenderTransform>
+                                    </Image>
+
+                                    <!-- Recuadro de selección (zona clara) -->
+                                    <!-- Border solo para el marco amarillo -->
+                                    <Border Name="CropAreaBorder"
+                                            Canvas.Left="{Binding CropAreaX}"
+                                            Canvas.Top="{Binding CropAreaY}"
+                                            Width="{Binding CropAreaWidth}"
+                                            Height="{Binding CropAreaHeight}"
+                                            BorderBrush="#FFD966"
+                                            BorderThickness="4"
+                                            CornerRadius="2"
+                                            Cursor="Hand"
+                                            ClipToBounds="True"
+                                            Background="Transparent">
+                                        <Panel ClipToBounds="True">
+                                            <!-- Imagen brillante - posicionada para coincidir EXACTAMENTE con la imagen de fondo -->
+                                            <!-- Usa Canvas para posicionamiento absoluto y RenderTransformOrigin="0,0" con offsets calculados -->
+                                            <Canvas Width="{Binding CropAreaWidth}" Height="{Binding CropAreaHeight}" ClipToBounds="True">
+                                                <Image Source="{Binding ImagenOriginalParaEncuadre}"
+                                                       Stretch="Uniform"
+                                                       Width="600"
+                                                       Height="400"
+                                                       IsHitTestVisible="False"
+                                                       Name="CropInnerImage"
+                                                       Canvas.Left="{Binding CropImageOffsetXConZoom}"
+                                                       Canvas.Top="{Binding CropImageOffsetYConZoom}"
+                                                       RenderTransformOrigin="0,0">
+                                                    <Image.RenderTransform>
+                                                        <ScaleTransform ScaleX="{Binding ZoomLevel}" ScaleY="{Binding ZoomLevel}"/>
+                                                    </Image.RenderTransform>
+                                                </Image>
+                                            </Canvas>
+
+                                            <!-- Lineas de tercios (no interactivas) -->
+                                            <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*" IsHitTestVisible="False" Margin="-4">
+                                                <!-- Lineas verticales -->
+                                                <Border Grid.Column="1" Grid.RowSpan="3" Width="1" Background="#80FFFFFF" HorizontalAlignment="Left"/>
+                                                <Border Grid.Column="2" Grid.RowSpan="3" Width="1" Background="#80FFFFFF" HorizontalAlignment="Left"/>
+                                                <!-- Lineas horizontales -->
+                                                <Border Grid.Row="1" Grid.ColumnSpan="3" Height="1" Background="#80FFFFFF" VerticalAlignment="Top"/>
+                                                <Border Grid.Row="2" Grid.ColumnSpan="3" Height="1" Background="#80FFFFFF" VerticalAlignment="Top"/>
+                                            </Grid>
+
+                                            <!-- Handles de esquinas para redimensionar -->
+                                            <Border Width="16" Height="16" Background="#FFD966" CornerRadius="2"
+                                                    HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-6,-6,0,0"
+                                                    BorderBrush="White" BorderThickness="1"
+                                                    Tag="TopLeft" Cursor="TopLeftCorner"
+                                                    PointerPressed="ResizeHandle_PointerPressed"/>
+                                            <Border Width="16" Height="16" Background="#FFD966" CornerRadius="2"
+                                                    HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-6,-6,0"
+                                                    BorderBrush="White" BorderThickness="1"
+                                                    Tag="TopRight" Cursor="TopRightCorner"
+                                                    PointerPressed="ResizeHandle_PointerPressed"/>
+                                            <Border Width="16" Height="16" Background="#FFD966" CornerRadius="2"
+                                                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="-6,0,0,-6"
+                                                    BorderBrush="White" BorderThickness="1"
+                                                    Tag="BottomLeft" Cursor="BottomLeftCorner"
+                                                    PointerPressed="ResizeHandle_PointerPressed"/>
+                                            <Border Width="16" Height="16" Background="#FFD966" CornerRadius="2"
+                                                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-6,-6"
+                                                    BorderBrush="White" BorderThickness="1"
+                                                    Tag="BottomRight" Cursor="BottomRightCorner"
+                                                    PointerPressed="ResizeHandle_PointerPressed"/>
+                                        </Panel>
+                                    </Border>
+                                </Canvas>
+                            </Grid>
+                        </Viewbox>
+                    </Border>
+
+                    <!-- Botones de posicion rapida + Instrucciones -->
+                    <Border Grid.Row="4"
+                            Background="#F5F7FA"
+                            CornerRadius="8"
+                            Padding="12"
+                            Margin="0,12,0,0">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <!-- Botones de posicion rapida -->
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="Vertical:"
+                                           FontSize="10"
+                                           Foreground="#666666"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,4,0"/>
+                                <Button Content="↑"
+                                        Background="#E0E0E0"
+                                        Foreground="#333333"
+                                        Padding="10,6"
+                                        CornerRadius="4"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Arriba"
+                                        Command="{Binding PosicionArribaCommand}"/>
+                                <Button Content="●"
+                                        Background="#0b5394"
+                                        Foreground="White"
+                                        Padding="10,6"
+                                        CornerRadius="4"
+                                        FontSize="10"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Centro"
+                                        Command="{Binding PosicionCentroCommand}"/>
+                                <Button Content="↓"
+                                        Background="#E0E0E0"
+                                        Foreground="#333333"
+                                        Padding="10,6"
+                                        CornerRadius="4"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Abajo"
+                                        Command="{Binding PosicionAbajoCommand}"/>
+
+                                <Border Width="1" Background="#D0D0D0" Margin="8,2"/>
+
+                                <TextBlock Text="Horizontal:"
+                                           FontSize="10"
+                                           Foreground="#666666"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,4,0"/>
+                                <Button Content="←"
+                                        Background="#E0E0E0"
+                                        Foreground="#333333"
+                                        Padding="10,6"
+                                        CornerRadius="4"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Izquierda"
+                                        Command="{Binding PosicionIzquierdaCommand}"/>
+                                <Button Content="●"
+                                        Background="#6c757d"
+                                        Foreground="White"
+                                        Padding="10,6"
+                                        CornerRadius="4"
+                                        FontSize="10"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Centro horizontal"
+                                        Command="{Binding PosicionCentroHorizontalCommand}"/>
+                                <Button Content="→"
+                                        Background="#E0E0E0"
+                                        Foreground="#333333"
+                                        Padding="10,6"
+                                        CornerRadius="4"
+                                        FontSize="12"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        ToolTip.Tip="Derecha"
+                                        Command="{Binding PosicionDerechaCommand}"/>
+                            </StackPanel>
+
+                            <!-- Instrucciones -->
+                            <Border Grid.Column="1"
+                                    Background="#FFF3CD"
+                                    CornerRadius="6"
+                                    Padding="8"
+                                    Margin="16,0,0,0">
+                                <TextBlock Text="Usa el zoom para acercar/alejar la imagen. Arrastra el recuadro para posicionar qué parte de la imagen se verá."
+                                           Foreground="#856404"
+                                           TextWrapping="Wrap"
+                                           FontSize="10"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- Botones -->
+                    <Grid Grid.Row="5" ColumnDefinitions="Auto,*,Auto,Auto" Margin="0,12,0,0">
+                        <!-- Botón Encuadrar Automático -->
+                        <Button Grid.Column="0"
+                                Background="#0b5394"
+                                Foreground="White"
+                                Padding="16,10"
+                                CornerRadius="6"
+                                Cursor="Hand"
+                                Command="{Binding EncuadrarAutomaticoCommand}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="⊡" FontSize="14" VerticalAlignment="Center"/>
+                                <TextBlock Text="Encuadrar" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Button>
+
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="Área:"
+                                       Foreground="#666666"
+                                       FontSize="11"/>
+                            <TextBlock Foreground="#333333" FontSize="11">
+                                <Run Text="{Binding CropAreaWidth, StringFormat='{}{0:F0}'}"/>
+                                <Run Text=" x "/>
+                                <Run Text="{Binding CropAreaHeight, StringFormat='{}{0:F0}'}"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <Button Grid.Column="2"
+                                Content="Cancelar"
+                                Background="#E0E0E0"
+                                Foreground="#333333"
+                                Padding="16,10"
+                                CornerRadius="6"
+                                Cursor="Hand"
+                                Margin="0,0,8,0"
+                                Command="{Binding CerrarEncuadreCommand}"/>
+
+                        <Button Grid.Column="3"
+                                Content="Aplicar"
+                                Background="#28a745"
+                                Foreground="White"
+                                Padding="16,10"
+                                CornerRadius="6"
+                                Cursor="Hand"
+                                Command="{Binding ConfirmarEncuadreCommand}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Border>
+
+    </Grid>
+
+</UserControl>

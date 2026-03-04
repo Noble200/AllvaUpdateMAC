@@ -1,0 +1,445 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.AdminDashboardView"
+             x:DataType="vm:AdminDashboardViewModel"> 
+
+    <Design.DataContext>
+        <vm:AdminDashboardViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <StyleInclude Source="AdminDashboardView.Styles.axaml"/>
+
+        <!-- Estilos para botones del header (usuario y menu) con hover de contraste -->
+        <Style Selector="Button.header-icon-btn">
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style Selector="Button.header-icon-btn /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#f3f3f3"/>
+        </Style>
+
+        <Style Selector="Button.header-icon-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#FFD966"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <!-- Fondo amarillo -->
+        <Border Background="#FFD966" />
+
+        <Grid ColumnDefinitions="Auto,*">
+            
+            <!-- SIDEBAR - Se oculta completamente -->
+            <Border Grid.Column="0" 
+                    Background="White"
+                    BoxShadow="2 0 8 0 #15000000"
+                    Width="240"
+                    IsVisible="{Binding SidebarVisible}">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    
+                    <!-- Logo Allva + Botón cerrar -->
+                    <Grid Grid.Row="0" Margin="16,20,16,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Logo -->
+                        <Border Grid.Column="0"
+                                Background="#FAFAFA"
+                                CornerRadius="10"
+                                Padding="12,8"
+                                BorderBrush="#E8E8E8"
+                                BorderThickness="1"
+                                HorizontalAlignment="Left">
+                            <Image Source="/Assets/logo.png" 
+                                   Width="140" 
+                                   Height="55"
+                                   Stretch="Uniform"
+                                   RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                        </Border>
+                        
+                        <!-- Botón cerrar sidebar -->
+                        <Button Grid.Column="1"
+                                Command="{Binding OcultarSidebarCommand}"
+                                Background="Transparent"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                ToolTip.Tip="Ocultar menú"
+                                VerticalAlignment="Center">
+                            <Canvas Width="16" Height="16">
+                                <!-- Flecha izquierda -->
+                                <Line StartPoint="10,3" EndPoint="4,8" Stroke="#666666" StrokeThickness="2" StrokeLineCap="Round"/>
+                                <Line StartPoint="4,8" EndPoint="10,13" Stroke="#666666" StrokeThickness="2" StrokeLineCap="Round"/>
+                                <Line StartPoint="14,2" EndPoint="14,14" Stroke="#666666" StrokeThickness="2" StrokeLineCap="Round"/>
+                            </Canvas>
+                        </Button>
+                    </Grid>
+
+                    <!-- Separador -->
+                    <Border Grid.Row="1" 
+                            Height="1"
+                            Background="#E0E0E0"
+                            Margin="16,0,16,8"/>
+
+                    <!-- Menú de navegación -->
+                    <StackPanel Grid.Row="2" Margin="0,8,0,0">
+
+                        <TextBlock Text="MENÚ PRINCIPAL"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"
+                                   Foreground="#999999"
+                                   Margin="20,0,20,12"/>
+
+                        <!-- Informes y analíticas -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='informes'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="informes"
+                                IsVisible="{Binding MostrarInformes}"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Informes y analíticas" Classes="admin-menu-text"/>
+                        </Button>
+
+                        <!-- Gestión de comercios -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='comercios'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="comercios"
+                                IsVisible="{Binding MostrarGestionComercios}"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Gestión comercios" Classes="admin-menu-text"/>
+                        </Button>
+
+                        <!-- Gestión de usuarios -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='usuarios'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="usuarios"
+                                IsVisible="{Binding MostrarGestionUsuarios}"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Gestión usuarios" Classes="admin-menu-text"/>
+                        </Button>
+
+                        <!-- Margen Beneficios -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='divisas'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="divisas"
+                                IsVisible="{Binding MostrarDivisas}"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Margen Beneficios" Classes="admin-menu-text"/>
+                        </Button>
+
+                        <!-- Pago suscripciones -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='suscripciones'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="suscripciones"
+                                IsVisible="{Binding MostrarSuscripciones}"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Pago suscripciones" Classes="admin-menu-text"/>
+                        </Button>
+
+                        <!-- Balance de Cuentas -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='balance'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="balance"
+                                IsVisible="{Binding MostrarBalance}"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Balance de cuentas" Classes="admin-menu-text"/>
+                        </Button>
+
+                        <!-- Operaciones -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='operaciones'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="operaciones"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Operaciones" Classes="admin-menu-text"/>
+                        </Button>
+
+                        <!-- Edición FrontOffice -->
+                        <Button Classes="admin-menu-item"
+                                Classes.active="{Binding SelectedModule, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='edicion_frontoffice'}"
+                                Command="{Binding NavigateToModuleCommand}"
+                                CommandParameter="edicion_frontoffice"
+                                Margin="12,2"
+                                CornerRadius="8">
+                            <TextBlock Text="Edición FrontOffice" Classes="admin-menu-text"/>
+                        </Button>
+
+                    </StackPanel>
+
+                    <!-- Cerrar Sesión -->
+                    <Border Grid.Row="3" 
+                            Margin="12,0,12,16"
+                            Padding="0,12,0,0"
+                            BorderThickness="0,1,0,0"
+                            BorderBrush="#EEEEEE">
+                        <Button Classes="admin-menu-item"
+                                Command="{Binding LogoutCommand}"
+                                CornerRadius="8"
+                                Margin="0">
+                            <TextBlock Text="Cerrar sesión" Classes="admin-menu-text"/>
+                        </Button>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+            <!-- CONTENIDO PRINCIPAL -->
+            <Grid Grid.Column="1" RowDefinitions="Auto,Auto,*">
+
+                <!-- ============================================ -->
+                <!-- TOP BAR GLOBAL - Usuario, Código, Botones -->
+                <!-- ============================================ -->
+                <Border Grid.Row="0"
+                        Background="White"
+                        Padding="20,10"
+                        Margin="24,16,24,0"
+                        CornerRadius="10"
+                        BoxShadow="0 2 8 0 #10000000">
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+
+                        <!-- Botón mostrar sidebar (solo visible cuando está oculto) -->
+                        <Button Grid.Column="0"
+                                Command="{Binding MostrarSidebarCommand}"
+                                Background="#f3f3f3"
+                                Width="32"
+                                Height="32"
+                                CornerRadius="6"
+                                Padding="0"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                Margin="0,0,14,0"
+                                ToolTip.Tip="Mostrar menú"
+                                IsVisible="{Binding !SidebarVisible}"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center">
+                            <Canvas Width="14" Height="14">
+                                <!-- Ícono hamburguesa con flecha -->
+                                <Line StartPoint="2,3" EndPoint="12,3" Stroke="#0b5394" StrokeThickness="2" StrokeLineCap="Round"/>
+                                <Line StartPoint="2,7" EndPoint="9,7" Stroke="#0b5394" StrokeThickness="2" StrokeLineCap="Round"/>
+                                <Line StartPoint="2,11" EndPoint="12,11" Stroke="#0b5394" StrokeThickness="2" StrokeLineCap="Round"/>
+                            </Canvas>
+                        </Button>
+
+                        <!-- Usuario y código de oficina -->
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="12"
+                                    VerticalAlignment="Center">
+                            <TextBlock Text="{Binding AdminName}"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#0b5394"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="|"
+                                       FontSize="14"
+                                       Foreground="#595959"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding LocalCode}"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="#595959"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Botones de usuario y menú -->
+                        <StackPanel Grid.Column="2"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    VerticalAlignment="Center">
+
+                            <!-- Botón Usuario -->
+                            <Panel>
+                                <Button x:Name="UserButton"
+                                        Click="UserButton_Click"
+                                        Classes="header-icon-btn"
+                                        Width="34"
+                                        Height="34"
+                                        CornerRadius="17">
+                                    <!-- Icono usuario profesional -->
+                                    <Canvas Width="18" Height="18">
+                                        <!-- Cabeza -->
+                                        <Ellipse Width="7" Height="7" Canvas.Left="5.5" Canvas.Top="2"
+                                                 Fill="#0b5394"/>
+                                        <!-- Cuerpo -->
+                                        <Ellipse Width="12" Height="9" Canvas.Left="3" Canvas.Top="10"
+                                                 Fill="#0b5394"/>
+                                    </Canvas>
+                                </Button>
+
+                                <Popup x:Name="UserPopup"
+                                       PlacementTarget="{Binding #UserButton}"
+                                       Placement="BottomEdgeAlignedRight"
+                                       IsLightDismissEnabled="True"
+                                       HorizontalOffset="0"
+                                       VerticalOffset="6">
+                                    <Border Background="White"
+                                            CornerRadius="10"
+                                            BoxShadow="0 8 24 0 #30000000"
+                                            BorderBrush="#0b5394"
+                                            BorderThickness="1"
+                                            MinWidth="200"
+                                            Padding="0">
+                                        <StackPanel>
+                                            <Button Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="16,12"
+                                                    HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Left"
+                                                    Cursor="Hand"
+                                                    Click="NavigateToMiPerfil">
+                                                <Button.Styles>
+                                                    <Style Selector="Button:pointerover">
+                                                        <Setter Property="Background" Value="#F5F5F5"/>
+                                                    </Style>
+                                                </Button.Styles>
+                                                <TextBlock Text="Mi perfil"
+                                                           FontSize="14"
+                                                           Foreground="#444444"/>
+                                            </Button>
+
+                                            <Border Height="1" Background="#EEEEEE" Margin="12,4"/>
+
+                                            <!-- Centro de Ayuda -->
+                                            <Button Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="16,12"
+                                                    HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Left"
+                                                    Cursor="Hand"
+                                                    Click="NavigateToCentroAyudaUsuario">
+                                                <Button.Styles>
+                                                    <Style Selector="Button:pointerover">
+                                                        <Setter Property="Background" Value="#F5F5F5"/>
+                                                    </Style>
+                                                </Button.Styles>
+                                                <TextBlock Text="Centro de Ayuda"
+                                                           FontSize="14"
+                                                           Foreground="#444444"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                            </Panel>
+
+                            <!-- Botón Menú Hamburguesa -->
+                            <Panel>
+                                <Button x:Name="MenuButton"
+                                        Click="MenuButton_Click"
+                                        Classes="header-icon-btn"
+                                        Width="34"
+                                        Height="34"
+                                        CornerRadius="6">
+                                    <StackPanel Spacing="4"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center">
+                                        <Border Width="16" Height="2" Background="#0b5394" CornerRadius="1"/>
+                                        <Border Width="16" Height="2" Background="#0b5394" CornerRadius="1"/>
+                                        <Border Width="16" Height="2" Background="#0b5394" CornerRadius="1"/>
+                                    </StackPanel>
+                                </Button>
+
+                                <Popup x:Name="MenuPopup"
+                                       PlacementTarget="{Binding #MenuButton}"
+                                       Placement="BottomEdgeAlignedRight"
+                                       IsLightDismissEnabled="True"
+                                       HorizontalOffset="0"
+                                       VerticalOffset="6">
+                                    <Border Background="White"
+                                            CornerRadius="10"
+                                            BoxShadow="0 8 24 0 #30000000"
+                                            BorderBrush="#0b5394"
+                                            BorderThickness="1"
+                                            MinWidth="220"
+                                            Padding="0">
+                                        <StackPanel>
+                                            <ItemsControl ItemsSource="{Binding MenuHamburguesaItems}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button Background="Transparent"
+                                                                BorderThickness="0"
+                                                                Padding="16,12"
+                                                                HorizontalAlignment="Stretch"
+                                                                HorizontalContentAlignment="Left"
+                                                                Cursor="Hand"
+                                                                Click="MenuHamburguesaItem_Click"
+                                                                Command="{Binding $parent[UserControl].((vm:AdminDashboardViewModel)DataContext).NavigateToMenuHamburguesaItemCommand}"
+                                                                CommandParameter="{Binding}">
+                                                            <Button.Styles>
+                                                                <Style Selector="Button:pointerover">
+                                                                    <Setter Property="Background" Value="#F5F5F5"/>
+                                                                </Style>
+                                                            </Button.Styles>
+                                                            <TextBlock Text="{Binding Titulo}"
+                                                                       FontSize="14"
+                                                                       Foreground="#444444"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                            </Panel>
+
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- ============================================ -->
+                <!-- HEADER DEL PANEL - Solo título del módulo -->
+                <!-- ============================================ -->
+                <Border Grid.Row="1"
+                        Background="White"
+                        Padding="16,10"
+                        Margin="24,8,24,0"
+                        CornerRadius="10,10,0,0"
+                        BoxShadow="0 2 8 0 #10000000"
+                        IsVisible="{Binding MostrarTituloModulo}">
+                    <TextBlock Text="{Binding SelectedModuleTitle}"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#0b5394"
+                               VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- Área de contenido -->
+                <Border Grid.Row="2"
+                        Background="White"
+                        Margin="{Binding MargenContenido}"
+                        CornerRadius="{Binding CornerRadiusContenido}"
+                        Padding="0"
+                        ClipToBounds="True">
+                    <ContentControl Content="{Binding CurrentView}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"/>
+                </Border>
+
+            </Grid>
+
+        </Grid>
+    </Grid>
+
+</UserControl>

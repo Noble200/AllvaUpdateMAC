@@ -1,0 +1,292 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             x:Class="Allva.Desktop.Views.PanelDivisas.ConfirmacionClienteView"
+             x:DataType="vm:CurrencyExchangePanelViewModel">
+    
+    <UserControl.Styles>
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #20000000"/>
+            <Setter Property="Padding" Value="24"/>
+        </Style>
+        
+        <Style Selector="Button.btn-cerrar-popup">
+            <Setter Property="Background" Value="#0b5394"/>
+        </Style>
+        <Style Selector="Button.btn-cerrar-popup:pointerover">
+            <Setter Property="Background" Value="#094478"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Border Background="#f5f5f5">
+            <ScrollViewer>
+                <StackPanel Spacing="24" Margin="30" MaxWidth="1400" HorizontalAlignment="Center">
+                    
+                    <!-- Encabezado -->
+                    <StackPanel Spacing="6" HorizontalAlignment="Center">
+                        <TextBlock Text="Confirmar Datos del Cliente"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#0b5394"
+                                   HorizontalAlignment="Center"/>
+                        
+                        <TextBlock Text="Por favor revise los datos antes de confirmar"
+                                   FontSize="14"
+                                   Foreground="#666"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- Datos del cliente -->
+                    <Border Classes="card">
+                        <Grid ColumnDefinitions="*,450">
+                            <!-- Informacion -->
+                            <StackPanel Grid.Column="0" Spacing="20">
+                                
+                                <!-- Datos Personales -->
+                                <StackPanel Spacing="4">
+                                    <TextBlock Text="Datos Personales" 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="#0b5394"/>
+                                    <Border Height="1" Background="#E0E0E0"/>
+                                </StackPanel>
+                                
+                                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" Margin="0,8,0,0">
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Spacing="4" Margin="0,0,40,16">
+                                        <TextBlock Text="Nombre completo:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevoNombreCompletoPreview}" FontSize="15" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Row="0" Grid.Column="1" Spacing="4" Margin="0,0,0,16">
+                                        <TextBlock Text="Teléfono:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevoTelefono, TargetNullValue='-'}" FontSize="15"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Row="1" Grid.Column="0" Spacing="4" Margin="0,0,40,16">
+                                        <TextBlock Text="Dirección:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevaDireccion, TargetNullValue='-'}" FontSize="15"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Spacing="4" Margin="0,0,0,16">
+                                        <TextBlock Text="Nacionalidad:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevaNacionalidad, TargetNullValue='-'}" FontSize="15"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Row="2" Grid.Column="0" Spacing="4" Margin="0,0,40,0">
+                                        <TextBlock Text="Fecha de nacimiento:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevaFechaNacimientoTexto, TargetNullValue='-'}" FontSize="15"/>
+                                    </StackPanel>
+                                </Grid>
+                                
+                                <!-- Documentacion -->
+                                <StackPanel Spacing="4" Margin="0,8,0,0">
+                                    <TextBlock Text="Documentación" 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="#0b5394"/>
+                                    <Border Height="1" Background="#E0E0E0"/>
+                                </StackPanel>
+                                
+                                <Grid ColumnDefinitions="*,*,*" Margin="0,8,0,0">
+                                    <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,40,0">
+                                        <TextBlock Text="Tipo documento:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevoTipoDocumento}" FontSize="15"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,40,0">
+                                        <TextBlock Text="Número documento:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevoNumeroDocumento}" FontSize="15" FontWeight="SemiBold"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="2" Spacing="4">
+                                        <TextBlock Text="Fecha caducidad:" FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="{Binding NuevaCaducidadDocumentoTexto, TargetNullValue='-'}" FontSize="15"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                            
+                            <!-- Imagenes -->
+                            <StackPanel Grid.Column="1" Spacing="12" Margin="24,0,0,0">
+                                <TextBlock Text="Documento" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394" 
+                                           HorizontalAlignment="Center"/>
+                                
+                                <!-- Imagen frontal -->
+                                <Border Background="#F5F5F5"
+                                        CornerRadius="8"
+                                        Padding="12"
+                                        IsVisible="{Binding TieneImagenDocumentoFrontal}">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="Cara frontal" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                Padding="0"
+                                                Cursor="Hand"
+                                                HorizontalAlignment="Center"
+                                                Command="{Binding MostrarPreviewImagenFrontalCommand}">
+                                            <Image Source="{Binding ImagenDocumentoFrontalPreview}"
+                                                   MaxHeight="120"
+                                                   Stretch="Uniform"/>
+                                        </Button>
+                                        <Button Content="Ver imagen"
+                                                Background="#E3F2FD"
+                                                Foreground="#1565C0"
+                                                FontSize="12"
+                                                Padding="16,6"
+                                                CornerRadius="6"
+                                                MinHeight="32"
+                                                HorizontalAlignment="Center"
+                                                Command="{Binding MostrarPreviewImagenFrontalCommand}"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Imagen trasera -->
+                                <Border Background="#F5F5F5"
+                                        CornerRadius="8"
+                                        Padding="12"
+                                        IsVisible="{Binding TieneImagenDocumentoTrasera}">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="Cara trasera" FontSize="12" Foreground="#666" HorizontalAlignment="Center"/>
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                Padding="0"
+                                                Cursor="Hand"
+                                                HorizontalAlignment="Center"
+                                                Command="{Binding MostrarPreviewImagenTraseraCommand}">
+                                            <Image Source="{Binding ImagenDocumentoTraseraPreview}"
+                                                   MaxHeight="120"
+                                                   Stretch="Uniform"/>
+                                        </Button>
+                                        <Button Content="Ver imagen"
+                                                Background="#E3F2FD"
+                                                Foreground="#1565C0"
+                                                FontSize="12"
+                                                Padding="16,6"
+                                                CornerRadius="6"
+                                                MinHeight="32"
+                                                HorizontalAlignment="Center"
+                                                Command="{Binding MostrarPreviewImagenTraseraCommand}"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <!-- Sin imagenes -->
+                                <Border Background="#FFF3E0"
+                                        CornerRadius="8"
+                                        Padding="20"
+                                        IsVisible="{Binding !TieneAlgunaImagenDocumento}">
+                                    <TextBlock Text="No se han adjuntado imágenes del documento"
+                                               FontSize="13"
+                                               Foreground="#E65100"
+                                               TextWrapping="Wrap"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Error -->
+                    <Border Background="#FFEBEE"
+                            CornerRadius="6"
+                            Padding="16"
+                            IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <TextBlock Text="{Binding ErrorMessage}" 
+                                   Foreground="#C62828"
+                                   FontWeight="SemiBold"/>
+                    </Border>
+                    
+                    <!-- Botones -->
+                    <Grid ColumnDefinitions="*,*" Height="52">
+                        <Button Grid.Column="0"
+                                Content="Atrás"
+                                Background="#ffd966"
+                                Foreground="#0b5394"
+                                FontWeight="SemiBold"
+                                FontSize="16"
+                                CornerRadius="6"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Margin="0,0,12,0"
+                                Command="{Binding VolverANuevoClienteCommand}"/>
+                        <Button Grid.Column="1"
+                                Content="Confirmar y Crear Cliente"
+                                Background="#0b5394"
+                                Foreground="White"
+                                FontWeight="SemiBold"
+                                FontSize="16"
+                                CornerRadius="6"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Margin="12,0,0,0"
+                                Command="{Binding GuardarNuevoClienteCommand}"/>
+                    </Grid>
+                    
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        
+        <!-- POPUP: Preview de imagen ampliada -->
+        <Border IsVisible="{Binding MostrarPreviewImagen}"
+                Background="#E0000000"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="20"
+                    Margin="40"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BoxShadow="0 8 24 0 #40000000">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    
+                    <!-- Encabezado -->
+                    <Grid Grid.Row="0" Margin="0,0,0,15">
+                        <TextBlock Text="{Binding TituloPreviewImagen}" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#0b5394"/>
+                        <Button Content="X" 
+                                Background="Transparent"
+                                Foreground="#666"
+                                FontWeight="Bold"
+                                FontSize="16"
+                                HorizontalAlignment="Right"
+                                Command="{Binding CerrarPreviewImagenCommand}"/>
+                    </Grid>
+                    
+                    <!-- Imagen centrada que se ajusta al espacio -->
+                    <Border Grid.Row="1" 
+                            Background="#f5f5f5" 
+                            CornerRadius="8"
+                            Padding="10">
+                        <Image Source="{Binding ImagenPreviewActual}"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    </Border>
+                    
+                    <!-- Boton cerrar -->
+                    <Button Grid.Row="2"
+                            Content="Cerrar"
+                            Classes="btn-cerrar-popup"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Padding="40,12"
+                            CornerRadius="6"
+                            HorizontalAlignment="Center"
+                            Margin="0,15,0,0"
+                            Command="{Binding CerrarPreviewImagenCommand}"/>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,124 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:Allva.Desktop.Views"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="380"
+        x:Class="Allva.Desktop.Views.ConfirmacionAnulacionView"
+        x:DataType="views:ConfirmacionAnulacionView"
+        Title="Confirmar Anulación"
+        Width="450"
+        Height="380"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#F5F5F5">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="#dc3545" Padding="20,16">
+            <TextBlock Text="Confirmar Anulación de Operación"
+                       FontSize="16"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <ScrollViewer Grid.Row="1" Padding="20">
+            <StackPanel Spacing="16">
+
+                <TextBlock Text="¿Desea anular la siguiente operación?"
+                           FontSize="14"
+                           FontWeight="Medium"
+                           Foreground="#333333"
+                           HorizontalAlignment="Center"/>
+
+                <!-- INFO OPERACION -->
+                <Border Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Padding="16">
+                    <StackPanel Spacing="8">
+
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="N° Operación:"
+                                       FontSize="12" Foreground="#666666" Margin="0,0,12,4"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding NumeroOperacion}"
+                                       FontSize="12" FontWeight="Bold" Foreground="#0b5394"/>
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Fecha:"
+                                       FontSize="12" Foreground="#666666" Margin="0,0,12,4"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding FechaHora}"
+                                       FontSize="12" FontWeight="Medium"/>
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Cliente:"
+                                       FontSize="12" Foreground="#666666" Margin="0,0,12,4"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding NombreCliente}"
+                                       FontSize="12" FontWeight="Medium"/>
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Beneficiario:"
+                                       FontSize="12" Foreground="#666666" Margin="0,0,12,4"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding NombreBeneficiario}"
+                                       FontSize="12" FontWeight="Medium"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Destino:"
+                                       FontSize="12" Foreground="#666666" Margin="0,0,12,4"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding PaisDestino}"
+                                       FontSize="12" FontWeight="Medium"/>
+
+                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Pack:"
+                                       FontSize="12" Foreground="#666666" Margin="0,0,12,4"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Descripcion}"
+                                       FontSize="12" FontWeight="Medium"/>
+
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Importe:"
+                                       FontSize="12" Foreground="#666666" Margin="0,0,12,4"/>
+                            <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Importe}"
+                                       FontSize="12" FontWeight="Bold" Foreground="#008800"/>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="#fff3cd"
+                        CornerRadius="6"
+                        Padding="12">
+                    <TextBlock Text="Esta acción no se puede deshacer."
+                               FontSize="12"
+                               Foreground="#856404"
+                               FontWeight="Medium"
+                               HorizontalAlignment="Center"/>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- BOTONES -->
+        <Border Grid.Row="2" Background="White" Padding="20,16" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Button Grid.Column="1"
+                        Content="Cancelar"
+                        Background="White"
+                        Foreground="#666666"
+                        BorderBrush="#CCCCCC"
+                        BorderThickness="1"
+                        Padding="20,10"
+                        CornerRadius="4"
+                        Margin="0,0,12,0"
+                        Click="Cancelar_Click"
+                        Cursor="Hand"/>
+
+                <Button Grid.Column="2"
+                        Content="Anular Operación"
+                        Background="#dc3545"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Padding="20,10"
+                        CornerRadius="4"
+                        Click="Confirmar_Click"
+                        Cursor="Hand"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

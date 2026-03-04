@@ -1,0 +1,422 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             xmlns:conv="using:Allva.Desktop.Converters"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="Allva.Desktop.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <UserControl.Resources>
+        <conv:ProgressToWidthConverter x:Key="ProgressToWidthConverter"/>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <StyleInclude Source="LoginView.Styles.axaml"/>
+    </UserControl.Styles>
+
+    <Grid Background="#ffd966">
+
+        <!-- Botón cambiar idioma -->
+        <Button Classes="btnIdioma"
+                Command="{Binding CambiarIdiomaCommand}"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,30,30,0"
+                ZIndex="1"
+                ToolTip.Tip="Change language / Cambiar idioma">
+            <TextBlock Classes="labelIdioma"
+                      Text="{Binding Localization.CurrentLanguageCode}"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Center"/>
+        </Button>
+
+        <!-- ScrollViewer para contenido desplazable -->
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto"
+                      Padding="20">
+
+        <!-- Contenedor centrado -->
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            
+            <!-- Panel de Login -->
+            <Border Classes="panelLogin">
+                
+                <StackPanel Spacing="25">
+                    
+                    <!-- Logo -->
+                    <Border Classes="logoContainer" 
+                            HorizontalAlignment="Center"
+                            Margin="0,0,0,15">
+                        <Image Source="/Assets/logo.png" 
+                               Height="80"
+                               Stretch="Uniform"/>
+                    </Border>
+
+                    <!-- Título -->
+                    <TextBlock Classes="tituloLogin"
+                              Text="{Binding Localization[Login_Title]}"
+                              HorizontalAlignment="Center"/>
+
+                    <!-- Formulario -->
+                    <StackPanel Spacing="20">
+                        
+                        <!-- Campo: Usuario -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="labelCampo" 
+                                      Text="{Binding Localization[Login_User]}"/>
+                            <TextBox Classes="inputLogin"
+                                    Text="{Binding NumeroUsuario}"
+                                    Watermark="{Binding Localization[Login_UserPlaceholder]}"
+                                    IsEnabled="{Binding !IsLoading}"
+                                    HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+
+                        <!-- Campo: Código Local -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="labelCampo" 
+                                      Text="{Binding Localization[Login_Office]}"/>
+                            <TextBox Classes="inputLogin"
+                                    Text="{Binding CodigoLocal}"
+                                    Watermark="{Binding Localization[Login_OfficePlaceholder]}"
+                                    IsEnabled="{Binding !IsLoading}"
+                                    HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+
+                        <!-- Campo: Contraseña -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="labelCampo" 
+                                      Text="{Binding Localization[Login_Password]}"/>
+                            <TextBox Classes="inputLogin"
+                                    Text="{Binding Password}"
+                                    PasswordChar="●"
+                                    Watermark="{Binding Localization[Login_PasswordPlaceholder]}"
+                                    IsEnabled="{Binding !IsLoading}"
+                                    HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <!-- Botón iniciar sesión -->
+                    <Button Classes="btnLogin"
+                            Command="{Binding LoginCommand}"
+                            IsEnabled="{Binding !IsLoading}">
+
+                        <Grid>
+                            <!-- Texto normal -->
+                            <TextBlock Text="{Binding Localization[Login_Button]}"
+                                      IsVisible="{Binding !IsLoading}"
+                                      HorizontalAlignment="Center"/>
+
+                            <!-- LOADING CON PUNTOS ANIMADOS -->
+                            <StackPanel Orientation="Horizontal"
+                                       HorizontalAlignment="Center"
+                                       Spacing="8"
+                                       IsVisible="{Binding IsLoading}">
+                                <TextBlock Text="{Binding Localization[Login_Loading]}"
+                                          FontSize="16"
+                                          FontWeight="Bold"
+                                          VerticalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <Ellipse Width="8" Height="8" Fill="White">
+                                        <Ellipse.Styles>
+                                            <Style Selector="Ellipse">
+                                                <Style.Animations>
+                                                    <Animation Duration="0:0:1" IterationCount="Infinite">
+                                                        <KeyFrame Cue="0%">
+                                                            <Setter Property="Opacity" Value="0.3"/>
+                                                        </KeyFrame>
+                                                        <KeyFrame Cue="33%">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                        </KeyFrame>
+                                                        <KeyFrame Cue="100%">
+                                                            <Setter Property="Opacity" Value="0.3"/>
+                                                        </KeyFrame>
+                                                    </Animation>
+                                                </Style.Animations>
+                                            </Style>
+                                        </Ellipse.Styles>
+                                    </Ellipse>
+                                    <Ellipse Width="8" Height="8" Fill="White">
+                                        <Ellipse.Styles>
+                                            <Style Selector="Ellipse">
+                                                <Style.Animations>
+                                                    <Animation Duration="0:0:1" IterationCount="Infinite" Delay="0:0:0.2">
+                                                        <KeyFrame Cue="0%">
+                                                            <Setter Property="Opacity" Value="0.3"/>
+                                                        </KeyFrame>
+                                                        <KeyFrame Cue="33%">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                        </KeyFrame>
+                                                        <KeyFrame Cue="100%">
+                                                            <Setter Property="Opacity" Value="0.3"/>
+                                                        </KeyFrame>
+                                                    </Animation>
+                                                </Style.Animations>
+                                            </Style>
+                                        </Ellipse.Styles>
+                                    </Ellipse>
+                                    <Ellipse Width="8" Height="8" Fill="White">
+                                        <Ellipse.Styles>
+                                            <Style Selector="Ellipse">
+                                                <Style.Animations>
+                                                    <Animation Duration="0:0:1" IterationCount="Infinite" Delay="0:0:0.4">
+                                                        <KeyFrame Cue="0%">
+                                                            <Setter Property="Opacity" Value="0.3"/>
+                                                        </KeyFrame>
+                                                        <KeyFrame Cue="33%">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                        </KeyFrame>
+                                                        <KeyFrame Cue="100%">
+                                                            <Setter Property="Opacity" Value="0.3"/>
+                                                        </KeyFrame>
+                                                    </Animation>
+                                                </Style.Animations>
+                                            </Style>
+                                        </Ellipse.Styles>
+                                    </Ellipse>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Button>
+
+                    <!-- Mensaje de error -->
+                    <Border Background="#FFDDDD"
+                            BorderBrush="#CC0000"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="15,10"
+                            IsVisible="{Binding MostrarMensajeError}"
+                            HorizontalAlignment="Stretch">
+                        <TextBlock Text="{Binding MensajeError}"
+                                  Foreground="#CC0000"
+                                  FontSize="13"
+                                  FontWeight="SemiBold"
+                                  TextWrapping="Wrap"
+                                  TextAlignment="Center"/>
+                    </Border>
+
+                    <!-- Enlace: Olvidé mi contraseña -->
+                    <Button Classes="btnRecuperarPassword"
+                            Command="{Binding RecuperarPasswordCommand}"
+                            IsEnabled="{Binding !IsLoading}"
+                            HorizontalAlignment="Center"
+                            Content="{Binding Localization[Login_ForgotPassword]}"/>
+
+                    <!-- Versión -->
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <TextBlock Classes="textoVersion"
+                                  Text="{Binding Localization[Login_Version]}"/>
+                        <TextBlock Classes="textoVersion"
+                                  Text="1.4.4"/>
+                    </StackPanel>
+
+                    <!-- Copyright -->
+                    <TextBlock Text="{Binding Localization[Login_Copyright]}"
+                              Foreground="#666666"
+                              FontSize="11"
+                              HorizontalAlignment="Center"
+                              Margin="0,10,0,0"/>
+
+                </StackPanel>
+            </Border>
+
+            <!-- OVERLAY DE ACTUALIZACIÓN -->
+            <Border Background="#DD0b5394" 
+                    IsVisible="{Binding MostrarMensajeActualizacion}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    CornerRadius="25">
+                <StackPanel HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"
+                           Spacing="30">
+                    
+                    <!-- Mensaje de actualización -->
+                    <TextBlock Text="{Binding MensajeActualizacion}"
+                              FontSize="24"
+                              FontWeight="Bold"
+                              Foreground="White"
+                              TextAlignment="Center"/>
+                    
+                    <!-- Barra de progreso -->
+                    <Border Background="#40FFFFFF"
+                            CornerRadius="10"
+                            Width="400"
+                            Height="20">
+                        <Border Background="#ffd966"
+                                CornerRadius="10"
+                                HorizontalAlignment="Left"
+                                Width="{Binding ProgresoActualizacion, Converter={StaticResource ProgressToWidthConverter}}"/>
+                    </Border>
+                    
+                    <!-- Porcentaje -->
+                    <TextBlock Text="{Binding ProgresoActualizacion, StringFormat='{}{0}%'}"
+                              FontSize="28"
+                              FontWeight="Bold"
+                              Foreground="#ffd966"
+                              TextAlignment="Center"/>
+                    
+                    <!-- Círculos animados -->
+                    <StackPanel Orientation="Horizontal" 
+                               Spacing="15"
+                               HorizontalAlignment="Center">
+                        <Ellipse Width="20" Height="20" Fill="#ffd966">
+                            <Ellipse.Styles>
+                                <Style Selector="Ellipse">
+                                    <Style.Animations>
+                                        <Animation Duration="0:0:1.2" IterationCount="Infinite">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="50%">
+                                                <Setter Property="Opacity" Value="0.3"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </Ellipse.Styles>
+                        </Ellipse>
+                        
+                        <Ellipse Width="20" Height="20" Fill="#ffd966">
+                            <Ellipse.Styles>
+                                <Style Selector="Ellipse">
+                                    <Style.Animations>
+                                        <Animation Duration="0:0:1.2" IterationCount="Infinite" Delay="0:0:0.2">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="50%">
+                                                <Setter Property="Opacity" Value="0.3"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </Ellipse.Styles>
+                        </Ellipse>
+                        
+                        <Ellipse Width="20" Height="20" Fill="#ffd966">
+                            <Ellipse.Styles>
+                                <Style Selector="Ellipse">
+                                    <Style.Animations>
+                                        <Animation Duration="0:0:1.2" IterationCount="Infinite" Delay="0:0:0.4">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="50%">
+                                                <Setter Property="Opacity" Value="0.3"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </Ellipse.Styles>
+                        </Ellipse>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- OVERLAY DE CARGA GRANDE Y VISIBLE (login) - Solo si NO hay actualización -->
+            <Border Background="#DD000000"
+                    IsVisible="{Binding MostrarOverlayCarga}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    CornerRadius="25">
+                <StackPanel HorizontalAlignment="Center" 
+                           VerticalAlignment="Center"
+                           Spacing="30">
+                    
+                    <!-- Círculos animados grandes -->
+                    <StackPanel Orientation="Horizontal" 
+                               Spacing="15"
+                               HorizontalAlignment="Center">
+                        <Ellipse Width="20" Height="20" Fill="#ffd966">
+                            <Ellipse.Styles>
+                                <Style Selector="Ellipse">
+                                    <Style.Animations>
+                                        <Animation Duration="0:0:1.2" IterationCount="Infinite">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="Opacity" Value="0.2"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="50%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="Opacity" Value="0.2"/>
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </Ellipse.Styles>
+                        </Ellipse>
+                        <Ellipse Width="20" Height="20" Fill="#ffd966">
+                            <Ellipse.Styles>
+                                <Style Selector="Ellipse">
+                                    <Style.Animations>
+                                        <Animation Duration="0:0:1.2" IterationCount="Infinite" Delay="0:0:0.3">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="Opacity" Value="0.2"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="50%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="Opacity" Value="0.2"/>
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </Ellipse.Styles>
+                        </Ellipse>
+                        <Ellipse Width="20" Height="20" Fill="#ffd966">
+                            <Ellipse.Styles>
+                                <Style Selector="Ellipse">
+                                    <Style.Animations>
+                                        <Animation Duration="0:0:1.2" IterationCount="Infinite" Delay="0:0:0.6">
+                                            <KeyFrame Cue="0%">
+                                                <Setter Property="Opacity" Value="0.2"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="50%">
+                                                <Setter Property="Opacity" Value="1"/>
+                                            </KeyFrame>
+                                            <KeyFrame Cue="100%">
+                                                <Setter Property="Opacity" Value="0.2"/>
+                                            </KeyFrame>
+                                        </Animation>
+                                    </Style.Animations>
+                                </Style>
+                            </Ellipse.Styles>
+                        </Ellipse>
+                    </StackPanel>
+                    
+                    <!-- Texto grande y visible -->
+                    <TextBlock Text="Verificando credenciales..."
+                              Foreground="#ffd966"
+                              FontSize="20"
+                              FontWeight="Bold"
+                              HorizontalAlignment="Center"/>
+                              
+                    <TextBlock Text="Por favor espera un momento"
+                              Foreground="White"
+                              FontSize="14"
+                              HorizontalAlignment="Center"
+                              Opacity="0.8"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        </ScrollViewer>
+
+    </Grid>
+
+</UserControl>

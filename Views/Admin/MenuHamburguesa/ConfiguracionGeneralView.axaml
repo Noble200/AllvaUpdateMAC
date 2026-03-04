@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.ConfiguracionGeneralView">
+
+    <Border Background="White" Padding="30">
+        <StackPanel Spacing="20">
+            
+            <!-- Encabezado -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Configuración General"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"/>
+                <TextBlock Text="Ajustes generales del sistema"
+                           FontSize="14"
+                           Foreground="#666666"/>
+            </StackPanel>
+
+            <Border Height="1" Background="#EEEEEE"/>
+
+            <!-- Contenido placeholder -->
+            <Border Background="#F8F9FA"
+                    CornerRadius="12"
+                    Padding="40"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <StackPanel Spacing="16" HorizontalAlignment="Center">
+                    <TextBlock Text="Próximamente"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#888888"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Este módulo está en desarrollo"
+                               FontSize="14"
+                               Foreground="#AAAAAA"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </Border>
+
+</UserControl>

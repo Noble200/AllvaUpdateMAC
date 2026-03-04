@@ -1,0 +1,326 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- ============================================ -->
+    <!-- ESTILOS DEL PANEL DE ADMINISTRACIÓN -->
+    <!-- ============================================ -->
+    
+    <!-- FONDO PRINCIPAL -->
+    <Style Selector="Border.admin-background">
+        <Setter Property="Background" Value="#F0F2F5"/>
+    </Style>
+    
+    <!-- SIDEBAR -->
+    <Style Selector="Border.admin-sidebar">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BoxShadow" Value="2 0 8 0 #15000000"/>
+        <Setter Property="MinWidth" Value="240"/>
+    </Style>
+    
+    <Style Selector="Border.admin-logo-container">
+        <Setter Property="Padding" Value="24,28,24,20"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+    </Style>
+    
+    <Style Selector="Border.admin-menu-separator">
+        <Setter Property="Height" Value="1"/>
+        <Setter Property="Background" Value="#E8E8E8"/>
+        <Setter Property="Margin" Value="20,0,20,8"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-section-title">
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="#999999"/>
+        <Setter Property="Padding" Value="24,12,24,10"/>
+    </Style>
+    
+    <!-- ITEMS DEL MENU -->
+    <Style Selector="Button.admin-menu-item">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="16,12"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+    
+    <Style Selector="Button.admin-menu-item /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="8"/>
+    </Style>
+    
+    <Style Selector="Button.admin-menu-item:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#F5F5F5"/>
+    </Style>
+    
+    <Style Selector="Button.admin-menu-item.active /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#FFD966"/>
+    </Style>
+    
+    <Style Selector="Button.admin-logout-btn">
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-menu-text">
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="#444444"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+    </Style>
+    
+    <Style Selector="Button.admin-menu-item.active TextBlock.admin-menu-text">
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="#333333"/>
+    </Style>
+    
+    <!-- HEADER SUPERIOR -->
+    <Style Selector="Border.admin-top-header">
+        <Setter Property="Background" Value="#0b5394"/>
+        <Setter Property="Padding" Value="28,14"/>
+        <Setter Property="Margin" Value="24,24,24,0"/>
+        <Setter Property="CornerRadius" Value="12,12,0,0"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-header-title">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- BOTONES DEL HEADER -->
+    <Style Selector="Button.admin-header-btn">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Width" Value="38"/>
+        <Setter Property="Height" Value="38"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+    
+    <Style Selector="Button.admin-header-btn /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="CornerRadius" Value="8"/>
+    </Style>
+    
+    <Style Selector="Button.admin-header-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#F0F0F0"/>
+    </Style>
+    
+    <!-- AREA DE CONTENIDO -->
+    <Style Selector="Border.admin-content-area">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Margin" Value="24,0,24,24"/>
+        <Setter Property="CornerRadius" Value="0,0,12,12"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+    
+    <!-- PANEL DE CONTENIDO GENERAL -->
+    <Style Selector="Border.admin-content-panel">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Margin" Value="24"/>
+        <Setter Property="BoxShadow" Value="0 2 12 0 #12000000"/>
+    </Style>
+    
+    <!-- HEADER DEL MÓDULO -->
+    <Style Selector="Border.admin-module-header">
+        <Setter Property="Background" Value="#0b5394"/>
+        <Setter Property="Padding" Value="28,14"/>
+        <Setter Property="CornerRadius" Value="12,12,0,0"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-module-title">
+        <Setter Property="FontSize" Value="18"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="White"/>
+    </Style>
+    
+    <!-- TABLA DE DATOS -->
+    <Style Selector="Border.admin-table-header">
+        <Setter Property="Background" Value="#FFD966"/>
+        <Setter Property="Padding" Value="16,12"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-table-header-text">
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="#333333"/>
+    </Style>
+    
+    <Style Selector="Border.admin-table-row">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Padding" Value="16,12"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="#F0F0F0"/>
+    </Style>
+    
+    <Style Selector="Border.admin-table-row:pointerover">
+        <Setter Property="Background" Value="#FAFAFA"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-table-cell">
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Foreground" Value="#333333"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- BOTONES DEL SISTEMA -->
+    <Style Selector="Button.admin-btn-yellow">
+        <Setter Property="Background" Value="#FFD966"/>
+        <Setter Property="Foreground" Value="#333333"/>
+        <Setter Property="Padding" Value="18,10"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    
+    <Style Selector="Button.admin-btn-yellow /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#FFD966"/>
+        <Setter Property="CornerRadius" Value="8"/>
+    </Style>
+    
+    <Style Selector="Button.admin-btn-yellow:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#FFCC33"/>
+    </Style>
+    
+    <Style Selector="Button.admin-btn-blue">
+        <Setter Property="Background" Value="#0b5394"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="18,10"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    
+    <Style Selector="Button.admin-btn-blue /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#0b5394"/>
+        <Setter Property="CornerRadius" Value="8"/>
+    </Style>
+    
+    <Style Selector="Button.admin-btn-blue:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#084171"/>
+    </Style>
+    
+    <!-- INPUTS Y CAMPOS DE FORMULARIO -->
+    <Style Selector="TextBox.admin-input">
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#D8D8D8"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+    
+    <Style Selector="TextBox.admin-input:focus">
+        <Setter Property="BorderBrush" Value="#0b5394"/>
+    </Style>
+    
+    <Style Selector="TextBox.admin-input:pointerover">
+        <Setter Property="BorderBrush" Value="#BBBBBB"/>
+    </Style>
+    
+    <!-- FILTROS -->
+    <Style Selector="Border.admin-filters-panel">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="BorderThickness" Value="0,0,1,0"/>
+        <Setter Property="BorderBrush" Value="#EEEEEE"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-filters-title">
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="Foreground" Value="#333333"/>
+        <Setter Property="Margin" Value="0,0,0,16"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-filter-label">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="#555555"/>
+        <Setter Property="Margin" Value="0,0,0,6"/>
+    </Style>
+    
+    <!-- COMBOBOX -->
+    <Style Selector="ComboBox.admin-combobox">
+        <Setter Property="Padding" Value="12,10"/>
+        <Setter Property="CornerRadius" Value="8"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#D8D8D8"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
+    
+    <!-- CARDS / TARJETAS -->
+    <Style Selector="Border.admin-card">
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="BoxShadow" Value="0 2 8 0 #10000000"/>
+    </Style>
+    
+    <Style Selector="Border.admin-card:pointerover">
+        <Setter Property="BoxShadow" Value="0 4 12 0 #18000000"/>
+    </Style>
+    
+    <!-- BADGES / ETIQUETAS -->
+    <Style Selector="Border.admin-badge">
+        <Setter Property="Background" Value="#E8F4FD"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Padding" Value="8,4"/>
+    </Style>
+    
+    <Style Selector="Border.admin-badge-success">
+        <Setter Property="Background" Value="#E8F5E9"/>
+    </Style>
+    
+    <Style Selector="Border.admin-badge-warning">
+        <Setter Property="Background" Value="#FFF8E1"/>
+    </Style>
+    
+    <Style Selector="Border.admin-badge-danger">
+        <Setter Property="Background" Value="#FFEBEE"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-badge-text">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="#0b5394"/>
+    </Style>
+    
+    <!-- ESTADÍSTICAS -->
+    <Style Selector="TextBlock.admin-stat-number">
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#0b5394"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-stat-number-warning">
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#F59E0B"/>
+    </Style>
+    
+    <Style Selector="TextBlock.admin-stat-label">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Foreground" Value="#666666"/>
+    </Style>
+    
+    <!-- SCROLLVIEWER -->
+    <Style Selector="ScrollViewer.admin-scroll">
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+    </Style>
+
+</Styles>

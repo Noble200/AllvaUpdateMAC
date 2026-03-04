@@ -1,0 +1,177 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             x:Class="Allva.Desktop.Views.PanelPackAlimentos.EditarClientePackView"
+             x:DataType="vm:FoodPacksViewModel">
+
+    <Border Background="#f8f9fa"
+            CornerRadius="8"
+            Padding="40,30">
+        
+        <StackPanel Spacing="24">
+            
+            <!-- Header -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0"
+                        Content="Volver"
+                        Command="{Binding VolverASeleccionBeneficiarioCommand}"
+                        Background="#6c757d"
+                        Foreground="White"
+                        Padding="16,10"
+                        FontSize="14"
+                        CornerRadius="6"/>
+                
+                <TextBlock Grid.Column="1"
+                           Text="Editar Cliente"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- Formulario -->
+            <Border Background="White"
+                    CornerRadius="8"
+                    Padding="32"
+                    BoxShadow="0 2 8 0 #20000000"
+                    MaxWidth="1100"
+                    HorizontalAlignment="Center">
+                
+                <StackPanel Spacing="24">
+                    
+                    <!-- Seccion: Datos Personales -->
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="DATOS PERSONALES"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#ffd966"
+                                   Background="#0b5394"
+                                   Padding="12,8"
+                                   Margin="-32,-32,-32,0"/>
+                        
+                        <Grid ColumnDefinitions="*,24,*" Margin="0,16,0,0">
+                            <!-- Nombre -->
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="Nombre *" FontSize="14" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                <TextBox Text="{Binding NuevoNombre, Mode=TwoWay}"
+                                         Watermark="Nombre del cliente"
+                                         FontSize="15"
+                                         Padding="14"
+                                         CornerRadius="6"
+                                         MinHeight="46"/>
+                            </StackPanel>
+                            
+                            <!-- Apellido -->
+                            <StackPanel Grid.Column="2" Spacing="6">
+                                <TextBlock Text="Apellido *" FontSize="14" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                <TextBox Text="{Binding NuevoApellido, Mode=TwoWay}"
+                                         Watermark="Apellido del cliente"
+                                         FontSize="15"
+                                         Padding="14"
+                                         CornerRadius="6"
+                                         MinHeight="46"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Seccion: Documento -->
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="DOCUMENTO DE IDENTIDAD"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#ffd966"
+                                   Background="#0b5394"
+                                   Padding="12,8"
+                                   Margin="-32,0,-32,0"/>
+                        
+                        <Grid ColumnDefinitions="200,24,*" Margin="0,16,0,0">
+                            <!-- Tipo Documento -->
+                            <StackPanel Grid.Column="0" Spacing="6">
+                                <TextBlock Text="Tipo *" FontSize="14" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                <ComboBox ItemsSource="{Binding TiposDocumento}"
+                                          SelectedItem="{Binding NuevoTipoDocumento, Mode=TwoWay}"
+                                          FontSize="15"
+                                          Padding="14,12"
+                                          CornerRadius="6"
+                                          MinHeight="46"
+                                          HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                            
+                            <!-- Numero Documento -->
+                            <StackPanel Grid.Column="2" Spacing="6">
+                                <TextBlock Text="Número de Documento *" FontSize="14" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                <TextBox Text="{Binding NuevoNumeroDocumento, Mode=TwoWay}"
+                                         Watermark="Número de documento"
+                                         FontSize="15"
+                                         Padding="14"
+                                         CornerRadius="6"
+                                         MinHeight="46"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <!-- Seccion: Contacto -->
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="DATOS DE CONTACTO"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#ffd966"
+                                   Background="#0b5394"
+                                   Padding="12,8"
+                                   Margin="-32,0,-32,0"/>
+                        
+                        <StackPanel Spacing="6" Margin="0,16,0,0">
+                            <TextBlock Text="Teléfono / Móvil *" FontSize="14" FontWeight="SemiBold" Foreground="#0b5394"/>
+                            <TextBox x:Name="TxtTelefono"
+                                     Text="{Binding NuevoTelefono, Mode=TwoWay}"
+                                     Watermark="600.000.000"
+                                     FontSize="15"
+                                     Padding="14"
+                                     CornerRadius="6"
+                                     MinHeight="46"
+                                     MaxWidth="400"
+                                     HorizontalAlignment="Left"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Mensaje de error -->
+                    <TextBlock Text="{Binding ErrorMessage}"
+                               Foreground="#dc3545"
+                               FontSize="14"
+                               IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                               TextAlignment="Center"/>
+
+                    <!-- Botones -->
+                    <Grid ColumnDefinitions="*,16,*" Margin="0,8,0,0">
+                        <Button Grid.Column="0"
+                                Content="Cancelar"
+                                Command="{Binding VolverASeleccionBeneficiarioCommand}"
+                                Background="#6c757d"
+                                Foreground="White"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Padding="16,14"
+                                FontSize="16"
+                                FontWeight="SemiBold"
+                                CornerRadius="6"/>
+                        
+                        <Button Grid.Column="2"
+                                Content="Guardar Cambios"
+                                Command="{Binding GuardarClienteCommand}"
+                                Background="#28a745"
+                                Foreground="White"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                Padding="16,14"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                CornerRadius="6"/>
+                    </Grid>
+                    
+                </StackPanel>
+            </Border>
+            
+        </StackPanel>
+    </Border>
+</UserControl>

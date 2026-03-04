@@ -1,0 +1,591 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             x:Class="Allva.Desktop.Views.PanelDivisas.NuevoClienteView"
+             x:DataType="vm:CurrencyExchangePanelViewModel">
+    
+    <UserControl.Styles>
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #20000000"/>
+            <Setter Property="Padding" Value="24"/>
+        </Style>
+        
+        <Style Selector="TextBox.input">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="MinHeight" Value="44"/>
+        </Style>
+        
+        <Style Selector="ComboBox">
+            <Setter Property="MinHeight" Value="44"/>
+        </Style>
+        
+        <Style Selector="Button.btn-cerrar-popup">
+            <Setter Property="Background" Value="#0b5394"/>
+        </Style>
+        <Style Selector="Button.btn-cerrar-popup:pointerover">
+            <Setter Property="Background" Value="#094478"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Border Background="#f5f5f5">
+            <ScrollViewer>
+                <StackPanel Spacing="24" Margin="30">
+                    
+                    <!-- Encabezado -->
+                    <Grid ColumnDefinitions="Auto,*">
+                        <Button Grid.Column="0"
+                                Content="Atrás"
+                                Background="#0b5394"
+                                Foreground="White"
+                                FontWeight="SemiBold"
+                                Padding="24,12"
+                                CornerRadius="6"
+                                MinHeight="44"
+                                Command="{Binding VolverAPrincipalCommand}"/>
+                        
+                        <TextBlock Grid.Column="1"
+                                   Text="Registrar Nuevo Cliente"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#0b5394"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Grid>
+                    
+                    <!-- Nota campos obligatorios -->
+                    <Border Background="#FFF3E0" CornerRadius="6" Padding="12">
+                        <TextBlock Text="Los campos marcados con * son obligatorios" 
+                                   Foreground="#E65100"
+                                   FontSize="13"/>
+                    </Border>
+                    
+                    <!-- Formulario -->
+                    <Border Classes="card">
+                        <StackPanel Spacing="24">
+                            
+                            <!-- Datos personales -->
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Datos Personales" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                <Border Height="1" Background="#E0E0E0"/>
+                            </StackPanel>
+                            
+                            <!-- Fila 1: Nombres -->
+                            <Grid ColumnDefinitions="*,*,*,*">
+                                <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Primer nombre " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding NuevoNombre}" 
+                                             Classes="input"
+                                             Watermark="Nombre"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="6" Margin="12,0">
+                                    <TextBlock Text="Segundo nombre" FontSize="12" Foreground="#666"/>
+                                    <TextBox Text="{Binding NuevoSegundoNombre}" 
+                                             Classes="input"
+                                             Watermark="Opcional"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="6" Margin="12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Primer apellido " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding NuevoApellido}" 
+                                             Classes="input"
+                                             Watermark="Apellido"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Spacing="6" Margin="12,0,0,0">
+                                    <TextBlock Text="Segundo apellido" FontSize="12" Foreground="#666"/>
+                                    <TextBox Text="{Binding NuevoSegundoApellido}" 
+                                             Classes="input"
+                                             Watermark="Opcional"/>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <!-- Fila 2: Telefono y Direccion -->
+                            <Grid ColumnDefinitions="*,3*">
+                                <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+                                    <TextBlock Text="Teléfono" FontSize="12" Foreground="#666"/>
+                                    <TextBox x:Name="TxtTelefono"
+                                             Text="{Binding NuevoTelefono}"
+                                             Classes="input"
+                                             Watermark="600.000.000"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="6" Margin="12,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Dirección u Hospedaje " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding NuevaDireccion}" 
+                                             Classes="input"
+                                             Watermark="Calle, número, ciudad..."/>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <!-- Fila 3: Nacionalidad y Fecha nacimiento -->
+                            <Grid ColumnDefinitions="*,*">
+                                <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Nacionalidad " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding NuevaNacionalidad}" 
+                                             Classes="input"
+                                             Watermark="España"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="6" Margin="12,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Fecha nacimiento " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding NuevaFechaNacimientoTexto}" 
+                                             Classes="input"
+                                             Watermark="dd/mm/aaaa"
+                                             MaxLength="10"
+                                             x:Name="TxtFechaNacimiento"/>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <!-- Documentacion -->
+                            <StackPanel Spacing="4" Margin="0,12,0,0">
+                                <TextBlock Text="Documentación" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                <Border Height="1" Background="#E0E0E0"/>
+                            </StackPanel>
+                            
+                            <Grid ColumnDefinitions="*,*,*,*">
+                                <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Residencia " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <ComboBox ItemsSource="{Binding TiposResidencia}"
+                                            SelectedItem="{Binding NuevoTipoResidencia}"
+                                            HorizontalAlignment="Stretch"
+                                            PlaceholderText="Seleccionar..."/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="6" Margin="12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Tipo documento " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <ComboBox ItemsSource="{Binding TiposDocumento}"
+                                            SelectedItem="{Binding NuevoTipoDocumento}"
+                                            HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="6" Margin="12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Número documento " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding NuevoNumeroDocumento}" 
+                                             Classes="input"
+                                             Watermark="12345678A"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Spacing="6" Margin="12,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Fecha caducidad " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <TextBox Text="{Binding NuevaCaducidadDocumentoTexto}" 
+                                             Classes="input"
+                                             Watermark="dd/mm/aaaa"
+                                             MaxLength="10"
+                                             x:Name="TxtFechaCaducidad"/>
+                                </StackPanel>
+                            </Grid>
+                            
+                            <!-- Imagenes del documento -->
+                            <StackPanel Spacing="4" Margin="0,12,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Imágenes del Documento " 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="#0b5394"/>
+                                    <TextBlock Text="*" FontSize="16" Foreground="#C62828" FontWeight="Bold"/>
+                                </StackPanel>
+                                <Border Height="1" Background="#E0E0E0"/>
+                            </StackPanel>
+                            
+                            <Grid ColumnDefinitions="*,*">
+                                <!-- Imagen frontal -->
+                                <StackPanel Grid.Column="0" Spacing="10" Margin="0,0,12,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Cara frontal del documento " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <Border Background="#F5F5F5"
+                                            CornerRadius="8"
+                                            MinHeight="160"
+                                            Padding="24"
+                                            BorderBrush="#ddd"
+                                            BorderThickness="2"
+                                            IsVisible="{Binding !TieneImagenDocumentoFrontal}">
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                                            <TextBlock Text="Sin imagen"
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="#888"
+                                                       FontSize="14"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                                <Button Content="Escanear"
+                                                        Background="#4CAF50"
+                                                        Foreground="White"
+                                                        FontWeight="SemiBold"
+                                                        Padding="20,10"
+                                                        CornerRadius="6"
+                                                        MinHeight="40"
+                                                        x:Name="BtnEscanearFrontal"/>
+                                                <Button Content="Seleccionar..."
+                                                        Background="#ffd966"
+                                                        Foreground="#0b5394"
+                                                        FontWeight="SemiBold"
+                                                        Padding="20,10"
+                                                        CornerRadius="6"
+                                                        MinHeight="40"
+                                                        x:Name="BtnSeleccionarFrontal"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="#F5F5F5"
+                                            CornerRadius="8"
+                                            Padding="12"
+                                            IsVisible="{Binding TieneImagenDocumentoFrontal}">
+                                        <StackPanel Spacing="10">
+                                            <Grid>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Padding="0"
+                                                        Cursor="Hand"
+                                                        Command="{Binding MostrarPreviewImagenFrontalCommand}">
+                                                    <Image Source="{Binding ImagenDocumentoFrontalPreview}"
+                                                           MaxHeight="160"
+                                                           Stretch="Uniform"/>
+                                                </Button>
+                                                <TextBlock Text="SOLO CONSULTA"
+                                                           FontSize="14"
+                                                           FontWeight="Bold"
+                                                           Foreground="#40C62828"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           IsHitTestVisible="False">
+                                                    <TextBlock.RenderTransform>
+                                                        <RotateTransform Angle="-25"/>
+                                                    </TextBlock.RenderTransform>
+                                                </TextBlock>
+                                            </Grid>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                                                <Button Content="Ver"
+                                                        Background="#E3F2FD"
+                                                        Foreground="#1565C0"
+                                                        FontSize="12"
+                                                        Padding="16,8"
+                                                        CornerRadius="6"
+                                                        MinHeight="36"
+                                                        Command="{Binding MostrarPreviewImagenFrontalCommand}"/>
+                                                <Button Content="Quitar"
+                                                        Background="#FFEBEE"
+                                                        Foreground="#C62828"
+                                                        FontSize="12"
+                                                        Padding="16,8"
+                                                        CornerRadius="6"
+                                                        MinHeight="36"
+                                                        Command="{Binding QuitarImagenFrontalCommand}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                                
+                                <!-- Imagen trasera -->
+                                <StackPanel Grid.Column="1" Spacing="10" Margin="12,0,0,0">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Cara trasera del documento " FontSize="12" Foreground="#666"/>
+                                        <TextBlock Text="*" FontSize="12" Foreground="#C62828" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    <Border Background="#F5F5F5"
+                                            CornerRadius="8"
+                                            MinHeight="160"
+                                            Padding="24"
+                                            BorderBrush="#ddd"
+                                            BorderThickness="2"
+                                            IsVisible="{Binding !TieneImagenDocumentoTrasera}">
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                                            <TextBlock Text="Sin imagen"
+                                                       HorizontalAlignment="Center"
+                                                       Foreground="#888"
+                                                       FontSize="14"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+                                                <Button Content="Escanear"
+                                                        Background="#4CAF50"
+                                                        Foreground="White"
+                                                        FontWeight="SemiBold"
+                                                        Padding="20,10"
+                                                        CornerRadius="6"
+                                                        MinHeight="40"
+                                                        x:Name="BtnEscanearTrasera"/>
+                                                <Button Content="Seleccionar..."
+                                                        Background="#ffd966"
+                                                        Foreground="#0b5394"
+                                                        FontWeight="SemiBold"
+                                                        Padding="20,10"
+                                                        CornerRadius="6"
+                                                        MinHeight="40"
+                                                        x:Name="BtnSeleccionarTrasera"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="#F5F5F5"
+                                            CornerRadius="8"
+                                            Padding="12"
+                                            IsVisible="{Binding TieneImagenDocumentoTrasera}">
+                                        <StackPanel Spacing="10">
+                                            <Grid>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Padding="0"
+                                                        Cursor="Hand"
+                                                        Command="{Binding MostrarPreviewImagenTraseraCommand}">
+                                                    <Image Source="{Binding ImagenDocumentoTraseraPreview}"
+                                                           MaxHeight="160"
+                                                           Stretch="Uniform"/>
+                                                </Button>
+                                                <TextBlock Text="SOLO CONSULTA"
+                                                           FontSize="14"
+                                                           FontWeight="Bold"
+                                                           Foreground="#40C62828"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           IsHitTestVisible="False">
+                                                    <TextBlock.RenderTransform>
+                                                        <RotateTransform Angle="-25"/>
+                                                    </TextBlock.RenderTransform>
+                                                </TextBlock>
+                                            </Grid>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                                                <Button Content="Ver"
+                                                        Background="#E3F2FD"
+                                                        Foreground="#1565C0"
+                                                        FontSize="12"
+                                                        Padding="16,8"
+                                                        CornerRadius="6"
+                                                        MinHeight="36"
+                                                        Command="{Binding MostrarPreviewImagenTraseraCommand}"/>
+                                                <Button Content="Quitar"
+                                                        Background="#FFEBEE"
+                                                        Foreground="#C62828"
+                                                        FontSize="12"
+                                                        Padding="16,8"
+                                                        CornerRadius="6"
+                                                        MinHeight="36"
+                                                        Command="{Binding QuitarImagenTraseraCommand}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                            
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Error -->
+                    <Border Background="#FFEBEE"
+                            CornerRadius="6"
+                            Padding="16"
+                            IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <TextBlock Text="{Binding ErrorMessage}" 
+                                   Foreground="#C62828"
+                                   FontWeight="SemiBold"/>
+                    </Border>
+                    
+                    <!-- Botones -->
+                    <Grid ColumnDefinitions="*,*" Height="52">
+                        <Button Grid.Column="0"
+                                Content="Cancelar"
+                                Background="#ffd966"
+                                Foreground="#0b5394"
+                                FontWeight="SemiBold"
+                                FontSize="16"
+                                CornerRadius="6"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Margin="0,0,12,0"
+                                Command="{Binding VolverAPrincipalCommand}"/>
+                        <Button Grid.Column="1"
+                                Content="Continuar"
+                                Background="#0b5394"
+                                Foreground="White"
+                                FontWeight="SemiBold"
+                                FontSize="16"
+                                CornerRadius="6"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Margin="12,0,0,0"
+                                Command="{Binding MostrarConfirmacionClienteCommand}"/>
+                    </Grid>
+                    
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+        
+        <!-- POPUP: Preview de imagen ampliada -->
+        <Border IsVisible="{Binding MostrarPreviewImagen}"
+                Background="#E0000000"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="20"
+                    Margin="40"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BoxShadow="0 8 24 0 #40000000">
+                <Grid RowDefinitions="Auto,*,Auto">
+                    
+                    <!-- Encabezado -->
+                    <Grid Grid.Row="0" Margin="0,0,0,15">
+                        <TextBlock Text="{Binding TituloPreviewImagen}" 
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#0b5394"/>
+                        <Button Content="X" 
+                                Background="Transparent"
+                                Foreground="#666"
+                                FontWeight="Bold"
+                                FontSize="16"
+                                HorizontalAlignment="Right"
+                                Command="{Binding CerrarPreviewImagenCommand}"/>
+                    </Grid>
+                    
+                    <!-- Imagen centrada con marcas de agua en toda la imagen -->
+                    <Border Grid.Row="1" 
+                            Background="#f5f5f5" 
+                            CornerRadius="8"
+                            Padding="10">
+                        <Grid>
+                            <Image Source="{Binding ImagenPreviewActual}"
+                                Stretch="Uniform"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"/>
+                            
+                            <!-- Marcas de agua distribuidas -->
+                            <Canvas IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <!-- Fila 1 -->
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="20" Canvas.Top="30">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="280" Canvas.Top="30">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="540" Canvas.Top="30">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="800" Canvas.Top="30">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                
+                                <!-- Fila 2 -->
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="100" Canvas.Top="120">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="360" Canvas.Top="120">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="620" Canvas.Top="120">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="880" Canvas.Top="120">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                
+                                <!-- Fila 3 -->
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="20" Canvas.Top="210">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="280" Canvas.Top="210">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="540" Canvas.Top="210">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="800" Canvas.Top="210">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                
+                                <!-- Fila 4 -->
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="100" Canvas.Top="300">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="360" Canvas.Top="300">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="620" Canvas.Top="300">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="880" Canvas.Top="300">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                
+                                <!-- Fila 5 -->
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="20" Canvas.Top="390">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="280" Canvas.Top="390">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="540" Canvas.Top="390">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="800" Canvas.Top="390">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                
+                                <!-- Fila 6 -->
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="100" Canvas.Top="480">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="360" Canvas.Top="480">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="620" Canvas.Top="480">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                                <TextBlock Text="SOLO CONSULTA" FontSize="22" FontWeight="Bold" Foreground="#40C62828" Canvas.Left="880" Canvas.Top="480">
+                                    <TextBlock.RenderTransform><RotateTransform Angle="-25"/></TextBlock.RenderTransform>
+                                </TextBlock>
+                            </Canvas>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Boton cerrar -->
+                    <Button Grid.Row="2"
+                            Content="Cerrar"
+                            Classes="btn-cerrar-popup"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Padding="40,12"
+                            CornerRadius="6"
+                            HorizontalAlignment="Center"
+                            Margin="0,15,0,0"
+                            Command="{Binding CerrarPreviewImagenCommand}"/>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+
+</UserControl>

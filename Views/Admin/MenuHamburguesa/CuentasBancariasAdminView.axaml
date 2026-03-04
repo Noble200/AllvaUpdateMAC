@@ -1,0 +1,428 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:behaviors="using:Allva.Desktop.Behaviors"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.CuentasBancariasAdminView"
+             x:DataType="vm:CuentasBancariasAdminViewModel">
+
+    <UserControl.DataContext>
+        <vm:CuentasBancariasAdminViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#084171"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style Selector="TextBox.iban">
+            <Setter Property="FontFamily" Value="Consolas, Menlo, Courier New, monospace"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="LetterSpacing" Value="1"/>
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#f3f3f3"/>
+        </Style>
+        <Style Selector="Button.danger-small">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#DC2626"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#DC2626"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style Selector="Button.danger-small:pointerover">
+            <Setter Property="Background" Value="#FEE2E2"/>
+        </Style>
+        <Style Selector="Button.edit-small">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+        </Style>
+        <Style Selector="Button.edit-small:pointerover">
+            <Setter Property="Background" Value="#DBEAFE"/>
+        </Style>
+        <Style Selector="Button.header-btn">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.header-btn:pointerover">
+            <Setter Property="Background" Value="#e6c35a"/>
+        </Style>
+        <Style Selector="CheckBox">
+            <Setter Property="Foreground" Value="#595959"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="CheckBox:checked /template/ Border#NormalRectangle">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+        <Style Selector="CheckBox:checked">
+            <Setter Property="Foreground" Value="#0b5394"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="ComboBox:focus">
+            <Setter Property="BorderBrush" Value="#084171"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER - fondo blanco con texto azul, sin borde -->
+        <Border Grid.Row="0"
+                Background="#ffffff"
+                Padding="24,16">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="4">
+                    <TextBlock Text="CUENTAS BANCARIAS"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#0b5394"/>
+                    <TextBlock Text="Gestiona las cuentas bancarias visibles en el Front Office"
+                               FontSize="12"
+                               Foreground="#595959"/>
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Content="+ Agregar Cuenta"
+                        Classes="primary"
+                        Command="{Binding MostrarFormularioAgregarCommand}"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding !MostrarFormulario}"/>
+            </Grid>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Background="#f3f3f3">
+            <StackPanel Margin="20" Spacing="16">
+
+                <!-- FORMULARIO DE AGREGAR/EDITAR -->
+                <Border Background="#ffffff"
+                        CornerRadius="12"
+                        Padding="24"
+                        BorderBrush="#0b5394"
+                        BorderThickness="2"
+                        IsVisible="{Binding MostrarFormulario}"
+                        BoxShadow="0 2 10 0 #20000000">
+                    <StackPanel Spacing="20">
+                        <!-- Título del formulario -->
+                        <Border Background="#0b5394" CornerRadius="8" Padding="16,12" Margin="-24,-24,-24,0">
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="Nueva Cuenta Bancaria"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="#ffffff"
+                                           IsVisible="{Binding !EstaEditando}"/>
+                                <TextBlock Text="Editar Cuenta Bancaria"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="#ffffff"
+                                           IsVisible="{Binding EstaEditando}"/>
+                                <TextBlock Text="Completa los datos de la cuenta bancaria"
+                                           FontSize="11"
+                                           Foreground="#ffffff"
+                                           Opacity="0.9"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Nombre del Banco -->
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" Margin="0,12,0,0">
+                            <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
+                                <TextBlock Text="Banco *" FontSize="13" Foreground="#0b5394" FontWeight="SemiBold"/>
+                                <ComboBox ItemsSource="{Binding BancosDisponibles}"
+                                          SelectedItem="{Binding BancoSeleccionado}"
+                                          HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="6" Margin="8,0,0,0"
+                                        IsVisible="{Binding BancoSeleccionado, Converter={StaticResource EqualToOtroConverter}}">
+                                <TextBlock Text="Nombre del banco *" FontSize="13" Foreground="#0b5394" FontWeight="SemiBold"/>
+                                <TextBox Text="{Binding NombreBancoOtro, Mode=TwoWay}"
+                                         Watermark="Escribe el nombre del banco..."/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Titular -->
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Titular de la Cuenta" FontSize="13" Foreground="#0b5394" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding Titular, Mode=TwoWay}"
+                                     Watermark="Ej: ALLVA S.L."/>
+                        </StackPanel>
+
+                        <!-- IBAN con formato visual -->
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="IBAN *" FontSize="13" Foreground="#0b5394" FontWeight="SemiBold"/>
+
+                            <!-- Diagrama visual del IBAN -->
+                            <Border Background="#f3f3f3" CornerRadius="8" Padding="16,12" BorderBrush="#0b5394" BorderThickness="1">
+                                <StackPanel Spacing="8">
+                                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                        <Border Grid.Column="0" Background="#DBEAFE" CornerRadius="4" Padding="8,4" Margin="0,0,4,0">
+                                            <TextBlock Text="ES" FontWeight="Bold" Foreground="#1E40AF" FontFamily="Consolas, Menlo, monospace"/>
+                                        </Border>
+                                        <Border Grid.Column="1" Background="#DBEAFE" CornerRadius="4" Padding="8,4" Margin="0,0,8,0">
+                                            <TextBlock Text="00" FontWeight="Bold" Foreground="#1E40AF" FontFamily="Consolas, Menlo, monospace"/>
+                                        </Border>
+                                        <Border Grid.Column="2" Background="#ffd966" CornerRadius="4" Padding="8,4" Margin="0,0,4,0">
+                                            <TextBlock Text="0000" FontWeight="Bold" Foreground="#595959" FontFamily="Consolas, Menlo, monospace"/>
+                                        </Border>
+                                        <Border Grid.Column="3" Background="#D1FAE5" CornerRadius="4" Padding="8,4" Margin="0,0,4,0">
+                                            <TextBlock Text="0000" FontWeight="Bold" Foreground="#065F46" FontFamily="Consolas, Menlo, monospace"/>
+                                        </Border>
+                                        <Border Grid.Column="4" Background="#FCE7F3" CornerRadius="4" Padding="8,4" Margin="0,0,4,0">
+                                            <TextBlock Text="00" FontWeight="Bold" Foreground="#9D174D" FontFamily="Consolas, Menlo, monospace"/>
+                                        </Border>
+                                        <Border Grid.Column="5" Background="#E0E7FF" CornerRadius="4" Padding="8,4">
+                                            <TextBlock Text="0000000000" FontWeight="Bold" Foreground="#3730A3" FontFamily="Consolas, Menlo, monospace"/>
+                                        </Border>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                                        <TextBlock Grid.Column="0" Text="País" FontSize="10" Foreground="#1E40AF" Width="50" TextAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="Control" FontSize="10" Foreground="#1E40AF" Width="50" TextAlignment="Center"/>
+                                        <TextBlock Grid.Column="2" Text="Banco" FontSize="10" Foreground="#595959" Width="50" TextAlignment="Center"/>
+                                        <TextBlock Grid.Column="3" Text="Sucursal" FontSize="10" Foreground="#065F46" Width="50" TextAlignment="Center"/>
+                                        <TextBlock Grid.Column="4" Text="DC" FontSize="10" Foreground="#9D174D" Width="30" TextAlignment="Center"/>
+                                        <TextBlock Grid.Column="5" Text="Num. Cuenta" FontSize="10" Foreground="#3730A3" Width="90" TextAlignment="Center"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Campo de entrada IBAN -->
+                            <TextBox Text="{Binding IbanCompleto, Mode=TwoWay}"
+                                     Classes="iban"
+                                     Watermark="ES00 0000 0000 00 0000000000"
+                                     MaxLength="29">
+                                <i:Interaction.Behaviors>
+                                    <behaviors:IbanFormatBehavior/>
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                            <TextBlock Text="El IBAN se formatea automáticamente mientras escribes"
+                                       FontSize="11"
+                                       Foreground="#595959"
+                                       FontStyle="Italic"/>
+                        </StackPanel>
+
+                        <!-- Módulos habilitados -->
+                        <Border Background="#f3f3f3" CornerRadius="8" Padding="16" BorderBrush="#0b5394" BorderThickness="1">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Módulos habilitados" FontSize="13" Foreground="#0b5394" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                                <CheckBox Content="Módulo de Compra de Divisas" IsChecked="{Binding DisponibleCompraDivisas, Mode=TwoWay}"/>
+                                <CheckBox Content="Módulo de Packs de Alimentos" IsChecked="{Binding DisponiblePackAlimentos, Mode=TwoWay}"/>
+                                <CheckBox Content="Módulo de Billetes de Avión" IsChecked="{Binding DisponibleBilletesAvion, Mode=TwoWay}"/>
+                                <CheckBox Content="Módulo de Packs de Viajes" IsChecked="{Binding DisponiblePackViajes, Mode=TwoWay}"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Botones del formulario -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12" Margin="0,8,0,0">
+                            <Button Content="Cancelar"
+                                    Classes="secondary"
+                                    Command="{Binding CancelarFormularioCommand}"/>
+                            <Button Content="Guardar Cuenta"
+                                    Classes="primary"
+                                    Command="{Binding GuardarCuentaCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- LISTA DE CUENTAS ESTILO TABLA -->
+                <Border Background="#ffffff"
+                        BorderBrush="#0b5394"
+                        BorderThickness="1"
+                        IsVisible="{Binding Cuentas.Count}">
+                        <Grid RowDefinitions="Auto,*">
+                            <!-- Header de la tabla - fondo blanco con texto azul -->
+                            <Border Grid.Row="0"
+                                    Background="#ffffff"
+                                    Padding="20,14"
+                                    BorderBrush="#E5E7EB"
+                                    BorderThickness="0,0,0,1">
+                                <Grid ColumnDefinitions="180,*,Auto,Auto">
+                                    <TextBlock Grid.Column="0" Text="Banco" FontSize="13" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                    <TextBlock Grid.Column="1" Text="IBAN" FontSize="13" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                    <TextBlock Grid.Column="2" Text="Módulos" FontSize="13" FontWeight="SemiBold" Foreground="#0b5394" Margin="0,0,20,0"/>
+                                    <TextBlock Grid.Column="3" Text="Acciones" FontSize="13" FontWeight="SemiBold" Foreground="#0b5394" Width="120" TextAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Filas de cuentas -->
+                            <ItemsControl Grid.Row="1" ItemsSource="{Binding Cuentas}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border BorderBrush="#E5E7EB"
+                                                BorderThickness="0,0,0,1"
+                                                Background="#ffffff">
+                                            <Border.Styles>
+                                                <Style Selector="Border:pointerover">
+                                                    <Setter Property="Background" Value="#f9f9f9"/>
+                                                </Style>
+                                            </Border.Styles>
+                                            <Grid ColumnDefinitions="180,*,Auto,Auto" MinHeight="60" Margin="20,0">
+                                            <!-- Nombre del banco y titular -->
+                                            <StackPanel Grid.Column="0" VerticalAlignment="Center" Spacing="2">
+                                                <TextBlock Text="{Binding NombreBanco}"
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#595959"/>
+                                                <TextBlock Text="{Binding Titular}"
+                                                           FontSize="11"
+                                                           Foreground="#808080"
+                                                           IsVisible="{Binding Titular, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                            </StackPanel>
+
+                                            <!-- IBAN -->
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal" Spacing="4">
+                                                <TextBlock Text="{Binding CodigoPais}" FontFamily="Consolas, Menlo, monospace" FontSize="13" FontWeight="Bold" Foreground="#1E40AF"/>
+                                                <TextBlock Text="{Binding DigitoControlPais}" FontFamily="Consolas, Menlo, monospace" FontSize="13" FontWeight="Bold" Foreground="#1E40AF"/>
+                                                <TextBlock Text=" " FontSize="13"/>
+                                                <TextBlock Text="{Binding CodigoBanco}" FontFamily="Consolas, Menlo, monospace" FontSize="13" FontWeight="Bold" Foreground="#0b5394"/>
+                                                <TextBlock Text=" " FontSize="13"/>
+                                                <TextBlock Text="{Binding CodigoSucursal}" FontFamily="Consolas, Menlo, monospace" FontSize="13" FontWeight="Bold" Foreground="#065F46"/>
+                                                <TextBlock Text=" " FontSize="13"/>
+                                                <TextBlock Text="{Binding DigitoControl}" FontFamily="Consolas, Menlo, monospace" FontSize="13" FontWeight="Bold" Foreground="#9D174D"/>
+                                                <TextBlock Text=" " FontSize="13"/>
+                                                <TextBlock Text="{Binding NumeroCuentaCliente}" FontFamily="Consolas, Menlo, monospace" FontSize="13" FontWeight="Bold" Foreground="#3730A3"/>
+                                            </StackPanel>
+
+                                            <!-- Etiquetas de módulos -->
+                                            <WrapPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                                                <Border Background="#ffd966"
+                                                        CornerRadius="10"
+                                                        Padding="8,3"
+                                                        Margin="0,0,4,2"
+                                                        IsVisible="{Binding DisponibleCompraDivisas}">
+                                                    <TextBlock Text="Divisas" FontSize="10" Foreground="#595959" FontWeight="Medium"/>
+                                                </Border>
+                                                <Border Background="#DCFCE7"
+                                                        CornerRadius="10"
+                                                        Padding="8,3"
+                                                        Margin="0,0,4,2"
+                                                        IsVisible="{Binding DisponiblePackAlimentos}">
+                                                    <TextBlock Text="Alimentos" FontSize="10" Foreground="#166534" FontWeight="Medium"/>
+                                                </Border>
+                                                <Border Background="#E0E7FF"
+                                                        CornerRadius="10"
+                                                        Padding="8,3"
+                                                        Margin="0,0,4,2"
+                                                        IsVisible="{Binding DisponibleBilletesAvion}">
+                                                    <TextBlock Text="Avión" FontSize="10" Foreground="#3730A3" FontWeight="Medium"/>
+                                                </Border>
+                                                <Border Background="#DBEAFE"
+                                                        CornerRadius="10"
+                                                        Padding="8,3"
+                                                        Margin="0,0,4,2"
+                                                        IsVisible="{Binding DisponiblePackViajes}">
+                                                    <TextBlock Text="Viajes" FontSize="10" Foreground="#1E40AF" FontWeight="Medium"/>
+                                                </Border>
+                                            </WrapPanel>
+
+                                            <!-- Botones de acción -->
+                                            <StackPanel Grid.Column="3"
+                                                        Orientation="Horizontal"
+                                                        Spacing="6"
+                                                        VerticalAlignment="Center"
+                                                        Width="120"
+                                                        HorizontalAlignment="Center">
+                                                <Button Content="Editar"
+                                                        Classes="edit-small"
+                                                        Command="{Binding $parent[ItemsControl].((vm:CuentasBancariasAdminViewModel)DataContext).EditarCuentaCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                                <Button Content="Eliminar"
+                                                        Classes="danger-small"
+                                                        Command="{Binding $parent[ItemsControl].((vm:CuentasBancariasAdminViewModel)DataContext).EliminarCuentaCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Grid>
+                </Border>
+
+                <!-- Mensaje si no hay cuentas -->
+                <Border Background="#ffffff"
+                        CornerRadius="12"
+                        Padding="32"
+                        BorderBrush="#0b5394"
+                        BorderThickness="1"
+                        IsVisible="{Binding !Cuentas.Count}"
+                        BoxShadow="0 2 10 0 #20000000">
+                    <StackPanel HorizontalAlignment="Center" Spacing="12">
+                        <Border Width="64" Height="64"
+                                CornerRadius="32"
+                                Background="#ffd966"
+                                HorizontalAlignment="Center">
+                            <Viewbox Width="32" Height="32" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Path Data="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+                                      Fill="#0b5394"
+                                      Width="24" Height="24"/>
+                            </Viewbox>
+                        </Border>
+                        <TextBlock Text="No hay cuentas bancarias"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="#0b5394"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Agrega una cuenta usando el botón '+ Agregar Cuenta' de arriba"
+                                   FontSize="13"
+                                   Foreground="#595959"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+
+</UserControl>

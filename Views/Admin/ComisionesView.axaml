@@ -1,0 +1,1024 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.ComisionesView"
+             x:DataType="vm:ComisionesViewModel">
+
+    <Design.DataContext>
+        <vm:ComisionesViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+        </Style>
+        
+        <Style Selector="TextBlock.label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+        
+        <Style Selector="TextBlock.value-large">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+        </Style>
+        
+        <Style Selector="Button.btn-primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        
+        <Style Selector="Button.btn-primary:pointerover">
+            <Setter Property="Background" Value="#094578"/>
+        </Style>
+        
+        <Style Selector="Button.btn-secondary">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        
+        <Style Selector="Button.btn-secondary:pointerover">
+            <Setter Property="Background" Value="#ffcc00"/>
+        </Style>
+        
+        <Style Selector="Button.btn-outline">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        
+        <Style Selector="Button.btn-outline:pointerover">
+            <Setter Property="Background" Value="#E8F0F8"/>
+        </Style>
+        
+        <Style Selector="Button.btn-tab">
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+        
+        <Style Selector="Button.btn-tab:pointerover">
+            <Setter Property="Background" Value="#E0E0E0"/>
+        </Style>
+        
+        <Style Selector="Button.btn-tab-active">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+        
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #15000000"/>
+        </Style>
+        
+        <Style Selector="Border.card-highlight">
+            <Setter Property="Background" Value="#FFF9E6"/>
+            <Setter Property="BorderBrush" Value="#ffd966"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+        
+        <Style Selector="Border.list-item">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="BorderBrush" Value="#E5E5E5"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+        
+        <Style Selector="Border.list-item:pointerover">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="Background" Value="#F8FAFC"/>
+        </Style>
+        
+        <Style Selector="TextBox">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Background="#F5F5F5">
+        <Grid RowDefinitions="Auto,Auto,*" Margin="24">
+            
+            <!-- TABS DE MODULOS -->
+            <Border Grid.Row="0" 
+                    Background="White" 
+                    CornerRadius="8" 
+                    Padding="8"
+                    Margin="0,0,0,20"
+                    BoxShadow="0 2 8 0 #10000000">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <Button Content="Divisas"
+                            Padding="24,12"
+                            CornerRadius="6"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            BorderThickness="0"
+                            Background="{Binding TabDivisasBackground}"
+                            Foreground="{Binding TabDivisasForeground}"
+                            Command="{Binding CambiarPanelCommand}"
+                            CommandParameter="divisas"/>
+                    <Button Content="Pack Alimentos"
+                            Padding="24,12"
+                            CornerRadius="6"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            BorderThickness="0"
+                            Background="{Binding TabAlimentosBackground}"
+                            Foreground="{Binding TabAlimentosForeground}"
+                            Command="{Binding CambiarPanelCommand}"
+                            CommandParameter="alimentos"/>
+                    <Button Content="Billetes de Avion"
+                            Padding="24,12"
+                            CornerRadius="6"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            BorderThickness="0"
+                            Background="{Binding TabBilletesBackground}"
+                            Foreground="{Binding TabBilletesForeground}"
+                            Command="{Binding CambiarPanelCommand}"
+                            CommandParameter="billetes"/>
+                    <Button Content="Packs de Viajes"
+                            Padding="24,12"
+                            CornerRadius="6"
+                            FontWeight="SemiBold"
+                            Cursor="Hand"
+                            BorderThickness="0"
+                            Background="{Binding TabViajesBackground}"
+                            Foreground="{Binding TabViajesForeground}"
+                            Command="{Binding CambiarPanelCommand}"
+                            CommandParameter="viajes"/>
+                </StackPanel>
+            </Border>
+            
+            <!-- ============================================ -->
+            <!-- PANEL DIVISAS -->
+            <!-- ============================================ -->
+            <Grid Grid.Row="1" Grid.RowSpan="2" IsVisible="{Binding EsPanelDivisas}" RowDefinitions="Auto,*">
+                
+                <!-- HEADER: Margen Global Divisas -->
+                <Border Grid.Row="0" Classes="card-highlight" Margin="0,0,0,20">
+                    <Grid ColumnDefinitions="*,Auto">
+                        
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Margen Global de Divisas" Classes="section-title"/>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding MargenGlobalTexto}" Classes="value-large"/>
+                                <TextBlock Text="%" 
+                                           FontSize="20" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"
+                                           VerticalAlignment="Bottom"
+                                           Margin="0,0,0,4"/>
+                            </StackPanel>
+                            <TextBlock Text="Este es el margen por defecto que se aplica a todas las operaciones de divisas" 
+                                       Classes="label"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" 
+                                    Orientation="Horizontal" 
+                                    Spacing="12"
+                                    VerticalAlignment="Center">
+                            <Button Content="Editar Margen Global" 
+                                    Classes="btn-primary"
+                                    Command="{Binding EditarMargenGlobalCommand}"/>
+                            <Button Content="Aplicar a Todos" 
+                                    Classes="btn-secondary"
+                                    Command="{Binding AplicarMargenGlobalATodosCommand}"/>
+                        </StackPanel>
+                        
+                    </Grid>
+                </Border>
+                
+                <!-- CONTENIDO PRINCIPAL DIVISAS -->
+                <Grid Grid.Row="1" ColumnDefinitions="*,350">
+                    
+                    <!-- Lista de Comercios/Locales -->
+                    <Grid Grid.Column="0" RowDefinitions="Auto,Auto,*" Margin="0,0,20,0">
+                        
+                        <!-- Tabs: Comercios / Locales -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
+                            <Button Content="Por Comercio"
+                                    Classes.btn-tab-active="{Binding EsVistaComercios}"
+                                    Classes.btn-tab="{Binding !EsVistaComercios}"
+                                    Command="{Binding CambiarVistaCommand}"
+                                    CommandParameter="comercios"/>
+                            <Button Content="Por Local"
+                                    Classes.btn-tab-active="{Binding EsVistaLocales}"
+                                    Classes.btn-tab="{Binding !EsVistaLocales}"
+                                    Command="{Binding CambiarVistaCommand}"
+                                    CommandParameter="locales"/>
+                        </StackPanel>
+                        
+                        <!-- Buscador -->
+                        <TextBox Grid.Row="1" 
+                                 Watermark="Buscar..."
+                                 Text="{Binding TextoBusqueda}"
+                                 Margin="0,0,0,16"/>
+                        
+                        <!-- Lista -->
+                        <Border Grid.Row="2" Classes="card">
+                            <Grid>
+                                
+                                <!-- Lista de Comercios -->
+                                <ScrollViewer IsVisible="{Binding EsVistaComercios}">
+                                    <ItemsControl ItemsSource="{Binding ComerciosFiltrados}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Padding="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        Command="{Binding $parent[ItemsControl].((vm:ComisionesViewModel)DataContext).SeleccionarComercioCommand}"
+                                                        CommandParameter="{Binding}">
+                                                    <Border Classes="list-item">
+                                                        <Grid ColumnDefinitions="*,Auto,Auto">
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="{Binding NombreComercio}" 
+                                                                           FontWeight="SemiBold"
+                                                                           FontSize="14"/>
+                                                                <TextBlock FontSize="12" Foreground="#888888">
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} - {1} locales">
+                                                                            <Binding Path="Pais"/>
+                                                                            <Binding Path="CantidadLocales"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                            <TextBlock Grid.Column="1" 
+                                                                       Text="{Binding MargenTexto}"
+                                                                       FontWeight="Bold"
+                                                                       Foreground="#0b5394"
+                                                                       FontSize="16"
+                                                                       VerticalAlignment="Center"
+                                                                       Margin="0,0,16,0"/>
+                                                            <Border Grid.Column="2"
+                                                                    Background="#E8F5E9"
+                                                                    CornerRadius="4"
+                                                                    Padding="8,4"
+                                                                    VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding EstadoTexto}"
+                                                                           FontSize="11"
+                                                                           Foreground="#2E7D32"/>
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                                
+                                <!-- Lista de Locales -->
+                                <ScrollViewer IsVisible="{Binding EsVistaLocales}">
+                                    <ItemsControl ItemsSource="{Binding LocalesFiltrados}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Padding="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        Command="{Binding $parent[ItemsControl].((vm:ComisionesViewModel)DataContext).SeleccionarLocalCommand}"
+                                                        CommandParameter="{Binding}">
+                                                    <Border Classes="list-item">
+                                                        <Grid ColumnDefinitions="*,Auto,Auto">
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="{Binding CodigoLocal}"
+                                                                           FontWeight="SemiBold"
+                                                                           FontSize="16"/>
+                                                                <TextBlock Text="{Binding NombreComercio}"
+                                                                           FontSize="12" Foreground="#888888"/>
+                                                            </StackPanel>
+                                                            <TextBlock Grid.Column="1" 
+                                                                       Text="{Binding MargenTexto}"
+                                                                       FontWeight="Bold"
+                                                                       Foreground="#0b5394"
+                                                                       FontSize="16"
+                                                                       VerticalAlignment="Center"
+                                                                       Margin="0,0,16,0"/>
+                                                            <Border Grid.Column="2"
+                                                                    Background="#E3F2FD"
+                                                                    CornerRadius="4"
+                                                                    Padding="8,4"
+                                                                    VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding EstadoMargen}"
+                                                                           FontSize="11"
+                                                                           Foreground="#1565C0"/>
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                                
+                            </Grid>
+                        </Border>
+                        
+                    </Grid>
+                    
+                    <!-- Panel de Edicion Divisas -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding MostrarPanelEdicion}">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            
+                            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                                <TextBlock Text="{Binding TituloPanelEdicion}" 
+                                           Classes="section-title"/>
+                                <Border Height="2" Background="#ffd966" HorizontalAlignment="Left" Width="60"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="1" Spacing="16">
+                                
+                                <StackPanel>
+                                    <TextBlock Text="Nuevo Margen (%)" Classes="label"/>
+                                    <TextBox Text="{Binding NuevoMargenTexto}"
+                                             Watermark="Ej: 10.00"/>
+                                </StackPanel>
+                                
+                                <!-- Info comercio -->
+                                <StackPanel IsVisible="{Binding ComercioSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <TextBlock Text="Comercio seleccionado:" Classes="label"/>
+                                    <TextBlock Text="{Binding ComercioSeleccionado.NombreComercio}" 
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding ComercioSeleccionado.CantidadLocales, StringFormat='Este comercio tiene {0} locales'}"
+                                               FontSize="12"
+                                               Foreground="#888888"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+                                
+                                <!-- Info local -->
+                                <StackPanel IsVisible="{Binding LocalSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <TextBlock Text="Local seleccionado:" Classes="label"/>
+                                    <TextBlock Text="{Binding LocalSeleccionado.NombreLocal}" 
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock FontSize="12" Foreground="#888888" Margin="0,4,0,0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Codigo: {0} | Comercio: {1}">
+                                                <Binding Path="LocalSeleccionado.CodigoLocal"/>
+                                                <Binding Path="LocalSeleccionado.NombreComercio"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                                
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="2" Spacing="8">
+                                <Button Content="Guardar Cambios" 
+                                        Classes="btn-primary"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding GuardarMargenCommand}"/>
+                                
+                                <Button Content="Cancelar" 
+                                        Classes="btn-outline"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding CancelarEdicionCommand}"/>
+                            </StackPanel>
+                            
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Mensaje vacio Divisas -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding !MostrarPanelEdicion}">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                            <TextBlock Text="Seleccione un elemento" 
+                                       FontSize="16"
+                                       Foreground="#888888"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Haga clic en un comercio o local para editar su margen" 
+                                       FontSize="13"
+                                       Foreground="#AAAAAA"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                    
+                </Grid>
+            </Grid>
+            
+            <!-- ============================================ -->
+            <!-- PANEL PACK ALIMENTOS (MODIFICADO - DOBLE COMISION) -->
+            <!-- ============================================ -->
+            <Grid Grid.Row="1" Grid.RowSpan="2" IsVisible="{Binding EsPanelAlimentos}" RowDefinitions="Auto,*">
+                
+                <!-- HEADER: Comisiones Globales Pack Alimentos -->
+                <Border Grid.Row="0" Classes="card-highlight" Margin="0,0,0,20">
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Comisiones Globales - Pack de Alimentos" Classes="section-title"/>
+
+                            <!-- Visualizacion: Local + Allva = Total -->
+                            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="0,8,0,0">
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Comision Local" FontSize="12" Foreground="#666666"/>
+                                    <StackPanel Orientation="Horizontal" Height="36">
+                                        <TextBlock Text="{Binding ComisionLocalAlimentosGlobalTexto}" Classes="value-large"/>
+                                        <TextBlock Text=" EUR" FontSize="16" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <TextBlock Grid.Column="1" Text="+" FontSize="24" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Center" Margin="15,15,15,0"/>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Tasa de Uso" FontSize="12" Foreground="#666666"/>
+                                    <StackPanel Orientation="Horizontal" Height="36">
+                                        <TextBlock Text="{Binding ComisionAllvaAlimentosGlobalTexto}" Classes="value-large"/>
+                                        <TextBlock Text=" EUR" FontSize="16" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <TextBlock Grid.Column="3" Text="=" FontSize="24" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Center" Margin="15,15,15,0"/>
+                                <StackPanel Grid.Column="4">
+                                    <TextBlock Text="Total" FontSize="12" Foreground="#666666"/>
+                                    <StackPanel Orientation="Horizontal" Height="36">
+                                        <TextBlock Text="{Binding ComisionTotalAlimentosGlobalTexto}" Classes="value-large" Foreground="#2E7D32"/>
+                                        <TextBlock Text=" EUR" FontSize="16" FontWeight="Bold" Foreground="#2E7D32" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+
+                            <TextBlock Text="Estos valores fijos se suman al precio base del pack de alimentos"
+                                       Classes="label"
+                                       Margin="0,12,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    Spacing="12"
+                                    VerticalAlignment="Center">
+                            <Button Content="Editar Comisiones Globales"
+                                    Classes="btn-primary"
+                                    Command="{Binding EditarComisionAlimentosGlobalCommand}"/>
+                            <Button Content="Aplicar a Todos"
+                                    Classes="btn-secondary"
+                                    Command="{Binding AplicarComisionAlimentosGlobalATodosCommand}"/>
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+                
+                <!-- CONTENIDO PRINCIPAL PACK ALIMENTOS -->
+                <Grid Grid.Row="1" ColumnDefinitions="*,380">
+                    
+                    <!-- Lista de Comercios/Locales -->
+                    <Grid Grid.Column="0" RowDefinitions="Auto,Auto,*" Margin="0,0,20,0">
+                        
+                        <!-- Tabs: Comercios / Locales -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
+                            <Button Content="Por Comercio"
+                                    Classes.btn-tab-active="{Binding EsVistaComerciosAlimentos}"
+                                    Classes.btn-tab="{Binding !EsVistaComerciosAlimentos}"
+                                    Command="{Binding CambiarVistaAlimentosCommand}"
+                                    CommandParameter="comercios"/>
+                            <Button Content="Por Local"
+                                    Classes.btn-tab-active="{Binding EsVistaLocalesAlimentos}"
+                                    Classes.btn-tab="{Binding !EsVistaLocalesAlimentos}"
+                                    Command="{Binding CambiarVistaAlimentosCommand}"
+                                    CommandParameter="locales"/>
+                        </StackPanel>
+                        
+                        <!-- Buscador -->
+                        <TextBox Grid.Row="1" 
+                                 Watermark="Buscar comercio o local..."
+                                 Text="{Binding TextoBusquedaAlimentos}"
+                                 Margin="0,0,0,16"/>
+                        
+                        <!-- Lista -->
+                        <Border Grid.Row="2" Classes="card">
+                            <Grid>
+                                
+                                <!-- Lista de Comercios Pack Alimentos -->
+                                <ScrollViewer IsVisible="{Binding EsVistaComerciosAlimentos}">
+                                    <ItemsControl ItemsSource="{Binding ComerciosAlimentosFiltrados}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Padding="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        Command="{Binding $parent[ItemsControl].((vm:ComisionesViewModel)DataContext).SeleccionarComercioAlimentosCommand}"
+                                                        CommandParameter="{Binding}">
+                                                    <Border Classes="list-item">
+                                                        <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="{Binding NombreComercio}" 
+                                                                           FontWeight="SemiBold"
+                                                                           FontSize="14"/>
+                                                                <TextBlock FontSize="12" Foreground="#888888">
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{}{0} - {1} locales">
+                                                                            <Binding Path="Pais"/>
+                                                                            <Binding Path="CantidadLocales"/>
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                                                                <TextBlock Text="Local" FontSize="10" Foreground="#888888" HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ComisionLocalTexto}" FontWeight="SemiBold" Foreground="#0b5394" FontSize="13"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="2" Margin="0,0,8,0">
+                                                                <TextBlock Text="Tasa" FontSize="10" Foreground="#888888" HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ComisionAllvaTexto}" FontWeight="SemiBold" Foreground="#0b5394" FontSize="13"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="3" Margin="0,0,12,0">
+                                                                <TextBlock Text="Total" FontSize="10" Foreground="#888888" HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ComisionTotalTexto}" FontWeight="Bold" Foreground="#2E7D32" FontSize="13"/>
+                                                            </StackPanel>
+                                                            <Border Grid.Column="4"
+                                                                    Background="#E8F5E9"
+                                                                    CornerRadius="4"
+                                                                    Padding="8,4"
+                                                                    VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding EstadoTexto}"
+                                                                           FontSize="11"
+                                                                           Foreground="#2E7D32"/>
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+
+                                <!-- Lista de Locales Pack Alimentos -->
+                                <ScrollViewer IsVisible="{Binding EsVistaLocalesAlimentos}">
+                                    <ItemsControl ItemsSource="{Binding LocalesAlimentosFiltrados}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Padding="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        Command="{Binding $parent[ItemsControl].((vm:ComisionesViewModel)DataContext).SeleccionarLocalAlimentosCommand}"
+                                                        CommandParameter="{Binding}">
+                                                    <Border Classes="list-item">
+                                                        <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="{Binding CodigoLocal}"
+                                                                           FontWeight="SemiBold"
+                                                                           FontSize="16"/>
+                                                                <TextBlock Text="{Binding NombreComercio}"
+                                                                           FontSize="12" Foreground="#888888"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="1" Margin="0,0,10,0" MinWidth="70">
+                                                                <TextBlock Text="Local" FontSize="10" Foreground="#888888" HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ComisionLocalTexto}" FontWeight="SemiBold" Foreground="#0b5394" FontSize="13" HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="2" Margin="0,0,10,0" MinWidth="70">
+                                                                <TextBlock Text="Tasa" FontSize="10" Foreground="#888888" HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ComisionAllvaTexto}" FontWeight="SemiBold" Foreground="#0b5394" FontSize="13" HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="3" Margin="0,0,12,0" MinWidth="85">
+                                                                <TextBlock Text="Total" FontSize="10" Foreground="#888888" HorizontalAlignment="Center"/>
+                                                                <TextBlock Text="{Binding ComisionTotalTexto}" FontWeight="Bold" Foreground="#2E7D32" FontSize="13" HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                            <Border Grid.Column="4"
+                                                                    Background="#E3F2FD"
+                                                                    CornerRadius="4"
+                                                                    Padding="8,4"
+                                                                    VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding EstadoComision}"
+                                                                           FontSize="11"
+                                                                           Foreground="#1565C0"/>
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                                
+                            </Grid>
+                        </Border>
+                        
+                    </Grid>
+                    
+                    <!-- Panel de Edicion Pack Alimentos -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding MostrarPanelEdicionAlimentos}">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            
+                            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                                <TextBlock Text="{Binding TituloPanelEdicionAlimentos}" 
+                                           Classes="section-title"/>
+                                <Border Height="2" Background="#ffd966" HorizontalAlignment="Left" Width="60"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="1" Spacing="16">
+                                
+                                <StackPanel>
+                                    <TextBlock Text="Comision del Local (EUR)" Classes="label"/>
+                                    <TextBox Text="{Binding NuevaComisionLocalTexto}"
+                                             Watermark="Ej: 2.00"/>
+                                    <TextBlock Text="Lo que gana el local por cada operacion" FontSize="11" Foreground="#888888" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                
+                                <StackPanel>
+                                    <TextBlock Text="Tasa de Uso (EUR)" Classes="label"/>
+                                    <TextBox Text="{Binding NuevaComisionAllvaTexto}"
+                                             Watermark="Ej: 3.00"/>
+                                    <TextBlock Text="Tasa de uso de Allva por cada operacion" FontSize="11" Foreground="#888888" Margin="0,4,0,0"/>
+                                </StackPanel>
+                                
+                                <Border Background="#E8F5E9" CornerRadius="6" Padding="12">
+                                    <TextBlock Text="Estos valores se suman al precio del pack. Ejemplo: Pack 50 EUR + 2 EUR (local) + 3 EUR (Allva) = 55 EUR total"
+                                               FontSize="12"
+                                               Foreground="#2E7D32"
+                                               TextWrapping="Wrap"/>
+                                </Border>
+                                
+                                <!-- Info comercio -->
+                                <StackPanel IsVisible="{Binding ComercioAlimentosSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <TextBlock Text="Comercio seleccionado:" Classes="label"/>
+                                    <TextBlock Text="{Binding ComercioAlimentosSeleccionado.NombreComercio}" 
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding ComercioAlimentosSeleccionado.CantidadLocales, StringFormat='Este comercio tiene {0} locales'}"
+                                               FontSize="12"
+                                               Foreground="#888888"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+                                
+                                <!-- Info local -->
+                                <StackPanel IsVisible="{Binding LocalAlimentosSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}">
+                                    <TextBlock Text="Local seleccionado:" Classes="label"/>
+                                    <TextBlock Text="{Binding LocalAlimentosSeleccionado.NombreLocal}" 
+                                               FontWeight="SemiBold"/>
+                                    <TextBlock FontSize="12" Foreground="#888888" Margin="0,4,0,0">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="Codigo: {0} | Comercio: {1}">
+                                                <Binding Path="LocalAlimentosSeleccionado.CodigoLocal"/>
+                                                <Binding Path="LocalAlimentosSeleccionado.NombreComercio"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                                
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="2" Spacing="8">
+                                <Button Content="Guardar Cambios" 
+                                        Classes="btn-primary"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding GuardarComisionAlimentosCommand}"/>
+                                
+                                <Button Content="Cancelar" 
+                                        Classes="btn-outline"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding CancelarEdicionAlimentosCommand}"/>
+                            </StackPanel>
+                            
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Mensaje vacio Pack Alimentos -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding !MostrarPanelEdicionAlimentos}">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                            <TextBlock Text="Seleccione un elemento" 
+                                       FontSize="16"
+                                       Foreground="#888888"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Haga clic en un comercio o local para editar sus comisiones de Pack de Alimentos" 
+                                       FontSize="13"
+                                       Foreground="#AAAAAA"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                    
+                </Grid>
+            </Grid>
+            
+            <!-- ============================================ -->
+            <!-- PANEL BILLETES DE AVION -->
+            <!-- ============================================ -->
+            <Grid Grid.Row="1" Grid.RowSpan="2" IsVisible="{Binding EsPanelBilletes}" RowDefinitions="Auto,*">
+                
+                <!-- HEADER: Comision Global Billetes -->
+                <Border Grid.Row="0" Classes="card-highlight" Margin="0,0,0,20">
+                    <Grid ColumnDefinitions="*,Auto">
+                        
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Comision Global - Billetes de Avion" Classes="section-title"/>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding ComisionBilletesGlobalTexto}" Classes="value-large"/>
+                                <TextBlock Text="%" 
+                                           FontSize="20" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"
+                                           VerticalAlignment="Bottom"
+                                           Margin="0,0,0,4"/>
+                            </StackPanel>
+                            <TextBlock Text="Este es el porcentaje de comision que se aplica a todas las operaciones de venta de billetes de avion" 
+                                       Classes="label"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" 
+                                    Orientation="Horizontal" 
+                                    Spacing="12"
+                                    VerticalAlignment="Center">
+                            <Button Content="Editar Comision" 
+                                    Classes="btn-primary"
+                                    Command="{Binding EditarComisionBilletesCommand}"/>
+                        </StackPanel>
+                        
+                    </Grid>
+                </Border>
+                
+                <!-- Contenido Billetes -->
+                <Grid Grid.Row="1" ColumnDefinitions="*,350">
+                    
+                    <Border Grid.Column="0" Classes="card" Margin="0,0,20,0">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
+                            <TextBlock Text="Billetes de Avion" 
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Gestiona las comisiones aplicadas a las operaciones de venta de billetes de avion. La comision global se aplica a todos los comercios y locales." 
+                                       FontSize="14"
+                                       Foreground="#666666"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       MaxWidth="500"/>
+                            <Border Background="#E8F5E9" CornerRadius="8" Padding="20" Margin="0,16,0,0">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="Funcionalidades disponibles:" FontWeight="SemiBold" Foreground="#2E7D32"/>
+                                    <TextBlock Text="Comision global para todas las ventas de billetes" Foreground="#333"/>
+                                    <TextBlock Text="Aplicable a todos los destinos y aerolineas" Foreground="#333"/>
+                                    <TextBlock Text="Se calcula sobre el precio del billete" Foreground="#333"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Panel de Edicion Billetes -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding MostrarPanelEdicion}">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            
+                            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                                <TextBlock Text="{Binding TituloPanelEdicion}" 
+                                           Classes="section-title"/>
+                                <Border Height="2" Background="#ffd966" HorizontalAlignment="Left" Width="60"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="1" Spacing="16">
+                                <StackPanel>
+                                    <TextBlock Text="Nueva Comision (%)" Classes="label"/>
+                                    <TextBox Text="{Binding NuevoMargenTexto}"
+                                             Watermark="Ej: 3.00"/>
+                                </StackPanel>
+                                
+                                <Border Background="#E8F5E9" CornerRadius="6" Padding="12">
+                                    <TextBlock Text="Esta comision se aplicara a todas las ventas de billetes de avion en todos los comercios y locales."
+                                               FontSize="12"
+                                               Foreground="#2E7D32"
+                                               TextWrapping="Wrap"/>
+                                </Border>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="2" Spacing="8">
+                                <Button Content="Guardar Cambios" 
+                                        Classes="btn-primary"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding GuardarMargenCommand}"/>
+                                
+                                <Button Content="Cancelar" 
+                                        Classes="btn-outline"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding CancelarEdicionCommand}"/>
+                            </StackPanel>
+                            
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Mensaje vacio Billetes -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding !MostrarPanelEdicion}">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                            <TextBlock Text="Editar Comision" 
+                                       FontSize="16"
+                                       Foreground="#888888"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Haga clic en 'Editar Comision' para modificar el porcentaje global" 
+                                       FontSize="13"
+                                       Foreground="#AAAAAA"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                    
+                </Grid>
+            </Grid>
+            
+            <!-- ============================================ -->
+            <!-- PANEL PACKS DE VIAJES -->
+            <!-- ============================================ -->
+            <Grid Grid.Row="1" Grid.RowSpan="2" IsVisible="{Binding EsPanelViajes}" RowDefinitions="Auto,*">
+                
+                <!-- HEADER: Comision Global Viajes -->
+                <Border Grid.Row="0" Classes="card-highlight" Margin="0,0,0,20">
+                    <Grid ColumnDefinitions="*,Auto">
+                        
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Comision Global - Packs de Viajes" Classes="section-title"/>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding ComisionViajesGlobalTexto}" Classes="value-large"/>
+                                <TextBlock Text="%" 
+                                           FontSize="20" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"
+                                           VerticalAlignment="Bottom"
+                                           Margin="0,0,0,4"/>
+                            </StackPanel>
+                            <TextBlock Text="Este es el porcentaje de comision que se aplica a todas las operaciones de venta de packs de viajes" 
+                                       Classes="label"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" 
+                                    Orientation="Horizontal" 
+                                    Spacing="12"
+                                    VerticalAlignment="Center">
+                            <Button Content="Editar Comision" 
+                                    Classes="btn-primary"
+                                    Command="{Binding EditarComisionViajesCommand}"/>
+                        </StackPanel>
+                        
+                    </Grid>
+                </Border>
+                
+                <!-- Contenido Viajes -->
+                <Grid Grid.Row="1" ColumnDefinitions="*,350">
+                    
+                    <Border Grid.Column="0" Classes="card" Margin="0,0,20,0">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="16">
+                            <TextBlock Text="Packs de Viajes" 
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Gestiona las comisiones aplicadas a las operaciones de venta de packs de viajes completos. La comision global se aplica a todos los comercios y locales." 
+                                       FontSize="14"
+                                       Foreground="#666666"
+                                       TextWrapping="Wrap"
+                                       TextAlignment="Center"
+                                       MaxWidth="500"/>
+                            <Border Background="#F3E5F5" CornerRadius="8" Padding="20" Margin="0,16,0,0">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Text="Funcionalidades disponibles:" FontWeight="SemiBold" Foreground="#7B1FA2"/>
+                                    <TextBlock Text="Comision global para todos los packs de viaje" Foreground="#333"/>
+                                    <TextBlock Text="Incluye vuelos, hoteles y actividades" Foreground="#333"/>
+                                    <TextBlock Text="Se calcula sobre el precio total del pack" Foreground="#333"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Panel de Edicion Viajes -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding MostrarPanelEdicion}">
+                        <Grid RowDefinitions="Auto,*,Auto">
+                            
+                            <StackPanel Grid.Row="0" Margin="0,0,0,20">
+                                <TextBlock Text="{Binding TituloPanelEdicion}" 
+                                           Classes="section-title"/>
+                                <Border Height="2" Background="#ffd966" HorizontalAlignment="Left" Width="60"/>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="1" Spacing="16">
+                                <StackPanel>
+                                    <TextBlock Text="Nueva Comision (%)" Classes="label"/>
+                                    <TextBox Text="{Binding NuevoMargenTexto}"
+                                             Watermark="Ej: 8.00"/>
+                                </StackPanel>
+                                
+                                <Border Background="#F3E5F5" CornerRadius="6" Padding="12">
+                                    <TextBlock Text="Esta comision se aplicara a todas las ventas de packs de viajes en todos los comercios y locales."
+                                               FontSize="12"
+                                               Foreground="#7B1FA2"
+                                               TextWrapping="Wrap"/>
+                                </Border>
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="2" Spacing="8">
+                                <Button Content="Guardar Cambios" 
+                                        Classes="btn-primary"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding GuardarMargenCommand}"/>
+                                
+                                <Button Content="Cancelar" 
+                                        Classes="btn-outline"
+                                        HorizontalAlignment="Stretch"
+                                        Command="{Binding CancelarEdicionCommand}"/>
+                            </StackPanel>
+                            
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Mensaje vacio Viajes -->
+                    <Border Grid.Column="1" 
+                            Classes="card"
+                            IsVisible="{Binding !MostrarPanelEdicion}">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                            <TextBlock Text="Editar Comision" 
+                                       FontSize="16"
+                                       Foreground="#888888"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Haga clic en 'Editar Comision' para modificar el porcentaje global" 
+                                       FontSize="13"
+                                       Foreground="#AAAAAA"
+                                       HorizontalAlignment="Center"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                    
+                </Grid>
+            </Grid>
+            
+        </Grid>
+        
+        <!-- Cargando -->
+        <Border Background="#80000000"
+                IsVisible="{Binding Cargando}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Cargando..." 
+                           Foreground="White"
+                           FontSize="16"/>
+            </StackPanel>
+        </Border>
+        
+        <!-- Mensaje exito -->
+        <Border Background="#0b5394"
+                CornerRadius="8"
+                Padding="20,12"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Margin="0,0,0,20"
+                IsVisible="{Binding MostrarMensajeExito}">
+            <TextBlock Text="{Binding MensajeExito}" 
+                       Foreground="White"
+                       FontWeight="SemiBold"/>
+        </Border>
+        
+    </Grid>
+    
+</UserControl>

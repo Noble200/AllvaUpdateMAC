@@ -1,0 +1,322 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels.UserBoton"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="650"
+             x:Class="Allva.Desktop.Views.UserBoton.MiPerfilView"
+             x:DataType="vm:MiPerfilViewModel"
+             Background="#ffd966">
+
+    <Design.DataContext>
+        <vm:MiPerfilViewModel/>
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <!-- Estilo para campos de texto editables con borde azul -->
+        <Style Selector="TextBox.campo-perfil">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#595959"/>
+            <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="Width" Value="280"/>
+        </Style>
+        <Style Selector="TextBox.campo-perfil:focus">
+            <Setter Property="BorderBrush" Value="#084171"/>
+        </Style>
+
+        <!-- Estilo para campos de texto NO editables (fondo gris) -->
+        <Style Selector="TextBox.campo-readonly">
+            <Setter Property="Background" Value="#E8E8E8"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="12,5"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#595959"/>
+            <Setter Property="MinHeight" Value="32"/>
+            <Setter Property="Width" Value="280"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+        </Style>
+
+        <!-- Estilo para etiquetas amarillas compactas con ancho fijo -->
+        <Style Selector="Border.etiqueta-amarilla">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="MinWidth" Value="85"/>
+            <Setter Property="MaxWidth" Value="85"/>
+        </Style>
+
+        <!-- Botones primarios azules -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+
+        <!-- Botones secundarios (cancelar) -->
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#f0f0f0"/>
+        </Style>
+
+        <!-- Boton icono editar (lapiz) -->
+        <Style Selector="Button.btn-editar">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+        </Style>
+        <Style Selector="Button.btn-editar:pointerover">
+            <Setter Property="Opacity" Value="0.7"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Border Background="#ffd966" Padding="20">
+            <Border Background="#ffffff"
+                    CornerRadius="20"
+                    Padding="0"
+                    BoxShadow="0 4 20 0 #40000000">
+
+                <Grid RowDefinitions="Auto,*">
+                <!-- Header con titulo MI PERFIL -->
+                <Border Grid.Row="0"
+                        Background="#0b5394"
+                        CornerRadius="20,20,0,0"
+                        Padding="25,12">
+                    <TextBlock Text="MI PERFIL"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Foreground="#ffffff"/>
+                </Border>
+
+                <!-- Contenido principal -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="25,20" Spacing="12">
+
+                        <!-- Fila: Idioma -->
+                        <Grid ColumnDefinitions="85,Auto,Auto,Auto,*">
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                                <!-- Icono mundo -->
+                                <Viewbox Width="24" Height="24">
+                                    <Canvas Width="24" Height="24">
+                                        <Ellipse Stroke="#0b5394" StrokeThickness="2" Width="22" Height="22" Canvas.Left="1" Canvas.Top="1"/>
+                                        <Ellipse Stroke="#0b5394" StrokeThickness="1.5" Width="12" Height="22" Canvas.Left="6" Canvas.Top="1"/>
+                                        <Line Stroke="#0b5394" StrokeThickness="1.5" StartPoint="1,12" EndPoint="23,12"/>
+                                        <Path Stroke="#0b5394" StrokeThickness="1.5" Data="M 3,7 Q 12,9 21,7"/>
+                                        <Path Stroke="#0b5394" StrokeThickness="1.5" Data="M 3,17 Q 12,15 21,17"/>
+                                    </Canvas>
+                                </Viewbox>
+                                <TextBlock Text="Idioma"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="#595959"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <Border Grid.Column="1"
+                                    Background="#ffffff"
+                                    BorderBrush="#0b5394"
+                                    BorderThickness="2"
+                                    CornerRadius="16"
+                                    Padding="15,5"
+                                    Margin="12,0,8,0">
+                                <TextBlock Text="ENG" FontSize="12" Foreground="#595959" FontWeight="Medium"/>
+                            </Border>
+                            <Border Grid.Column="2"
+                                    Background="#ffd966"
+                                    CornerRadius="16"
+                                    Padding="15,5">
+                                <TextBlock Text="ESP" FontSize="12" Foreground="#595959" FontWeight="SemiBold"/>
+                            </Border>
+                        </Grid>
+
+                        <!-- Separador -->
+                        <Border Height="1" Background="#f3f3f3" Margin="0,8"/>
+
+                        <!-- Fila: Nombre y Apellidos -->
+                        <Grid ColumnDefinitions="85,Auto,20,85,Auto,*">
+                            <Border Grid.Column="0" Classes="etiqueta-amarilla" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <TextBlock Text="Nombre"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#595959"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <TextBox Grid.Column="1"
+                                     Classes="campo-readonly"
+                                     Text="{Binding NombreCompletoDisplay}"
+                                     Margin="10,0,0,0"/>
+
+                            <Border Grid.Column="3" Classes="etiqueta-amarilla" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <TextBlock Text="Apellidos"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#595959"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <TextBox Grid.Column="4"
+                                     Classes="campo-readonly"
+                                     Text="{Binding ApellidosCompletoDisplay}"
+                                     Margin="10,0,0,0"/>
+                        </Grid>
+
+                        <!-- Fila: Usuario y Contraseña -->
+                        <Grid ColumnDefinitions="85,Auto,20,Auto,Auto,Auto,*">
+                            <Border Grid.Column="0" Classes="etiqueta-amarilla" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <TextBlock Text="Usuario"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#595959"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <TextBox Grid.Column="1"
+                                     Classes="campo-readonly"
+                                     Text="{Binding NumeroUsuario}"
+                                     Margin="10,0,0,0"/>
+
+                            <Border Grid.Column="3"
+                                    Background="#ffd966"
+                                    CornerRadius="15"
+                                    Padding="10,4"
+                                    MinWidth="95"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                                <TextBlock Text="Contraseña"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#595959"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <TextBox Grid.Column="4"
+                                     Classes="campo-perfil"
+                                     Text="••••••••"
+                                     IsReadOnly="True"
+                                     Margin="10,0,0,0"/>
+
+                            <!-- Icono lapiz para contrasena -->
+                            <Button Grid.Column="5"
+                                    Classes="btn-editar"
+                                    Command="{Binding CambiarContrasenaCommand}"
+                                    ToolTip.Tip="Cambiar contraseña"
+                                    VerticalAlignment="Center"
+                                    Margin="8,0,0,0">
+                                <Viewbox Width="16" Height="16">
+                                    <Canvas Width="24" Height="24">
+                                        <Path Fill="#595959" Data="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z"/>
+                                    </Canvas>
+                                </Viewbox>
+                            </Button>
+                        </Grid>
+
+                        <!-- Fila: Correo -->
+                        <Grid ColumnDefinitions="85,Auto,*">
+                            <Border Grid.Column="0" Classes="etiqueta-amarilla" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <TextBlock Text="Correo"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#595959"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <TextBox Grid.Column="1"
+                                     Classes="campo-perfil"
+                                     Text="{Binding Email}"
+                                     Margin="10,0,0,0"/>
+                        </Grid>
+
+                        <!-- Fila: Movil/Telefono -->
+                        <Grid ColumnDefinitions="85,Auto,*">
+                            <Border Grid.Column="0" Classes="etiqueta-amarilla" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <TextBlock Text="Móvil"
+                                           FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="#595959"
+                                           HorizontalAlignment="Center"/>
+                            </Border>
+                            <TextBox Grid.Column="1"
+                                     Classes="campo-perfil"
+                                     Text="{Binding Telefono}"
+                                     Margin="10,0,0,0"/>
+                        </Grid>
+
+                        <!-- Nota informativa sobre correo obligatorio -->
+                        <TextBlock Text="El correo electrónico es obligatorio para recuperación de contraseña."
+                                   FontSize="12"
+                                   Foreground="#666666"
+                                   FontStyle="Italic"
+                                   Margin="0,8,0,0"/>
+
+                        <!-- Mensaje de estado (cambios guardados) -->
+                        <TextBlock Text="{Binding MensajeEstado}"
+                                   FontSize="13"
+                                   Foreground="{Binding ColorMensaje}"
+                                   HorizontalAlignment="Left"
+                                   IsVisible="{Binding MensajeVisible}"
+                                   FontWeight="Medium"
+                                   Margin="0,8,0,0"/>
+
+                        <!-- Botones de accion -->
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="10"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,15,0,0">
+                            <Button Content="Guardar cambios"
+                                    Classes="primary"
+                                    Command="{Binding GuardarCambiosCommand}"
+                                    MinWidth="150"/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Border>
+
+    <!-- Botón Cerrar - esquina inferior derecha, responsive -->
+    <Button Content="Cerrar"
+            Command="{Binding CerrarCommand}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="0,0,40,40"
+            Padding="20,12"
+            Background="#F5F5F5"
+            Foreground="#595959"
+            BorderBrush="#E0E0E0"
+            BorderThickness="1"
+            CornerRadius="6"
+            FontWeight="Medium"
+            Cursor="Hand">
+        <Button.Styles>
+            <Style Selector="Button:pointerover">
+                <Setter Property="Background" Value="#E8E8E8"/>
+            </Style>
+        </Button.Styles>
+    </Button>
+</Grid>
+</UserControl>

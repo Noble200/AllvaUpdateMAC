@@ -1,0 +1,218 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             x:Class="Allva.Desktop.Views.PanelPackAlimentos.SeleccionBeneficiarioPackView"
+             x:DataType="vm:FoodPacksViewModel">
+
+    <Border Background="#f8f9fa"
+            CornerRadius="8"
+            Padding="40,30">
+        
+        <StackPanel Spacing="24">
+            
+            <!-- Header -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0"
+                        Content="Volver"
+                        Command="{Binding VolverABuscarClienteCommand}"
+                        Background="#6c757d"
+                        Foreground="White"
+                        Padding="16,10"
+                        FontSize="14"
+                        CornerRadius="6"/>
+                
+                <TextBlock Grid.Column="1"
+                           Text="Seleccionar Beneficiario"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                
+                <Button Grid.Column="2"
+                        Content="Nuevo Beneficiario"
+                        Command="{Binding IrANuevoBeneficiarioCommand}"
+                        Background="#ffd966"
+                        Foreground="#0b5394"
+                        Padding="16,10"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        CornerRadius="6"/>
+            </Grid>
+
+            <!-- Info del Cliente Seleccionado -->
+            <Border Background="#E8F5E9"
+                    CornerRadius="8"
+                    Padding="20">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <TextBlock Text="Cliente Seleccionado:"
+                                   FontSize="13"
+                                   Foreground="#666666"/>
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Foreground="#2e7d32">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} | {1} | Tel: {2}">
+                                    <Binding Path="ClienteSeleccionadoNombre"/>
+                                    <Binding Path="ClienteSeleccionadoDocumento"/>
+                                    <Binding Path="ClienteSeleccionadoTelefono"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </StackPanel>
+                    
+                    <Button Grid.Column="1"
+                            Content="Editar Cliente"
+                            Command="{Binding IrAEditarClienteCommand}"
+                            Background="#ffd966"
+                            Foreground="#0b5394"
+                            Padding="14,8"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            CornerRadius="6"
+                            VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Tabla de Beneficiarios -->
+            <Border Background="White"
+                    CornerRadius="8"
+                    BoxShadow="0 2 8 0 #20000000"
+                    IsVisible="{Binding HayBeneficiarios}">
+                
+                <StackPanel>
+                    <!-- Encabezado de tabla -->
+                    <Border Background="#0b5394"
+                            CornerRadius="8,8,0,0"
+                            Padding="16,12">
+                        <Grid ColumnDefinitions="2*,*,2*,Auto,Auto">
+                            <TextBlock Grid.Column="0" Text="Nombre" Foreground="White" FontWeight="SemiBold" FontSize="14"/>
+                            <TextBlock Grid.Column="1" Text="Documento" Foreground="White" FontWeight="SemiBold" FontSize="14"/>
+                            <TextBlock Grid.Column="2" Text="Dirección" Foreground="White" FontWeight="SemiBold" FontSize="14"/>
+                            <TextBlock Grid.Column="3" Text="Editar" Foreground="White" FontWeight="SemiBold" FontSize="14" Width="80" TextAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="Acción" Foreground="White" FontWeight="SemiBold" FontSize="14" Width="120" TextAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Lista de beneficiarios -->
+                    <ItemsControl ItemsSource="{Binding BeneficiariosCliente}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Padding="16,12"
+                                        BorderBrush="#e9ecef"
+                                        BorderThickness="0,0,0,1"
+                                        Background="White">
+                                    <Border.Styles>
+                                        <Style Selector="Border:pointerover">
+                                            <Setter Property="Background" Value="#d4e5f7"/>
+                                        </Style>
+                                    </Border.Styles>
+                                    
+                                    <Grid ColumnDefinitions="2*,*,2*,Auto,Auto">
+                                        <!-- Nombre -->
+                                        <StackPanel Grid.Column="0" Spacing="2">
+                                            <TextBlock Text="{Binding NombreCompleto}"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#212529"/>
+                                            <TextBlock Text="{Binding Telefono}"
+                                                       FontSize="12"
+                                                       Foreground="#6c757d"/>
+                                        </StackPanel>
+                                        
+                                        <!-- Documento -->
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding DocumentoCompleto}"
+                                                   FontSize="13"
+                                                   Foreground="#495057"
+                                                   VerticalAlignment="Center"/>
+                                        
+                                        <!-- Direccion -->
+                                        <StackPanel Grid.Column="2" Spacing="2" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding DireccionCompleta}"
+                                                       FontSize="13"
+                                                       Foreground="#495057"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       MaxWidth="300"/>
+                                            <TextBlock FontSize="12" Foreground="#6c757d">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0}, {1}">
+                                                        <Binding Path="Ciudad"/>
+                                                        <Binding Path="Pais"/>
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        
+                                        <!-- Boton Editar -->
+                                        <Button Grid.Column="3"
+                                                Content="Editar"
+                                                Command="{Binding $parent[ItemsControl].((vm:FoodPacksViewModel)DataContext).IrAEditarBeneficiarioCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="#ffd966"
+                                                Foreground="#0b5394"
+                                                Width="80"
+                                                Padding="8,6"
+                                                FontSize="13"
+                                                FontWeight="SemiBold"
+                                                CornerRadius="4"
+                                                HorizontalContentAlignment="Center"
+                                                Margin="8,0"/>
+                                        
+                                        <!-- Boton Seleccionar -->
+                                        <Button Grid.Column="4"
+                                                Content="Seleccionar"
+                                                Command="{Binding $parent[ItemsControl].((vm:FoodPacksViewModel)DataContext).SeleccionarBeneficiarioCommand}"
+                                                CommandParameter="{Binding}"
+                                                Background="#28a745"
+                                                Foreground="White"
+                                                Width="120"
+                                                Padding="12,8"
+                                                FontSize="14"
+                                                FontWeight="SemiBold"
+                                                CornerRadius="4"
+                                                HorizontalContentAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Estado vacio -->
+            <Border Background="White"
+                    CornerRadius="8"
+                    Padding="48"
+                    BoxShadow="0 2 8 0 #20000000"
+                    IsVisible="{Binding NoHayBeneficiarios}"
+                    HorizontalAlignment="Center">
+                
+                <StackPanel Spacing="16" HorizontalAlignment="Center">
+                    <TextBlock Text="Este cliente no tiene beneficiarios registrados"
+                               FontSize="16"
+                               Foreground="#6c757d"
+                               TextAlignment="Center"/>
+                    
+                    <TextBlock Text="Debe agregar al menos un beneficiario para continuar con la operación."
+                               FontSize="14"
+                               Foreground="#adb5bd"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               MaxWidth="400"/>
+                    
+                    <Button Content="Agregar Beneficiario"
+                            Command="{Binding IrANuevoBeneficiarioCommand}"
+                            Background="#28a745"
+                            Foreground="White"
+                            Padding="24,12"
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            CornerRadius="6"
+                            HorizontalAlignment="Center"
+                            Margin="0,8,0,0"/>
+                </StackPanel>
+            </Border>
+            
+        </StackPanel>
+    </Border>
+</UserControl>

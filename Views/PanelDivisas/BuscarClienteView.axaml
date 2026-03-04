@@ -1,0 +1,204 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             x:Class="Allva.Desktop.Views.PanelDivisas.BuscarClienteView"
+             x:DataType="vm:CurrencyExchangePanelViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #20000000"/>
+            <Setter Property="Padding" Value="24"/>
+        </Style>
+
+        <Style Selector="Button.btn-primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+        <Style Selector="Button.btn-primary:pointerover">
+            <Setter Property="Background" Value="#094478"/>
+        </Style>
+        <Style Selector="Button.btn-primary:pressed">
+            <Setter Property="Background" Value="#6B7B8D"/>
+        </Style>
+
+        <Style Selector="Button.btn-outline">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style Selector="ComboBox">
+            <Setter Property="MinHeight" Value="44"/>
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="#ffd966" Padding="0">
+        <Border Background="White" Margin="20" CornerRadius="12" BoxShadow="0 4 12 0 #30000000">
+            <DockPanel Margin="30">
+
+                <!-- Barra de búsqueda: Filtro + Input + Botones en una fila -->
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12">
+                    <TextBlock Text="Cliente:"
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               Foreground="#0b5394"/>
+
+                    <ComboBox ItemsSource="{Binding TiposBusquedaCliente}"
+                              SelectedItem="{Binding TipoBusquedaSeleccionado}"
+                              Width="120"
+                              MinHeight="40"
+                              VerticalAlignment="Center"/>
+
+                    <TextBox Text="{Binding BusquedaCliente}"
+                             Watermark="Escribir..."
+                             BorderBrush="#0b5394"
+                             BorderThickness="1"
+                             Width="250"
+                             MinHeight="40"
+                             VerticalAlignment="Center"/>
+
+                    <Button Content="Buscar cliente"
+                            Classes="btn-primary"
+                            VerticalAlignment="Center"
+                            Command="{Binding BuscarClientesManualCommand}"/>
+
+                    <Button Content="Nuevo cliente"
+                            Classes="btn-outline"
+                            VerticalAlignment="Center"
+                            Command="{Binding IrANuevoClienteCommand}"/>
+                </StackPanel>
+
+                <!-- Título debajo de la barra, arriba de la tabla -->
+                <TextBlock DockPanel.Dock="Top"
+                           Text="Buscar cliente"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"
+                           Margin="0,0,0,16"/>
+
+                <!-- Pie: Error y Botón Atrás (abajo) -->
+                <Grid DockPanel.Dock="Bottom" ColumnDefinitions="*,Auto" Margin="0,20,0,0">
+                    <!-- Error -->
+                    <Border Grid.Column="0"
+                            Background="#FFEBEE"
+                            CornerRadius="6"
+                            Padding="16"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <TextBlock Text="{Binding ErrorMessage}"
+                                   Foreground="#C62828"
+                                   FontWeight="SemiBold"
+                                   FontSize="13"/>
+                    </Border>
+
+                    <!-- Botón Atrás -->
+                    <Button Grid.Column="1"
+                            Content="Atrás"
+                            Classes="btn-primary"
+                            Padding="30,10"
+                            VerticalAlignment="Center"
+                            Command="{Binding VolverAPrincipalCommand}"/>
+                </Grid>
+
+                <!-- Lista de clientes (rellena el espacio restante) -->
+                <Border MinHeight="300">
+                    <Grid RowDefinitions="Auto,*">
+
+                        <!-- Encabezado de tabla -->
+                        <Border Grid.Row="0"
+                                Background="#ffd966"
+                                CornerRadius="8,8,0,0"
+                                Padding="20,14">
+                            <Grid ColumnDefinitions="2*,1.2*,1.2*,1.2*,140">
+                                <TextBlock Grid.Column="0" Text="Nombre Completo" FontWeight="Bold" Foreground="#333" FontSize="13"/>
+                                <TextBlock Grid.Column="1" Text="Documento" FontWeight="Bold" Foreground="#333" FontSize="13"/>
+                                <TextBlock Grid.Column="2" Text="Teléfono" FontWeight="Bold" Foreground="#333" FontSize="13"/>
+                                <TextBlock Grid.Column="3" Text="Fecha nacimiento" FontWeight="Bold" Foreground="#333" FontSize="13"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Lista -->
+                        <Border Grid.Row="1" BorderBrush="#e0e0e0" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8">
+                            <ScrollViewer>
+                                <StackPanel>
+                                    <ItemsControl ItemsSource="{Binding ClientesEncontrados}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border BorderBrush="#e8e8e8"
+                                                        BorderThickness="0,0,0,1"
+                                                        Padding="20,14"
+                                                        Background="White">
+                                                    <Grid ColumnDefinitions="2*,1.2*,1.2*,1.2*,140">
+                                                        <TextBlock Grid.Column="0"
+                                                                   Text="{Binding NombreCompleto}"
+                                                                   VerticalAlignment="Center"
+                                                                   FontSize="13"
+                                                                   Foreground="#333"/>
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="{Binding DocumentoCompleto}"
+                                                                   VerticalAlignment="Center"
+                                                                   Foreground="#666"
+                                                                   FontSize="13"/>
+                                                        <TextBlock Grid.Column="2"
+                                                                   Text="{Binding Telefono}"
+                                                                   VerticalAlignment="Center"
+                                                                   Foreground="#666"
+                                                                   FontSize="13"/>
+                                                        <TextBlock Grid.Column="3"
+                                                                   Text="{Binding FechaNacimiento, StringFormat='{}{0:dd/MM/yyyy}', TargetNullValue='-'}"
+                                                                   VerticalAlignment="Center"
+                                                                   Foreground="#666"
+                                                                   FontSize="13"/>
+                                                        <Button Grid.Column="4"
+                                                                Content="Seleccionar"
+                                                                Classes="btn-primary"
+                                                                FontSize="12"
+                                                                Padding="16,8"
+                                                                HorizontalAlignment="Center"
+                                                                Command="{Binding $parent[ItemsControl].((vm:CurrencyExchangePanelViewModel)DataContext).SeleccionarClienteYContinuarCommand}"
+                                                                CommandParameter="{Binding}"/>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                    <!-- Mensaje sin resultados -->
+                                    <TextBlock Text="Presione 'Buscar cliente' para ver los resultados"
+                                               HorizontalAlignment="Center"
+                                               Margin="0,60,0,60"
+                                               Foreground="#999"
+                                               FontSize="14"
+                                               IsVisible="{Binding !ClientesEncontrados.Count}"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </Border>
+                    </Grid>
+                </Border>
+
+            </DockPanel>
+        </Border>
+    </Border>
+
+</UserControl>

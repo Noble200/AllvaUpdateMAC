@@ -1,0 +1,295 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             x:Class="Allva.Desktop.Views.PanelBilletes.ExtrasEquipajeView"
+             x:DataType="vm:FlightTicketsViewModel"
+             x:Name="ExtrasRoot">
+
+    <UserControl.Styles>
+        <Style Selector="Button.btn-continuar">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="40,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.btn-continuar:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+
+        <Style Selector="Button.btn-volver">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="24,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style Selector="Button.btn-volver:pointerover">
+            <Setter Property="Background" Value="#E8F0FE"/>
+        </Style>
+
+        <Style Selector="Button.btn-equipaje">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+        <Style Selector="Button.btn-equipaje:pointerover">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="Background" Value="#F0F5FF"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="#FFD966" Padding="0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Spacing="14" Margin="20">
+
+        <!-- TITULO + STEPPER -->
+        <Border Background="White" CornerRadius="8" Padding="20,16" BoxShadow="0 2 8 0 #20000000">
+            <StackPanel Spacing="16">
+                <TextBlock Text="{Binding TituloRutaBusqueda}" FontSize="22" FontWeight="Bold"
+                           Foreground="#0b5394" HorizontalAlignment="Center"/>
+
+                <!-- ============ STEPPER ============ -->
+                <Border HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="0">
+                        <StackPanel Spacing="4" HorizontalAlignment="Center" Width="120">
+                            <Ellipse Width="30" Height="30" Fill="#0b5394" HorizontalAlignment="Center"/>
+                            <TextBlock Text="&#x2713;" FontSize="14" FontWeight="Bold" Foreground="White"
+                                       HorizontalAlignment="Center" Margin="0,-27,0,0"/>
+                            <TextBlock Text="Vuelos" FontSize="12" Foreground="#0b5394"
+                                       HorizontalAlignment="Center" FontWeight="SemiBold" Margin="0,10,0,0"/>
+                        </StackPanel>
+                        <Border Width="60" Height="2" Background="#0b5394" VerticalAlignment="Top" Margin="0,15,0,0"/>
+                        <StackPanel Spacing="4" HorizontalAlignment="Center" Width="120">
+                            <Ellipse Width="30" Height="30" Fill="#FFC600" HorizontalAlignment="Center"/>
+                            <TextBlock Text="2" FontSize="14" FontWeight="Bold" Foreground="#0b5394"
+                                       HorizontalAlignment="Center" Margin="0,-27,0,0"/>
+                            <TextBlock Text="Extras" FontSize="12" Foreground="#0b5394"
+                                       HorizontalAlignment="Center" FontWeight="Bold" Margin="0,10,0,0"/>
+                        </StackPanel>
+                        <Border Width="60" Height="2" Background="#CCCCCC" VerticalAlignment="Top" Margin="0,15,0,0"/>
+                        <StackPanel Spacing="4" HorizontalAlignment="Center" Width="120">
+                            <Ellipse Width="30" Height="30" Fill="#CCCCCC" HorizontalAlignment="Center"/>
+                            <TextBlock Text="3" FontSize="14" FontWeight="Bold" Foreground="White"
+                                       HorizontalAlignment="Center" Margin="0,-27,0,0"/>
+                            <TextBlock Text="Datos" FontSize="12" Foreground="#999999"
+                                       HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                        </StackPanel>
+                        <Border Width="60" Height="2" Background="#CCCCCC" VerticalAlignment="Top" Margin="0,15,0,0"/>
+                        <StackPanel Spacing="4" HorizontalAlignment="Center" Width="120">
+                            <Ellipse Width="30" Height="30" Fill="#CCCCCC" HorizontalAlignment="Center"/>
+                            <TextBlock Text="4" FontSize="14" FontWeight="Bold" Foreground="White"
+                                       HorizontalAlignment="Center" Margin="0,-27,0,0"/>
+                            <TextBlock Text="Pagos" FontSize="12" Foreground="#999999"
+                                       HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- ============ CONTENIDO: Equipaje + Sidebar ============ -->
+        <Grid ColumnDefinitions="*,14,340">
+
+            <!-- OPCIONES DE EQUIPAJE -->
+            <StackPanel Grid.Column="0" Spacing="14">
+
+                <!-- Equipaje de mano -->
+                <Border Background="White" CornerRadius="8" Padding="24" BoxShadow="0 2 8 0 #20000000">
+                    <StackPanel Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text="&#x1F9F3;" FontSize="20"/>
+                            <TextBlock Text="Equipaje de mano" FontSize="17" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Cada pasajero puede llevar un equipaje de mano (max 10kg, 55x40x20 cm) incluido en el precio del billete."
+                                   FontSize="12" Foreground="#666666" TextWrapping="Wrap"/>
+
+                        <Border Background="#E8F5E9" CornerRadius="6" Padding="12,8">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="&#x2713;" FontSize="14" FontWeight="Bold" Foreground="#2E7D32"/>
+                                <TextBlock Text="Incluido en tu billete" FontSize="13" FontWeight="SemiBold" Foreground="#2E7D32" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Equipaje facturado -->
+                <Border Background="White" CornerRadius="8" Padding="24" BoxShadow="0 2 8 0 #20000000">
+                    <StackPanel Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text="&#x1F6C4;" FontSize="20"/>
+                            <TextBlock Text="Equipaje facturado" FontSize="17" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Text="Añade maleta facturada (max 23kg por maleta). El precio se aplica por trayecto."
+                                   FontSize="12" Foreground="#666666" TextWrapping="Wrap"/>
+
+                        <StackPanel Spacing="10">
+                            <!-- Opcion 0 maletas -->
+                            <Button Classes="btn-equipaje" Command="{Binding SeleccionarEquipajeFacturadoCommand}" CommandParameter="0">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Sin maleta facturada" FontSize="13" FontWeight="SemiBold" Foreground="#333333"/>
+                                        <TextBlock Text="Solo equipaje de mano" FontSize="11" Foreground="#999999"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <TextBlock Text="Incluido" FontSize="14" FontWeight="Bold" Foreground="#2E7D32" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Button>
+
+                            <!-- Opcion 1 maleta -->
+                            <Button Classes="btn-equipaje" Command="{Binding SeleccionarEquipajeFacturadoCommand}" CommandParameter="1">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="1 maleta facturada (23kg)" FontSize="13" FontWeight="SemiBold" Foreground="#333333"/>
+                                        <TextBlock Text="Por pasajero, por trayecto" FontSize="11" Foreground="#999999"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding PrecioUnaMaletaTexto}" FontSize="14" FontWeight="Bold" Foreground="#0b5394" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Button>
+
+                            <!-- Opcion 2 maletas -->
+                            <Button Classes="btn-equipaje" Command="{Binding SeleccionarEquipajeFacturadoCommand}" CommandParameter="2">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="2 maletas facturadas (23kg c/u)" FontSize="13" FontWeight="SemiBold" Foreground="#333333"/>
+                                        <TextBlock Text="Por pasajero, por trayecto" FontSize="11" Foreground="#999999"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding PrecioDosMaletasTexto}" FontSize="14" FontWeight="Bold" Foreground="#0b5394" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Indicador de seleccion actual -->
+                        <Border Background="#E8F0FE" CornerRadius="6" Padding="12,8">
+                            <TextBlock Text="{Binding EquipajeSeleccionadoTexto}" FontSize="13" FontWeight="SemiBold" Foreground="#0b5394"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Extras opcionales -->
+                <Border Background="White" CornerRadius="8" Padding="24" BoxShadow="0 2 8 0 #20000000">
+                    <StackPanel Spacing="16">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <TextBlock Text="&#x2B50;" FontSize="18"/>
+                            <TextBlock Text="Extras opcionales" FontSize="17" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- Sentarse juntos -->
+                        <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="16,12">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Sentarse juntos" FontSize="13" FontWeight="SemiBold" Foreground="#333333"/>
+                                    <TextBlock Text="Garantiza asientos contiguos para todos los pasajeros" FontSize="11" Foreground="#999999" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding PrecioSentarseJuntosTexto}" FontSize="13" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Center"/>
+                                    <CheckBox IsChecked="{Binding SentarseJuntos}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Seguro de viaje -->
+                        <Border BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="16,12">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Seguro de viaje" FontSize="13" FontWeight="SemiBold" Foreground="#333333"/>
+                                    <TextBlock Text="Cobertura médica, cancelación y pérdida de equipaje" FontSize="11" Foreground="#999999" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding PrecioSeguroTexto}" FontSize="13" FontWeight="Bold" Foreground="#0b5394" VerticalAlignment="Center"/>
+                                    <CheckBox IsChecked="{Binding SeguroViaje}" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- ============ SIDEBAR ============ -->
+            <Border Grid.Column="2" Background="White" CornerRadius="8" Padding="24"
+                    BoxShadow="0 2 8 0 #20000000" BorderBrush="#0b5394" BorderThickness="1"
+                    VerticalAlignment="Top">
+                <StackPanel Spacing="14">
+                    <TextBlock Text="Resumen de la reserva" FontSize="16" FontWeight="Bold" Foreground="#0b5394"/>
+
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="&#x1F464;" FontSize="16"/>
+                        <TextBlock Text="{Binding ResumenPasajeros}" FontSize="13" Foreground="#333333" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <Border Height="1" Background="#E0E0E0"/>
+
+                    <TextBlock Text="Resumen de vuelo" FontSize="14" FontWeight="Bold" Foreground="#0b5394"/>
+
+                    <StackPanel Spacing="4">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="&#x1F4C5;" FontSize="13"/>
+                            <TextBlock Text="{Binding ResumenVueloIda}" FontSize="12" Foreground="#666666" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Spacing="4" IsVisible="{Binding TieneVueloVueltaSeleccionado}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="&#x1F4C5;" FontSize="13"/>
+                            <TextBlock Text="{Binding ResumenVueloVuelta}" FontSize="12" Foreground="#666666" TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Border Height="1" Background="#E0E0E0"/>
+
+                    <StackPanel Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Precio billetes:" FontSize="12" Foreground="#333333"/>
+                            <TextBlock Grid.Column="1" Text="{Binding PrecioBilletesTexto}" FontSize="12" Foreground="#333333" FontWeight="SemiBold"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Equipaje facturado:" FontSize="12" Foreground="#333333"/>
+                            <TextBlock Grid.Column="1" Text="{Binding PrecioEquipajeTexto}" FontSize="12" Foreground="#333333"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Text="Sentarse juntos:" FontSize="12" Foreground="#333333"/>
+                            <TextBlock Grid.Column="1" Text="{Binding PrecioSentarseJuntosResumenTexto}" FontSize="12" Foreground="#333333"/>
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding SeguroViaje}">
+                            <TextBlock Grid.Column="0" Text="Seguro de viaje:" FontSize="12" Foreground="#333333"/>
+                            <TextBlock Grid.Column="1" Text="{Binding PrecioSeguroTexto}" FontSize="12" Foreground="#333333"/>
+                        </Grid>
+                    </StackPanel>
+
+                    <Border Height="1" Background="#0b5394"/>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Grid.Column="0" Text="Total:" FontSize="16" FontWeight="Bold" Foreground="#0b5394"/>
+                        <TextBlock Grid.Column="1" Text="{Binding PrecioTotalTexto}" FontSize="20" FontWeight="Bold" Foreground="#0b5394"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <!-- Botones -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16" Margin="0,6,0,20">
+            <Button Classes="btn-volver" Content="&#x2190; Volver" Command="{Binding VolverADetalleCommand}"/>
+            <Button Classes="btn-continuar" Content="Continuar a Datos  &#x203A;" Command="{Binding IrADatosCommand}"/>
+        </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</UserControl>

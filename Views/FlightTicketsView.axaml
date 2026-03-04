@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             xmlns:local="using:Allva.Desktop.Views.PanelBilletes"
+             x:Class="Allva.Desktop.Views.FlightTicketsView"
+             x:DataType="vm:FlightTicketsViewModel"
+             Background="#FFD966">
+
+    <UserControl.DataContext>
+        <vm:FlightTicketsViewModel/>
+    </UserControl.DataContext>
+
+    <Grid>
+        <local:BusquedaVuelosView IsVisible="{Binding VistaBusqueda, FallbackValue=True}" DataContext="{Binding}"/>
+        <local:CalendarioVuelosView IsVisible="{Binding VistaCalendario, FallbackValue=False}" DataContext="{Binding}"/>
+        <local:ResultadosVuelosView IsVisible="{Binding VistaResultados, FallbackValue=False}" DataContext="{Binding}"/>
+        <local:DetalleVueloView IsVisible="{Binding VistaDetalle, FallbackValue=False}" DataContext="{Binding}"/>
+        <local:ExtrasEquipajeView IsVisible="{Binding VistaExtras, FallbackValue=False}" DataContext="{Binding}"/>
+        <local:DatosPasajerosView IsVisible="{Binding VistaDatos, FallbackValue=False}" DataContext="{Binding}"/>
+    </Grid>
+
+</UserControl>

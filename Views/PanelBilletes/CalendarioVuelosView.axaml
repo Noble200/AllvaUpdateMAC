@@ -1,0 +1,240 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             xmlns:models="using:Allva.Desktop.Models"
+             x:Class="Allva.Desktop.Views.PanelBilletes.CalendarioVuelosView"
+             x:DataType="vm:FlightTicketsViewModel"
+             x:Name="CalendarioRoot">
+
+    <UserControl.Styles>
+        <Style Selector="Button.btn-continuar">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="40,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.btn-continuar:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+
+        <Style Selector="Button.btn-fechas-sugeridas">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.btn-fechas-sugeridas:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+
+        <Style Selector="Button.btn-nav-mes">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Width" Value="36"/>
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="Button.btn-nav-mes:pointerover">
+            <Setter Property="Background" Value="#E8F0FE"/>
+        </Style>
+
+        <Style Selector="Button.btn-volver">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="24,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style Selector="Button.btn-volver:pointerover">
+            <Setter Property="Background" Value="#E8F0FE"/>
+        </Style>
+        <Style Selector="Button.btn-dia">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.btn-dia:pointerover">
+            <Setter Property="Background" Value="#E8F0FE"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="#FFD966" Padding="0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Spacing="14" Margin="20">
+
+        <!-- Titulo de ruta -->
+        <Border Background="White" CornerRadius="8" Padding="20,16" BoxShadow="0 2 8 0 #20000000">
+            <StackPanel Spacing="16">
+                <TextBlock Text="{Binding TituloRutaBusqueda}"
+                           FontSize="22" FontWeight="Bold" Foreground="#0b5394"
+                           HorizontalAlignment="Center"/>
+
+                <!-- Fechas + boton fechas sugeridas -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
+                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <TextBlock Text="Fecha ida" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="#0b5394" VerticalAlignment="Center"/>
+                        <Border BorderBrush="#0b5394" BorderThickness="1" CornerRadius="6" Padding="10,6">
+                            <TextBlock Text="{Binding FechaIdaTexto}" FontSize="13" Foreground="#333333"/>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <TextBlock Text="Fecha vuelta" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="#0b5394" VerticalAlignment="Center"/>
+                        <Border BorderBrush="#0b5394" BorderThickness="1" CornerRadius="6" Padding="10,6">
+                            <TextBlock Text="{Binding FechaVueltaTexto}" FontSize="13" Foreground="#333333"/>
+                        </Border>
+                    </StackPanel>
+
+                    <Button Classes="btn-fechas-sugeridas" Content="Fechas sugeridas"/>
+                </StackPanel>
+
+                <TextBlock Text="Haz click en un dia del calendario para seleccionar fecha de ida, luego fecha de vuelta"
+                           FontSize="11" Foreground="#666" TextAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- CALENDARIO DUAL -->
+        <Border Background="White" CornerRadius="8" Padding="30" BoxShadow="0 2 8 0 #20000000"
+                BorderBrush="#0b5394" BorderThickness="1">
+            <StackPanel Spacing="20">
+                <!-- Navegacion de meses -->
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <Button Grid.Column="0" Classes="btn-nav-mes" Content="&#x276E;"
+                            Command="{Binding MesAnteriorCommand}"/>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal"
+                                HorizontalAlignment="Center" Spacing="80">
+                        <TextBlock Text="{Binding TituloMes1}" FontSize="16" FontWeight="Bold"
+                                   Foreground="#0b5394"/>
+                        <TextBlock Text="{Binding TituloMes2}" FontSize="16" FontWeight="Bold"
+                                   Foreground="#0b5394"/>
+                    </StackPanel>
+                    <Button Grid.Column="2" Classes="btn-nav-mes" Content="&#x276F;"
+                            Command="{Binding MesSiguienteCommand}"/>
+                </Grid>
+
+                <!-- Calendarios lado a lado -->
+                <Grid ColumnDefinitions="*,40,*">
+                    <!-- Mes 1 -->
+                    <StackPanel Grid.Column="0" Spacing="4">
+                        <Grid ColumnDefinitions="*,*,*,*,*,*,*">
+                            <TextBlock Grid.Column="0" Text="lun" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="mar" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="mier" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="juev" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="vier" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="sab" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="6" Text="dom" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <ItemsControl ItemsSource="{Binding PreciosCalendarioMes1}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel ItemWidth="62" ItemHeight="48"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:PrecioCalendarioItem">
+                                    <Button Classes="btn-dia" Width="62" Height="48"
+                                            Command="{Binding #CalendarioRoot.((vm:FlightTicketsViewModel)DataContext).SeleccionarFechaCalendarioCommand}"
+                                            CommandParameter="{Binding}"
+                                            IsVisible="{Binding !EsVacio}">
+                                        <StackPanel Spacing="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Dia}" FontSize="13" Foreground="#333333" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding PrecioTexto}" FontSize="9" Foreground="#0b5394" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- Separador -->
+                    <Border Grid.Column="1" Width="1" Background="#E0E0E0"
+                            VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+
+                    <!-- Mes 2 -->
+                    <StackPanel Grid.Column="2" Spacing="4">
+                        <Grid ColumnDefinitions="*,*,*,*,*,*,*">
+                            <TextBlock Grid.Column="0" Text="lun" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="mar" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="2" Text="mier" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="juev" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="4" Text="vier" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="5" Text="sab" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Column="6" Text="dom" FontSize="11" Foreground="#999" HorizontalAlignment="Center"/>
+                        </Grid>
+
+                        <ItemsControl ItemsSource="{Binding PreciosCalendarioMes2}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel ItemWidth="62" ItemHeight="48"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="models:PrecioCalendarioItem">
+                                    <Button Classes="btn-dia" Width="62" Height="48"
+                                            Command="{Binding #CalendarioRoot.((vm:FlightTicketsViewModel)DataContext).SeleccionarFechaCalendarioCommand}"
+                                            CommandParameter="{Binding}"
+                                            IsVisible="{Binding !EsVacio}">
+                                        <StackPanel Spacing="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Dia}" FontSize="13" Foreground="#333333" HorizontalAlignment="Center"/>
+                                            <TextBlock Text="{Binding PrecioTexto}" FontSize="9" Foreground="#0b5394" HorizontalAlignment="Center" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <!-- Solo ida + DatePickers -->
+        <Border Background="White" CornerRadius="8" Padding="20,16" BoxShadow="0 2 8 0 #20000000">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="20">
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Fecha ida:" FontSize="13" FontWeight="SemiBold" Foreground="#0b5394"/>
+                    <DatePicker SelectedDate="{Binding FechaIda}" MinWidth="140"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <TextBlock Text="Fecha vuelta:" FontSize="13" FontWeight="SemiBold" Foreground="#0b5394"/>
+                    <DatePicker SelectedDate="{Binding FechaVuelta}" MinWidth="140"/>
+                </StackPanel>
+                <CheckBox Content="Solo ida" IsChecked="{Binding SoloIda}"
+                          Foreground="#0b5394" FontSize="13" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Botones -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="16" Margin="0,6,0,20">
+            <Button Classes="btn-volver" Content="&#x2190; Volver" Command="{Binding VolverABusquedaCommand}"/>
+            <Button Classes="btn-continuar" Content="Continuar  &#x203A;" Command="{Binding IrAResultadosCommand}"/>
+        </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</UserControl>

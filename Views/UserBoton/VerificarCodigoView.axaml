@@ -1,0 +1,162 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="520"
+        x:Class="Allva.Desktop.Views.UserBoton.VerificarCodigoView"
+        Title="Verificar Código"
+        Width="450"
+        Height="520"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#F5F5F5">
+
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="#0b5394" Padding="20,16">
+            <TextBlock Text="Verificar Código"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <ScrollViewer Grid.Row="1" Padding="30">
+            <StackPanel Spacing="20">
+
+                <!-- Mensaje de bienvenida -->
+                <TextBlock Text="Ingresa el código que recibiste en tu correo"
+                           FontSize="14"
+                           Foreground="#666666"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Center"/>
+
+                <!-- Campo de codigo -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Código de verificación"
+                               FontSize="13"
+                               Foreground="#595959"/>
+                    <TextBox x:Name="CodigoTextBox"
+                             Watermark="000000"
+                             MaxLength="6"
+                             FontSize="24"
+                             TextAlignment="Center"
+                             LetterSpacing="8"/>
+                </StackPanel>
+
+                <!-- Separador -->
+                <Border Height="1" Background="#E0E0E0" Margin="0,10"/>
+
+                <!-- Nueva contrasena -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Nueva contraseña"
+                               FontSize="13"
+                               Foreground="#595959"/>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox x:Name="NuevaContrasenaTextBox"
+                                 Grid.Column="0"
+                                 PasswordChar="*"
+                                 Watermark="Mínimo 6 caracteres"/>
+                        <Button x:Name="VerNuevaContrasenaBtn"
+                                Grid.Column="1"
+                                Content="👁"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="10,0"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                Click="VerNuevaContrasena_Click"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Confirmar contrasena -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Confirmar contraseña"
+                               FontSize="13"
+                               Foreground="#595959"/>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox x:Name="ConfirmarContrasenaTextBox"
+                                 Grid.Column="0"
+                                 PasswordChar="*"
+                                 Watermark="Repite la contraseña"/>
+                        <Button x:Name="VerConfirmarContrasenaBtn"
+                                Grid.Column="1"
+                                Content="👁"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="10,0"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                Click="VerConfirmarContrasena_Click"/>
+                    </Grid>
+                </StackPanel>
+
+                <!-- Mensaje de estado -->
+                <TextBlock x:Name="MensajeEstado"
+                           Text=""
+                           FontSize="13"
+                           Foreground="#CC0000"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"
+                           IsVisible="False"/>
+
+                <!-- Indicador de carga -->
+                <StackPanel x:Name="LoadingPanel"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Spacing="10"
+                            IsVisible="False">
+                    <TextBlock Text="Actualizando contraseña..."
+                               FontSize="13"
+                               Foreground="#666666"/>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- BOTONES -->
+        <Border Grid.Row="2" Background="White" Padding="20,16" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Button x:Name="CancelarBtn"
+                        Grid.Column="1"
+                        Content="Cancelar"
+                        Background="White"
+                        Foreground="#666666"
+                        BorderBrush="#CCCCCC"
+                        BorderThickness="1"
+                        Padding="20,10"
+                        CornerRadius="4"
+                        Margin="0,0,12,0"
+                        Click="Cancelar_Click"
+                        Cursor="Hand"/>
+
+                <Button x:Name="ConfirmarBtn"
+                        Grid.Column="2"
+                        Content="Cambiar Contraseña"
+                        Background="#0b5394"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Padding="20,10"
+                        CornerRadius="4"
+                        Click="Confirmar_Click"
+                        Cursor="Hand"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

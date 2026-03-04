@@ -1,0 +1,32 @@
+# Build outputs - NO subir
+bin/
+obj/
+publish/
+Releases/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Compiled files
+*.exe
+*.dll
+*.pdb
+
+# Velopack
+*.nupkg
+RELEASES

@@ -1,0 +1,2124 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             xmlns:converters="using:Allva.Desktop.Converters"
+             x:Class="Allva.Desktop.Views.PanelPackAlimentos.FoodPacksView"
+             x:DataType="vm:FoodPacksViewModel"
+             Background="#F5F5F5">
+
+    <UserControl.Resources>
+        <converters:ByteArrayToImageConverter x:Key="ByteArrayToImage"/>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #20000000"/>
+        </Style>
+        <Style Selector="Button.btn-primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.btn-primary:pointerover">
+            <Setter Property="Background" Value="#094478"/>
+        </Style>
+        <Style Selector="Button.btn-secondary">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.btn-secondary:pointerover">
+            <Setter Property="Background" Value="#f0ca4d"/>
+        </Style>
+        <Style Selector="Button.btn-outline">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="16,10"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,8"/>
+        </Style>
+        <Style Selector="Button.btn-pais">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-pais:pointerover Border.card-pais">
+            <Setter Property="Background" Value="#F0F7FF"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+        <Style Selector="Button.btn-pack">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-pack:pointerover Border.card-pack">
+            <Setter Property="Background" Value="#F0F7FF"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+
+        <!-- MENSAJE DE ESTADO FLOTANTE -->
+        <Border IsVisible="{Binding HayMensaje}"
+                Background="{Binding MensajeBackground}"
+                Padding="16,12"
+                CornerRadius="8"
+                Margin="20"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                ZIndex="1000">
+            <TextBlock Text="{Binding MensajeEstado}" 
+                       Foreground="White" 
+                       FontWeight="SemiBold"
+                       FontSize="14"/>
+        </Border>
+
+        <!-- MODAL: SELECCIONAR PAIS PARA IMPRIMIR CATALOGO -->
+        <Border IsVisible="{Binding MostrarModalImprimirCatalogo}"
+                Background="#CC000000"
+                ZIndex="1001">
+            <Border Background="White"
+                    CornerRadius="12"
+                    MaxWidth="500"
+                    MaxHeight="600"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Padding="24">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    <!-- Header -->
+                    <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
+                        <TextBlock Text="Imprimir Catalogo de Packs"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#0b5394"/>
+                        <TextBlock Text="Seleccione el pais del cual desea generar el catalogo PDF"
+                                   FontSize="13"
+                                   Foreground="#666666"/>
+                    </StackPanel>
+
+                    <!-- Buscador -->
+                    <TextBox Grid.Row="1"
+                             Watermark="Buscar pais..."
+                             Text="{Binding BusquedaPaisImpresion}"
+                             Margin="0,0,0,12"/>
+
+                    <!-- Lista de paises -->
+                    <Border Grid.Row="2"
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Margin="0,0,0,16">
+                        <ScrollViewer MaxHeight="350">
+                            <ItemsControl ItemsSource="{Binding PaisesFiltradosImpresion}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Stretch"
+                                                Padding="0"
+                                                Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).SeleccionarPaisImpresionCommand}"
+                                                CommandParameter="{Binding}">
+                                            <Grid>
+                                                <!-- Fondo cuando NO esta seleccionado -->
+                                                <Border Padding="12,10"
+                                                        Background="White"
+                                                        IsVisible="{Binding !EsSeleccionadoImpresion}">
+                                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                                        <!-- Bandera -->
+                                                        <Border Grid.Column="0"
+                                                                Width="40"
+                                                                Height="28"
+                                                                CornerRadius="4"
+                                                                ClipToBounds="True"
+                                                                Margin="0,0,12,0"
+                                                                Background="#F0F0F0">
+                                                            <Panel>
+                                                                <Image Source="{Binding BanderaImagen, Converter={StaticResource ByteArrayToImage}}"
+                                                                       Stretch="Uniform"
+                                                                       IsVisible="{Binding TieneBandera}"/>
+                                                            </Panel>
+                                                        </Border>
+
+                                                        <!-- Nombre pais -->
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="{Binding NombrePais}"
+                                                                   FontSize="14"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="#333333"
+                                                                   VerticalAlignment="Center"/>
+                                                    </Grid>
+                                                </Border>
+
+                                                <!-- Fondo cuando SI esta seleccionado -->
+                                                <Border Padding="12,10"
+                                                        Background="#E8F5E9"
+                                                        IsVisible="{Binding EsSeleccionadoImpresion}">
+                                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                                        <!-- Bandera -->
+                                                        <Border Grid.Column="0"
+                                                                Width="40"
+                                                                Height="28"
+                                                                CornerRadius="4"
+                                                                ClipToBounds="True"
+                                                                Margin="0,0,12,0"
+                                                                Background="#F0F0F0">
+                                                            <Panel>
+                                                                <Image Source="{Binding BanderaImagen, Converter={StaticResource ByteArrayToImage}}"
+                                                                       Stretch="Uniform"
+                                                                       IsVisible="{Binding TieneBandera}"/>
+                                                            </Panel>
+                                                        </Border>
+
+                                                        <!-- Nombre pais -->
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="{Binding NombrePais}"
+                                                                   FontSize="14"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#2E7D32"
+                                                                   VerticalAlignment="Center"/>
+
+                                                        <!-- Indicador seleccionado -->
+                                                        <Border Grid.Column="2"
+                                                                Width="20"
+                                                                Height="20"
+                                                                CornerRadius="10"
+                                                                Background="#28a745">
+                                                            <TextBlock Text="✓"
+                                                                       FontSize="12"
+                                                                       Foreground="White"
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Botones -->
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+                        <Button Content="Cancelar"
+                                Background="#6c757d"
+                                Foreground="White"
+                                CornerRadius="6"
+                                Padding="24,12"
+                                FontWeight="SemiBold"
+                                Command="{Binding CerrarModalImprimirCatalogoCommand}"/>
+
+                        <Button Content="Generar PDF"
+                                Background="#28a745"
+                                Foreground="White"
+                                CornerRadius="6"
+                                Padding="24,12"
+                                FontWeight="SemiBold"
+                                IsEnabled="{Binding PaisSeleccionadoImpresion, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                Command="{Binding GenerarCatalogoPdfCommand}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Border>
+
+        <!-- LOADING OVERLAY -->
+        <Border IsVisible="{Binding EstaCargando}"
+                Background="#80FFFFFF"
+                ZIndex="999">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                <Border Width="50" Height="50" Background="#0b5394" CornerRadius="25">
+                    <TextBlock Text="..." FontSize="24" Foreground="White" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="Procesando..." Foreground="#0b5394" FontWeight="Medium" FontSize="14"/>
+            </StackPanel>
+        </Border>
+
+        <!-- MODAL: DETALLE COMPLETO DEL PACK -->
+        <Border IsVisible="{Binding MostrarDetallePack}"
+                Background="#CC000000"
+                ZIndex="998">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Margin="60,40"
+                    MaxWidth="900"
+                    MaxHeight="700"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    ClipToBounds="True">
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Header del Modal (fijo arriba) -->
+                    <Border Grid.Row="0" Background="#0b5394" Padding="24,16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="{Binding PackSeleccionado.NombrePack}" 
+                                           FontSize="22" 
+                                           FontWeight="Bold" 
+                                           Foreground="White"/>
+                                <TextBlock Text="Contenido del Pack" 
+                                           FontSize="14" 
+                                           Foreground="#B0D4F1"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Content="Cerrar"
+                                    Background="#ffd966"
+                                    Foreground="#333333"
+                                    FontWeight="SemiBold"
+                                    Padding="20,10"
+                                    CornerRadius="6"
+                                    Command="{Binding CerrarDetallePackCommand}"/>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Contenido scrolleable -->
+                    <ScrollViewer Grid.Row="1" 
+                                  VerticalScrollBarVisibility="Auto" 
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Spacing="16" Margin="24">
+                            <!-- Info del Pack -->
+                            <Border Background="#FAFAFA" CornerRadius="8" Padding="16">
+                                <Grid ColumnDefinitions="160,*">
+                                    <!-- Imagen del Pack -->
+                                    <Border Grid.Column="0"
+                                            Width="160"
+                                            Height="120"
+                                            CornerRadius="8"
+                                            ClipToBounds="True"
+                                            Background="#E8F4FD">
+                                        <Panel>
+                                            <Image Source="{Binding PackSeleccionado.ImagenPoster, Converter={StaticResource ByteArrayToImage}}"
+                                                   Stretch="UniformToFill"
+                                                   IsVisible="{Binding PackSeleccionado.TieneImagen}"/>
+                                            <Border Background="#0b5394" 
+                                                    CornerRadius="30"
+                                                    Width="60" Height="60"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center"
+                                                    IsVisible="{Binding !PackSeleccionado.TieneImagen}">
+                                                <TextBlock Text="P" FontSize="28" FontWeight="Bold" Foreground="White"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Panel>
+                                    </Border>
+                                    
+                                    <!-- Descripcion y Precio -->
+                                    <StackPanel Grid.Column="1" Spacing="12" Margin="20,0,0,0" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding PackSeleccionado.Descripcion}"
+                                                       FontSize="14"
+                                                       Foreground="#555555"
+                                                       TextWrapping="Wrap"/>
+                                            
+                                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                                <Border Background="#ffd966" 
+                                                        CornerRadius="8" 
+                                                        Padding="16,10">
+                                                    <TextBlock Text="{Binding PackSeleccionado.PrecioTotalFormateado}" 
+                                                               FontSize="22" 
+                                                               FontWeight="Bold" 
+                                                               Foreground="#333333"/>
+                                                </Border>
+                                                
+                                                <Border Background="#E8F4FD" 
+                                                        CornerRadius="8" 
+                                                        Padding="14,10"
+                                                        VerticalAlignment="Center">
+                                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                                        <TextBlock Text="Productos:" 
+                                                                   FontSize="13" 
+                                                                   Foreground="#666666"
+                                                                   VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding PackSeleccionado.CantidadProductos}" 
+                                                                   FontSize="16" 
+                                                                   FontWeight="Bold" 
+                                                                   Foreground="#0b5394"
+                                                                   VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                                
+                                <!-- Titulo Productos -->
+                                <TextBlock Text="Productos Incluidos" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                
+                                <!-- Lista de Productos -->
+                                <ItemsControl ItemsSource="{Binding PackSeleccionado.Productos}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Spacing="8"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#F8F8F8"
+                                                    CornerRadius="8"
+                                                    Padding="12"
+                                                    BorderBrush="#E8E8E8"
+                                                    BorderThickness="1">
+                                                <Grid ColumnDefinitions="70,*,Auto">
+                                                    <!-- Imagen del Producto -->
+                                                    <Border Grid.Column="0"
+                                                            Width="70"
+                                                            Height="55"
+                                                            CornerRadius="6"
+                                                            ClipToBounds="True"
+                                                            Background="#E8F4FD">
+                                                        <Panel>
+                                                            <Image Source="{Binding Imagen, Converter={StaticResource ByteArrayToImage}}"
+                                                                   Stretch="Uniform"
+                                                                   IsVisible="{Binding TieneImagen}"/>
+                                                            <Border Background="#D0E4F5" 
+                                                                    IsVisible="{Binding !TieneImagen}">
+                                                                <TextBlock Text="Sin Img" 
+                                                                           FontSize="9" 
+                                                                           Foreground="#0b5394"
+                                                                           HorizontalAlignment="Center" 
+                                                                           VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </Panel>
+                                                    </Border>
+                                                    
+                                                    <!-- Detalles del Producto -->
+                                                    <StackPanel Grid.Column="1" Spacing="2" Margin="12,0" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding NombreProducto}" 
+                                                                   FontSize="14" 
+                                                                   FontWeight="Bold" 
+                                                                   Foreground="#333333"/>
+                                                        <TextBlock Text="{Binding Descripcion}"
+                                                                   FontSize="12"
+                                                                   Foreground="#666666"
+                                                                   TextTrimming="CharacterEllipsis"
+                                                                   IsVisible="{Binding Descripcion, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                                                    </StackPanel>
+                                                    
+                                                    <!-- Cantidad -->
+                                                    <Border Grid.Column="2"
+                                                            Background="#0b5394" 
+                                                            CornerRadius="4" 
+                                                            Padding="10,6"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding CantidadConUnidad}" 
+                                                                   FontSize="12" 
+                                                                   FontWeight="SemiBold" 
+                                                                   Foreground="White"/>
+                                                    </Border>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                
+                                <!-- Mensaje si no hay productos -->
+                                <Border Background="#FFF3E0" 
+                                        CornerRadius="8" 
+                                        Padding="20"
+                                        IsVisible="{Binding !PackSeleccionado.CantidadProductos}">
+                                    <TextBlock Text="Este pack no tiene productos registrados"
+                                               FontSize="14"
+                                               Foreground="#E65100"
+                                               HorizontalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+        </Border>
+
+        <!-- VISTA 0: SELECCION DE PAIS (PANTALLA INICIAL) -->
+        <ScrollViewer IsVisible="{Binding VistaSeleccionPais}">
+            <StackPanel Spacing="20" Margin="24">
+                
+                <!-- Header con busqueda de cliente -->
+                <Border Classes="card" Padding="20">
+                    <Grid RowDefinitions="Auto,Auto">
+                        
+                        <!-- Buscador de clientes -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="16">
+                            <TextBlock Text="Pack de Alimentos" 
+                                       FontSize="24" 
+                                       FontWeight="Bold" 
+                                       Foreground="#0b5394"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Border Width="1" Background="#E0E0E0" Margin="8,0"/>
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="Cliente:" 
+                                           VerticalAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           Foreground="#666666"/>
+                                
+                                <ComboBox ItemsSource="{Binding TiposBusquedaCliente}"
+                                          SelectedItem="{Binding TipoBusquedaSeleccionado}"
+                                          Width="110"
+                                          VerticalAlignment="Center"/>
+                                
+                                <TextBox Text="{Binding BusquedaCliente}"
+                                         Watermark="Buscar cliente..."
+                                         Width="250"
+                                         VerticalAlignment="Center"/>
+
+                                <Button Content="Buscar"
+                                        Classes="btn-primary"
+                                        Command="{Binding IrABuscarClienteCommand}"/>
+
+                                <Button Content="Nuevo Cliente"
+                                        Classes="btn-outline"
+                                        Command="{Binding IrANuevoClienteCommand}"/>
+
+                                <Border Width="1" Background="#E0E0E0" Margin="8,0"/>
+
+                                <Button Content="Imprimir Catalogo"
+                                        Background="#28a745"
+                                        Foreground="White"
+                                        CornerRadius="6"
+                                        Padding="16,10"
+                                        FontWeight="SemiBold"
+                                        Command="{Binding AbrirModalImprimirCatalogoCommand}"
+                                        ToolTip.Tip="Generar PDF con todos los packs de un pais"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- Cliente seleccionado -->
+                        <Border Grid.Row="1" 
+                                IsVisible="{Binding TieneClienteSeleccionado}"
+                                Background="#E8F5E9"
+                                CornerRadius="6"
+                                Padding="12"
+                                Margin="0,16,0,0">
+                            <StackPanel Spacing="12">
+                                <!-- Fila 1: Cliente y Beneficiario -->
+                                <Grid ColumnDefinitions="*,*">
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="20">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="Cliente:" FontSize="12" Foreground="#666666"/>
+                                            <TextBlock Text="{Binding ClienteSeleccionadoNombre}" 
+                                                       FontWeight="Bold" 
+                                                       FontSize="15"
+                                                       Foreground="#2E7D32"/>
+                                        </StackPanel>
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="Doc:" FontSize="12" Foreground="#666666"/>
+                                            <TextBlock Text="{Binding ClienteSeleccionadoDocumento}" FontSize="14"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                    
+                                    <!-- Beneficiario seleccionado o boton para seleccionar -->
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Right">
+                                        <!-- Si hay beneficiario seleccionado -->
+                                        <Border IsVisible="{Binding TieneBeneficiarioSeleccionado}"
+                                                Background="#C8E6C9"
+                                                CornerRadius="6"
+                                                Padding="12,8">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="Beneficiario:" 
+                                                           FontSize="12" 
+                                                           Foreground="#666666"
+                                                           VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding BeneficiarioSeleccionadoNombre}" 
+                                                           FontSize="14" 
+                                                           FontWeight="Bold"
+                                                           Foreground="#1B5E20"
+                                                           VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+                                        
+                                        <!-- Si no hay beneficiario, mostrar boton -->
+                                        <Button Content="Seleccionar Beneficiario"
+                                                Classes="btn-outline"
+                                                IsVisible="{Binding !TieneBeneficiarioSeleccionado}"
+                                                Command="{Binding IrASeleccionBeneficiarioCommand}"/>
+                                        
+                                        <!-- Boton cambiar beneficiario -->
+                                        <Button Content="Cambiar"
+                                                Background="Transparent"
+                                                Foreground="#0b5394"
+                                                BorderBrush="#0b5394"
+                                                BorderThickness="1"
+                                                CornerRadius="6"
+                                                Padding="8,4"
+                                                FontSize="12"
+                                                IsVisible="{Binding TieneBeneficiarioSeleccionado}"
+                                                Command="{Binding IrASeleccionBeneficiarioCommand}"/>
+                                    </StackPanel>
+                                </Grid>
+                                
+                                <!-- Fila 2: Carrito y botones -->
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <!-- Indicador del carrito -->
+                                    <Border Grid.Column="0" 
+                                            Background="#ffd966" 
+                                            CornerRadius="6" 
+                                            Padding="12,8"
+                                            HorizontalAlignment="Left"
+                                            IsVisible="{Binding HayPacksEnCarrito}">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <TextBlock Text="Carrito:" 
+                                                       FontSize="13" 
+                                                       Foreground="#333333"
+                                                       FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding ResumenCarrito}" 
+                                                       FontSize="13" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="#0b5394"
+                                                       VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Boton Finalizar Compra -->
+                                    <Button Grid.Column="1"
+                                            Content="Finalizar Compra"
+                                            Classes="btn-primary"
+                                            Margin="8,0"
+                                            IsVisible="{Binding HayPacksEnCarrito}"
+                                            Command="{Binding IrAResumenCarritoCommand}"/>
+                                    
+                                    <Button Grid.Column="2"
+                                            Content="Cambiar Cliente"
+                                            Classes="btn-outline"
+                                            Command="{Binding LimpiarClienteSeleccionadoCommand}"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Titulo seleccion de pais -->
+                <TextBlock Text="Seleccione el pais de destino" 
+                           FontSize="18" 
+                           FontWeight="SemiBold" 
+                           Foreground="#0b5394"
+                           Margin="0,8,0,0"/>
+
+                <!-- Mensaje si no hay paises -->
+                <Border IsVisible="{Binding NoHayPaises}"
+                        Classes="card"
+                        Padding="40"
+                        HorizontalAlignment="Center">
+                    <StackPanel Spacing="12" HorizontalAlignment="Center">
+                        <Border Width="80" Height="80" Background="#FFF3E0" CornerRadius="40">
+                            <TextBlock Text="!" FontSize="40" FontWeight="Bold" Foreground="#E65100"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="No hay paises disponibles"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="#E65100"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="No se encontraron paises con packs de alimentos asignados"
+                                   FontSize="14"
+                                   Foreground="#888888"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Grid de Paises - 2 columnas estilo tarjetas -->
+                <ItemsControl ItemsSource="{Binding PaisesDisponibles}" IsVisible="{Binding HayPaises}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="2"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Classes="btn-pais"
+                                    Margin="12"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).SeleccionarPaisCommand}"
+                                    CommandParameter="{Binding}">
+                                <Border Classes="card card-pais" 
+                                        Padding="16"
+                                        ClipToBounds="True"
+                                        MinHeight="120">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <!-- Bandera -->
+                                        <Border Grid.Column="0"
+                                                Width="100"
+                                                Height="70"
+                                                CornerRadius="8"
+                                                ClipToBounds="True"
+                                                Background="#F0F0F0"
+                                                Margin="0,0,16,0">
+                                            <Panel>
+                                                <Image Source="{Binding BanderaImagen, Converter={StaticResource ByteArrayToImage}}"
+                                                       Stretch="Uniform"
+                                                       IsVisible="{Binding TieneBandera}"/>
+                                                <Border Background="#E8E8E8" 
+                                                        IsVisible="{Binding !TieneBandera}">
+                                                    <TextBlock Text="Sin Bandera" 
+                                                               FontSize="11" 
+                                                               Foreground="#999999"
+                                                               HorizontalAlignment="Center" 
+                                                               VerticalAlignment="Center"/>
+                                                </Border>
+                                            </Panel>
+                                        </Border>
+                                        
+                                        <!-- Nombre del pais -->
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                                            <TextBlock Text="{Binding NombrePais}" 
+                                                       FontSize="20" 
+                                                       FontWeight="Bold" 
+                                                       Foreground="#0b5394"/>
+                                            <TextBlock Text="Click para ver packs disponibles" 
+                                                       FontSize="13" 
+                                                       Foreground="#666666"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- VISTA 1: PRINCIPAL - PACKS DE ALIMENTOS -->
+        <ScrollViewer IsVisible="{Binding VistaPrincipal}">
+            <StackPanel Spacing="20" Margin="24">
+                
+                <!-- Header con busqueda de cliente -->
+                <Border Classes="card" Padding="20">
+                    <Grid RowDefinitions="Auto,Auto,Auto">
+                        
+                        <!-- Boton volver y titulo con pais -->
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="16" Margin="0,0,0,16">
+                            <Button Content="Cambiar Pais"
+                                    Classes="btn-outline"
+                                    Command="{Binding VolverASeleccionPaisCommand}"/>
+                            
+                            <Border Background="#E8F4FD" 
+                                    CornerRadius="8" 
+                                    Padding="16,10"
+                                    VerticalAlignment="Center">
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                    <TextBlock Text="Pais seleccionado:" 
+                                               FontSize="14" 
+                                               Foreground="#666666"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding PaisSeleccionadoNombre}" 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="#0b5394"
+                                               VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Indicador del carrito -->
+                            <Border Background="#ffd966" 
+                                    CornerRadius="8" 
+                                    Padding="16,10"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding HayPacksEnCarrito}"
+                                    Cursor="Hand">
+                                <Button Background="Transparent"
+                                        BorderThickness="0"
+                                        Padding="0"
+                                        Command="{Binding IrAResumenCarritoCommand}">
+                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                        <TextBlock Text="Carrito:" 
+                                                   FontSize="14" 
+                                                   Foreground="#333333"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding ResumenCarrito}" 
+                                                   FontSize="14" 
+                                                   FontWeight="Bold" 
+                                                   Foreground="#0b5394"
+                                                   VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Border>
+                            
+                            <!-- Boton Finalizar -->
+                            <Button Content="Finalizar Compra"
+                                    Classes="btn-primary"
+                                    IsVisible="{Binding HayPacksEnCarrito}"
+                                    Command="{Binding IrAResumenCarritoCommand}"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="16">
+                            <TextBlock Text="Pack de Alimentos" 
+                                       FontSize="24" 
+                                       FontWeight="Bold" 
+                                       Foreground="#0b5394"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Border Width="1" Background="#E0E0E0" Margin="8,0"/>
+                            
+                            <StackPanel Orientation="Horizontal" Spacing="12">
+                                <TextBlock Text="Cliente:" 
+                                           VerticalAlignment="Center"
+                                           FontWeight="SemiBold"
+                                           Foreground="#666666"/>
+                                
+                                <ComboBox ItemsSource="{Binding TiposBusquedaCliente}"
+                                          SelectedItem="{Binding TipoBusquedaSeleccionado}"
+                                          Width="110"
+                                          VerticalAlignment="Center"/>
+                                
+                                <TextBox Text="{Binding BusquedaCliente}"
+                                         Watermark="Buscar cliente..."
+                                         Width="250"
+                                         VerticalAlignment="Center"/>
+
+                                <Button Content="Buscar"
+                                        Classes="btn-primary"
+                                        Command="{Binding IrABuscarClienteCommand}"/>
+                                
+                                <Button Content="Nuevo Cliente" 
+                                        Classes="btn-outline"
+                                        Command="{Binding IrANuevoClienteCommand}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        
+                        <Border Grid.Row="2" 
+                                IsVisible="{Binding TieneClienteSeleccionado}"
+                                Background="#E8F5E9"
+                                CornerRadius="6"
+                                Padding="12"
+                                Margin="0,16,0,0">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="20">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Cliente seleccionado:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoNombre}" 
+                                                   FontWeight="Bold" 
+                                                   FontSize="15"
+                                                   Foreground="#2E7D32"/>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Documento:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoDocumento}" FontSize="14"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                <Button Grid.Column="1"
+                                        Content="Cambiar"
+                                        Classes="btn-outline"
+                                        Command="{Binding LimpiarClienteSeleccionadoCommand}"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- Mensaje si no hay packs -->
+                <Border IsVisible="{Binding NoHayPacks}"
+                        Classes="card"
+                        Padding="40"
+                        HorizontalAlignment="Center">
+                    <StackPanel Spacing="12" HorizontalAlignment="Center">
+                        <Border Width="80" Height="80" Background="#FFF3E0" CornerRadius="40">
+                            <TextBlock Text="!" FontSize="40" FontWeight="Bold" Foreground="#E65100"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <TextBlock Text="No hay packs disponibles"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="#E65100"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="No se encontraron packs de alimentos para este pais"
+                                   FontSize="14"
+                                   Foreground="#888888"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Grid de Packs - 2 columnas estilo tarjetas -->
+                <ItemsControl ItemsSource="{Binding PacksDisponibles}" IsVisible="{Binding HayPacks}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="2"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Classes="btn-pack"
+                                    Margin="12"
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Stretch"
+                                    Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).SeleccionarPackCommand}"
+                                    CommandParameter="{Binding}">
+                                <Panel>
+                                    <!-- Borde verde cuando está en carrito -->
+                                    <Border Classes="card" 
+                                            Padding="16"
+                                            ClipToBounds="True"
+                                            MinHeight="140"
+                                            Background="#E8F5E9"
+                                            BorderBrush="#2E7D32"
+                                            BorderThickness="3"
+                                            CornerRadius="8"
+                                            IsVisible="{Binding EstaEnCarrito}"/>
+                                    
+                                    <!-- Card normal -->
+                                    <Border Classes="card card-pack" 
+                                            Padding="16"
+                                            ClipToBounds="True"
+                                            MinHeight="140">
+                                        <Grid ColumnDefinitions="Auto,*">
+                                            <!-- Imagen del Pack (circular) -->
+                                            <Panel Grid.Column="0" Margin="0,0,16,0">
+                                                <Border Width="100"
+                                                        Height="100"
+                                                        CornerRadius="50"
+                                                        ClipToBounds="True"
+                                                        Background="#E8F4FD">
+                                                    <Panel>
+                                                        <Image Source="{Binding ImagenPoster, Converter={StaticResource ByteArrayToImage}}"
+                                                               Stretch="UniformToFill"
+                                                               IsVisible="{Binding TieneImagen}"/>
+                                                        <Border Background="#0b5394" 
+                                                                CornerRadius="50"
+                                                                IsVisible="{Binding !TieneImagen}">
+                                                            <TextBlock Text="P" FontSize="36" FontWeight="Bold" Foreground="White"
+                                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </Panel>
+                                                </Border>
+                                                <!-- Badge "En Carrito" sobre la imagen -->
+                                                <Border Background="#2E7D32"
+                                                        CornerRadius="10"
+                                                        Padding="8,4"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Bottom"
+                                                        Margin="0,0,0,-5"
+                                                        IsVisible="{Binding EstaEnCarrito}">
+                                                    <TextBlock Text="En Carrito" 
+                                                               FontSize="10" 
+                                                               FontWeight="Bold"
+                                                               Foreground="White"/>
+                                                </Border>
+                                            </Panel>
+
+                                            <!-- Info del Pack -->
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                                                <TextBlock Text="{Binding NombrePack}" 
+                                                           FontSize="18" 
+                                                           FontWeight="Bold" 
+                                                           Foreground="#0b5394"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                                
+                                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                                    <Border Background="#ffd966" 
+                                                            CornerRadius="6" 
+                                                            Padding="12,8">
+                                                        <TextBlock Text="{Binding PrecioTotalFormateado}" 
+                                                                   FontSize="18" 
+                                                                   FontWeight="Bold" 
+                                                                   Foreground="#333333"/>
+                                                    </Border>
+                                                    
+                                                    <Border Background="#E8F4FD" 
+                                                            CornerRadius="4" 
+                                                            Padding="8,6"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock FontSize="12" Foreground="#0b5394">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="Productos: {0}">
+                                                                    <Binding Path="CantidadProductos"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </Border>
+                                                </StackPanel>
+                                                
+                                                <TextBlock Text="{Binding Descripcion}"
+                                                           FontSize="13"
+                                                           Foreground="#666666"
+                                                           TextTrimming="CharacterEllipsis"/>
+                                                
+                                                <Button Content="Ver Detalles"
+                                                        Background="Transparent"
+                                                        Foreground="#0b5394"
+                                                        BorderBrush="#0b5394"
+                                                        BorderThickness="1"
+                                                        CornerRadius="6"
+                                                        Padding="12,6"
+                                                        FontSize="12"
+                                                        HorizontalAlignment="Left"
+                                                        Cursor="Hand"
+                                                        Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).VerDetallePackCommand}"
+                                                        CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </Panel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- VISTA 2: BUSCAR CLIENTE -->
+        <Border IsVisible="{Binding VistaBuscarCliente}"
+                Background="#F5F5F5">
+            <ScrollViewer>
+                <StackPanel Spacing="20" Margin="24">
+                    
+                    <!-- Header con titulo y boton volver -->
+                    <Border Classes="card" Padding="20">
+                        <StackPanel Spacing="16">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Button Grid.Column="0"
+                                        Content="Volver"
+                                        Classes="btn-outline"
+                                        Command="{Binding VolverAVistaPrincipalCommand}"/>
+                                
+                                <TextBlock Grid.Column="1"
+                                        Text="Pack de Alimentos"
+                                        FontSize="24"
+                                        FontWeight="Bold"
+                                        Foreground="#0b5394"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"/>
+                                
+                                <Button Grid.Column="2"
+                                        Content="Nuevo Cliente"
+                                        Classes="btn-secondary"
+                                        Command="{Binding IrANuevoClienteCommand}"/>
+                            </Grid>
+                            
+                            <TextBlock Text="Busque o registre un cliente para continuar" 
+                                    FontSize="14" 
+                                    Foreground="#666666"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Buscador de clientes -->
+                    <Border Classes="card" Padding="20">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="Buscar Cliente" 
+                                    FontSize="16" 
+                                    FontWeight="SemiBold" 
+                                    Foreground="#0b5394"/>
+                            
+                            <Grid ColumnDefinitions="150,*,Auto">
+                                <ComboBox Grid.Column="0"
+                                        ItemsSource="{Binding TiposBusquedaCliente}"
+                                        SelectedItem="{Binding TipoBusquedaSeleccionado}"
+                                        HorizontalAlignment="Stretch"/>
+                                
+                                <TextBox Grid.Column="1"
+                                        Text="{Binding BusquedaCliente}"
+                                        Watermark="Escribir nombre, documento o telefono..."
+                                        Margin="12,0"/>
+                                
+                                <Button Grid.Column="2"
+                                        Content="Buscar"
+                                        Classes="btn-primary"
+                                        Command="{Binding BuscarClientesManualCommand}"/>
+                            </Grid>
+
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                    IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Foreground="#dc3545"
+                                    FontSize="13"/>
+                            
+                            <!-- Resultados de busqueda -->
+                            <Border Background="#F8F8F8" 
+                                    CornerRadius="6" 
+                                    Padding="0"
+                                    MinHeight="100"
+                                    MaxHeight="250"
+                                    IsVisible="{Binding ClientesEncontrados.Count}">
+                                <ScrollViewer>
+                                    <ItemsControl ItemsSource="{Binding ClientesEncontrados}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Padding="0"
+                                                        HorizontalAlignment="Stretch"
+                                                        HorizontalContentAlignment="Stretch"
+                                                        Cursor="Hand"
+                                                        Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).SeleccionarClienteDesdeListaCommand}"
+                                                        CommandParameter="{Binding}">
+                                                    <Border Padding="16,12"
+                                                            Background="White"
+                                                            BorderBrush="#EEEEEE"
+                                                            BorderThickness="0,0,0,1">
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                            <StackPanel Grid.Column="0" Spacing="4">
+                                                                <TextBlock Text="{Binding NombreCompleto}" 
+                                                                        FontSize="15" 
+                                                                        FontWeight="SemiBold"
+                                                                        Foreground="#333333"/>
+                                                                <StackPanel Orientation="Horizontal" Spacing="20">
+                                                                    <TextBlock FontSize="13" Foreground="#666666">
+                                                                        <TextBlock.Text>
+                                                                            <MultiBinding StringFormat="{}{0}: {1}">
+                                                                                <Binding Path="TipoDocumento"/>
+                                                                                <Binding Path="NumeroDocumento"/>
+                                                                            </MultiBinding>
+                                                                        </TextBlock.Text>
+                                                                    </TextBlock>
+                                                                    <TextBlock Text="{Binding Telefono}" 
+                                                                            FontSize="13" 
+                                                                            Foreground="#666666"/>
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                            <TextBlock Grid.Column="1"
+                                                                    Text="Seleccionar"
+                                                                    Foreground="#0b5394"
+                                                                    FontWeight="SemiBold"
+                                                                    VerticalAlignment="Center"/>
+                                                        </Grid>
+                                                    </Border>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- VISTA 3: NUEVO CLIENTE -->
+        <Border IsVisible="{Binding VistaNuevoCliente}"
+                Background="#F5F5F5">
+            <ScrollViewer>
+                <StackPanel Spacing="20" Margin="24" MaxWidth="900" HorizontalAlignment="Center">
+                    
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Button Grid.Column="0"
+                                    Content="Volver"
+                                    Classes="btn-outline"
+                                    Command="{Binding VolverASeleccionPaisCommand}"/>
+                            
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding TituloFormularioCliente}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Classes="card" Padding="28">
+                        <StackPanel Spacing="20">
+                            
+                            <!-- Nombre y Segundo Nombre -->
+                            <Grid ColumnDefinitions="*,16,*">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Nombre *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding NuevoNombre}" Watermark="Nombre"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Segundo Nombre" FontWeight="Medium" Foreground="#666666"/>
+                                    <TextBox Text="{Binding NuevoSegundoNombre}" Watermark="Segundo nombre (opcional)"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Apellido y Segundo Apellido -->
+                            <Grid ColumnDefinitions="*,16,*">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Apellido *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding NuevoApellido}" Watermark="Apellido"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Segundo Apellido" FontWeight="Medium" Foreground="#666666"/>
+                                    <TextBox Text="{Binding NuevoSegundoApellido}" Watermark="Segundo apellido (opcional)"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Tipo Documento y Numero -->
+                            <Grid ColumnDefinitions="180,16,*">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Tipo Documento *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <ComboBox ItemsSource="{Binding TiposDocumento}"
+                                              SelectedItem="{Binding NuevoTipoDocumento}"
+                                              HorizontalAlignment="Stretch"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Numero Documento *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding NuevoNumeroDocumento}" Watermark="Numero de documento"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Telefono y Nacionalidad -->
+                            <Grid ColumnDefinitions="*,16,*">
+                                <StackPanel Grid.Column="0" Spacing="6">
+                                    <TextBlock Text="Telefono *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding NuevoTelefono}" Watermark="Telefono de contacto"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Spacing="6">
+                                    <TextBlock Text="Nacionalidad" FontWeight="Medium" Foreground="#666666"/>
+                                    <TextBox Text="{Binding NuevaNacionalidad}" Watermark="Nacionalidad (opcional)"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Direccion -->
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Direccion" FontWeight="Medium" Foreground="#666666"/>
+                                <TextBox Text="{Binding NuevaDireccion}" Watermark="Direccion completa (opcional)"/>
+                            </StackPanel>
+
+                            <!-- Error -->
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Foreground="#dc3545"
+                                       FontSize="13"/>
+
+                            <!-- Nota -->
+                            <Border Background="#fff3cd" CornerRadius="6" Padding="12">
+                                <TextBlock Text="Al guardar, debera agregar al menos un beneficiario para poder realizar operaciones."
+                                           FontSize="13"
+                                           Foreground="#856404"
+                                           TextWrapping="Wrap"/>
+                            </Border>
+
+                            <!-- Botones -->
+                            <Grid ColumnDefinitions="*,16,*" Margin="0,12,0,0">
+                                <Button Grid.Column="0"
+                                        Content="Cancelar"
+                                        Classes="btn-outline"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        Command="{Binding VolverASeleccionPaisCommand}"/>
+                                <Button Grid.Column="2"
+                                        Content="Guardar Cliente"
+                                        Classes="btn-primary"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        Command="{Binding GuardarClienteCommand}"/>
+                            </Grid>
+
+                            <TextBlock Text="* Campos obligatorios"
+                                       FontSize="12"
+                                       Foreground="#888888"
+                                       HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- VISTA 4: SELECCION DE PACK -->
+        <Border IsVisible="{Binding VistaSeleccionPack}"
+                Background="#F5F5F5">
+            <ScrollViewer>
+                <StackPanel Spacing="20" Margin="24">
+                    
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Button Grid.Column="0"
+                                    Content="Volver"
+                                    Classes="btn-outline"
+                                    Command="{Binding VolverASeleccionBeneficiarioCommand}"/>
+                            
+                            <StackPanel Grid.Column="1" HorizontalAlignment="Center" Spacing="4">
+                                <TextBlock Text="Seleccionar Pack de Alimentos"
+                                           FontSize="22"
+                                           FontWeight="Bold"
+                                           Foreground="#0b5394"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock HorizontalAlignment="Center" FontSize="14" Foreground="#666666">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="Cliente: {0}">
+                                            <Binding Path="ClienteSeleccionadoNombre"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </StackPanel>
+                            
+                            <Border Grid.Column="2" Width="100"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Grid de Packs - 2 columnas -->
+                    <ItemsControl ItemsSource="{Binding PacksDisponibles}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="2"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Classes="btn-pack"
+                                        Margin="12"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
+                                        Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).SeleccionarPackCommand}"
+                                        CommandParameter="{Binding}">
+                                    <Panel>
+                                        <!-- Borde verde cuando está en carrito -->
+                                        <Border Classes="card" 
+                                                Padding="16"
+                                                ClipToBounds="True"
+                                                MinHeight="140"
+                                                Background="#E8F5E9"
+                                                BorderBrush="#2E7D32"
+                                                BorderThickness="3"
+                                                CornerRadius="8"
+                                                IsVisible="{Binding EstaEnCarrito}"/>
+                                        
+                                        <!-- Card normal -->
+                                        <Border Classes="card card-pack" 
+                                                Padding="16"
+                                                ClipToBounds="True"
+                                                MinHeight="140">
+                                            <Grid ColumnDefinitions="Auto,*">
+                                                <!-- Imagen del Pack (circular) -->
+                                                <Panel Grid.Column="0" Margin="0,0,16,0">
+                                                    <Border Width="100"
+                                                            Height="100"
+                                                            CornerRadius="50"
+                                                            ClipToBounds="True"
+                                                            Background="#E8F4FD">
+                                                        <Panel>
+                                                            <Image Source="{Binding ImagenPoster, Converter={StaticResource ByteArrayToImage}}"
+                                                                   Stretch="UniformToFill"
+                                                                   IsVisible="{Binding TieneImagen}"/>
+                                                            <Border Background="#0b5394" 
+                                                                    CornerRadius="50"
+                                                                    IsVisible="{Binding !TieneImagen}">
+                                                                <TextBlock Text="P" FontSize="36" FontWeight="Bold" Foreground="White"
+                                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Border>
+                                                        </Panel>
+                                                    </Border>
+                                                    <!-- Badge "En Carrito" -->
+                                                    <Border Background="#2E7D32"
+                                                            CornerRadius="10"
+                                                            Padding="8,4"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Bottom"
+                                                            Margin="0,0,0,-5"
+                                                            IsVisible="{Binding EstaEnCarrito}">
+                                                        <TextBlock Text="En Carrito" 
+                                                                   FontSize="10" 
+                                                                   FontWeight="Bold"
+                                                                   Foreground="White"/>
+                                                    </Border>
+                                                </Panel>
+
+                                                <!-- Info del Pack -->
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="8">
+                                                    <TextBlock Text="{Binding NombrePack}" 
+                                                               FontSize="18" 
+                                                               FontWeight="Bold" 
+                                                               Foreground="#0b5394"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    
+                                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                                        <Border Background="#ffd966" 
+                                                                CornerRadius="6" 
+                                                                Padding="12,8">
+                                                            <TextBlock Text="{Binding PrecioTotalFormateado}" 
+                                                                       FontSize="18" 
+                                                                       FontWeight="Bold" 
+                                                                       Foreground="#333333"/>
+                                                        </Border>
+                                                        
+                                                        <Border Background="#E8F4FD" 
+                                                                CornerRadius="4" 
+                                                                Padding="8,6"
+                                                                VerticalAlignment="Center">
+                                                            <TextBlock FontSize="12" Foreground="#0b5394">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="Productos: {0}">
+                                                                        <Binding Path="CantidadProductos"/>
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </Border>
+                                                    </StackPanel>
+                                                    
+                                                    <TextBlock Text="{Binding Descripcion}"
+                                                               FontSize="13"
+                                                               Foreground="#666666"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    
+                                                    <Button Content="Ver Detalles"
+                                                            Background="Transparent"
+                                                            Foreground="#0b5394"
+                                                            BorderBrush="#0b5394"
+                                                            BorderThickness="1"
+                                                            CornerRadius="6"
+                                                            Padding="12,6"
+                                                            FontSize="12"
+                                                            HorizontalAlignment="Left"
+                                                            Cursor="Hand"
+                                                            Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).VerDetallePackCommand}"
+                                                            CommandParameter="{Binding}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </Panel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- VISTA 5: SELECCION DE BENEFICIARIO -->
+        <Border IsVisible="{Binding VistaSeleccionBeneficiario}"
+                Background="#F5F5F5">
+            <ScrollViewer>
+                <StackPanel Spacing="20" Margin="24">
+                    
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Button Grid.Column="0"
+                                    Content="Volver"
+                                    Classes="btn-outline"
+                                    Command="{Binding VolverASeleccionPaisCommand}"/>
+                            
+                            <TextBlock Grid.Column="1"
+                                       Text="Seleccionar Beneficiario"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Button Grid.Column="2"
+                                    Content="Nuevo Beneficiario"
+                                    Classes="btn-secondary"
+                                    Command="{Binding IrANuevoBeneficiarioCommand}"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Classes="card" Padding="16" Background="#E8F5E9">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Cliente seleccionado:" FontSize="12" Foreground="#666666"/>
+                                <TextBlock Text="{Binding ClienteSeleccionadoNombre}" 
+                                           FontWeight="Bold" FontSize="16" Foreground="#2e7d32"/>
+                                <TextBlock Text="{Binding ClienteSeleccionadoDocumento}" 
+                                           FontSize="13" Foreground="#495057"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Content="Editar Cliente"
+                                    Classes="btn-secondary"
+                                    Command="{Binding IrAEditarClienteCommand}"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <Border Classes="card" Padding="0" MinHeight="200" IsVisible="{Binding HayBeneficiarios}">
+                        <StackPanel>
+                            <Border Background="#0b5394" Padding="16,12">
+                                <Grid ColumnDefinitions="2*,*,2*,Auto">
+                                    <TextBlock Grid.Column="0" Text="Nombre" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="Documento" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="2" Text="Direccion" Foreground="White" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="3" Text="Accion" Foreground="White" FontWeight="SemiBold" Width="120"/>
+                                </Grid>
+                            </Border>
+                            
+                            <ItemsControl ItemsSource="{Binding BeneficiariosCliente}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="16,12" BorderBrush="#e9ecef" BorderThickness="0,0,0,1">
+                                            <Grid ColumnDefinitions="2*,*,2*,Auto">
+                                                <StackPanel Grid.Column="0" Spacing="2">
+                                                    <TextBlock Text="{Binding NombreCompleto}" FontWeight="SemiBold"/>
+                                                    <TextBlock Text="{Binding Telefono}" FontSize="12" Foreground="#6c757d"/>
+                                                </StackPanel>
+                                                <TextBlock Grid.Column="1" Text="{Binding DocumentoCompleto}" 
+                                                           VerticalAlignment="Center" FontSize="13"/>
+                                                <StackPanel Grid.Column="2" Spacing="2" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding DireccionCompleta}" FontSize="13" 
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                    <TextBlock FontSize="12" Foreground="#6c757d">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0}, {1}">
+                                                                <Binding Path="Ciudad"/>
+                                                                <Binding Path="Pais"/>
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                <Button Grid.Column="3"
+                                                        Content="Seleccionar"
+                                                        Classes="btn-primary"
+                                                        Width="120"
+                                                        Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).SeleccionarBeneficiarioCommand}"
+                                                        CommandParameter="{Binding}"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Classes="card" Padding="40" IsVisible="{Binding NoHayBeneficiarios}" HorizontalAlignment="Center">
+                        <StackPanel Spacing="16" HorizontalAlignment="Center">
+                            <TextBlock Text="Este cliente no tiene beneficiarios"
+                                       FontSize="16" Foreground="#6c757d" TextAlignment="Center"/>
+                            <Button Content="Agregar Beneficiario"
+                                    Classes="btn-primary"
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding IrANuevoBeneficiarioCommand}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- VISTA 6: NUEVO/EDITAR BENEFICIARIO -->
+        <Border IsVisible="{Binding VistaNuevoBeneficiario}"
+                Background="#F5F5F5">
+            <ScrollViewer>
+                <StackPanel Spacing="20" Margin="32,24">
+                    
+                    <!-- Header -->
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Button Grid.Column="0"
+                                    Content="Volver"
+                                    Classes="btn-outline"
+                                    Command="{Binding VolverASeleccionBeneficiarioCommand}"/>
+                            
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding TituloFormularioBeneficiario}"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Info cliente -->
+                    <Border Classes="card" Padding="16" Background="#E8F5E9">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="Beneficiario para el cliente:" FontSize="12" Foreground="#666666"/>
+                            <TextBlock Text="{Binding ClienteSeleccionadoNombre}" 
+                                       FontWeight="Bold" FontSize="16" Foreground="#2e7d32"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Formulario en 2 columnas -->
+                    <Border Classes="card" Padding="32">
+                        <Grid ColumnDefinitions="*,48,*">
+                            
+                            <!-- COLUMNA IZQUIERDA: Datos Personales -->
+                            <StackPanel Grid.Column="0" Spacing="20">
+                                
+                                <Border Background="#E8F4FD" Padding="12,10" CornerRadius="6">
+                                    <TextBlock Text="DATOS PERSONALES" 
+                                               FontSize="14" FontWeight="Bold" Foreground="#0b5394"/>
+                                </Border>
+                                
+                                <!-- Nombre -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Nombre *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding BeneficiarioNombre}" Watermark="Nombre del beneficiario"/>
+                                </StackPanel>
+
+                                <!-- Segundo Nombre -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Segundo Nombre" FontWeight="Medium" Foreground="#666666"/>
+                                    <TextBox Text="{Binding BeneficiarioSegundoNombre}" Watermark="Opcional"/>
+                                </StackPanel>
+
+                                <!-- Apellido -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Apellido *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding BeneficiarioApellido}" Watermark="Apellido"/>
+                                </StackPanel>
+
+                                <!-- Segundo Apellido -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Segundo Apellido" FontWeight="Medium" Foreground="#666666"/>
+                                    <TextBox Text="{Binding BeneficiarioSegundoApellido}" Watermark="Opcional"/>
+                                </StackPanel>
+
+                                <Border Background="#E8F4FD" Padding="12,10" CornerRadius="6" Margin="0,8,0,0">
+                                    <TextBlock Text="DOCUMENTO Y CONTACTO" 
+                                               FontSize="14" FontWeight="Bold" Foreground="#0b5394"/>
+                                </Border>
+
+                                <!-- Tipo y Numero Documento -->
+                                <Grid ColumnDefinitions="140,12,*">
+                                    <StackPanel Grid.Column="0" Spacing="6">
+                                        <TextBlock Text="Tipo *" FontWeight="Medium" Foreground="#0b5394"/>
+                                        <ComboBox ItemsSource="{Binding TiposDocumentoBeneficiario}"
+                                                  SelectedItem="{Binding BeneficiarioTipoDocumento}"
+                                                  HorizontalAlignment="Stretch"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Spacing="6">
+                                        <TextBlock Text="Numero *" FontWeight="Medium" Foreground="#0b5394"/>
+                                        <TextBox Text="{Binding BeneficiarioNumeroDocumento}" Watermark="Numero documento"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Telefono -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Telefono *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding BeneficiarioTelefono}" Watermark="Telefono de contacto"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <!-- COLUMNA DERECHA: Direccion -->
+                            <StackPanel Grid.Column="2" Spacing="20">
+                                
+                                <Border Background="#E8F4FD" Padding="12,10" CornerRadius="6">
+                                    <TextBlock Text="DIRECCION DE ENVIO" 
+                                               FontSize="14" FontWeight="Bold" Foreground="#0b5394"/>
+                                </Border>
+
+                                <!-- Pais -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Pais *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding BeneficiarioPais}" Watermark="Ej: Cuba, Venezuela, Argentina..."/>
+                                </StackPanel>
+
+                                <!-- Ciudad -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Ciudad *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding BeneficiarioCiudad}" Watermark="Ciudad de destino"/>
+                                </StackPanel>
+
+                                <!-- Calle -->
+                                <StackPanel Spacing="6">
+                                    <TextBlock Text="Calle *" FontWeight="Medium" Foreground="#0b5394"/>
+                                    <TextBox Text="{Binding BeneficiarioCalle}" Watermark="Nombre de la calle"/>
+                                </StackPanel>
+
+                                <!-- Numero y Piso -->
+                                <Grid ColumnDefinitions="*,12,*">
+                                    <StackPanel Grid.Column="0" Spacing="6">
+                                        <TextBlock Text="Numero *" FontWeight="Medium" Foreground="#0b5394"/>
+                                        <TextBox Text="{Binding BeneficiarioNumero}" Watermark="Nro."/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Spacing="6">
+                                        <TextBlock Text="Piso" FontWeight="Medium" Foreground="#666666"/>
+                                        <TextBox Text="{Binding BeneficiarioPiso}" Watermark="Opcional"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Departamento y Codigo Postal -->
+                                <Grid ColumnDefinitions="*,12,*">
+                                    <StackPanel Grid.Column="0" Spacing="6">
+                                        <TextBlock Text="Departamento" FontWeight="Medium" Foreground="#666666"/>
+                                        <TextBox Text="{Binding BeneficiarioNumeroDepartamento}" Watermark="Opcional"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Spacing="6">
+                                        <TextBlock Text="Codigo Postal" FontWeight="Medium" Foreground="#666666"/>
+                                        <TextBox Text="{Binding BeneficiarioCodigoPostal}" Watermark="Opcional"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Observaciones -->
+                                <StackPanel Spacing="6" Margin="0,8,0,0">
+                                    <TextBlock Text="Observaciones" FontWeight="Medium" Foreground="#666666"/>
+                                    <TextBox Text="{Binding BeneficiarioObservaciones}" 
+                                            Watermark="Notas adicionales sobre el envio (opcional)"
+                                            AcceptsReturn="True"
+                                            TextWrapping="Wrap"
+                                            Height="80"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Error y Botones -->
+                    <Border Classes="card" Padding="24">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="{Binding ErrorMessage}"
+                                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       Foreground="#dc3545"
+                                       FontSize="14"
+                                       TextAlignment="Center"/>
+
+                            <Grid ColumnDefinitions="*,24,*" MaxWidth="500" HorizontalAlignment="Center">
+                                <Button Grid.Column="0"
+                                        Content="Cancelar"
+                                        Classes="btn-outline"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        FontSize="15"
+                                        Padding="16,12"
+                                        Command="{Binding VolverASeleccionBeneficiarioCommand}"/>
+                                <Button Grid.Column="2"
+                                        Content="Guardar Beneficiario"
+                                        Classes="btn-primary"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        FontSize="15"
+                                        Padding="16,12"
+                                        Command="{Binding GuardarBeneficiarioCommand}"/>
+                            </Grid>
+
+                            <TextBlock Text="* Campos obligatorios"
+                                       FontSize="12"
+                                       Foreground="#888888"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- VISTA 7: RESUMEN DEL CARRITO (antes de confirmar) -->
+        <Border IsVisible="{Binding VistaResumenCarrito}"
+                Background="#F5F5F5">
+            <ScrollViewer>
+                <StackPanel Spacing="20" Margin="24" MaxWidth="1000" HorizontalAlignment="Center">
+                    
+                    <!-- Header -->
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Button Grid.Column="0"
+                                    Content="Volver a Packs"
+                                    Classes="btn-outline"
+                                    Command="{Binding VolverDesdeResumenCommand}"/>
+                            
+                            <TextBlock Grid.Column="1"
+                                       Text="Resumen de Compra"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Button Grid.Column="2"
+                                    Content="Vaciar Carrito"
+                                    Background="#dc3545"
+                                    Foreground="White"
+                                    CornerRadius="6"
+                                    Padding="16,10"
+                                    Command="{Binding VaciarCarritoCommand}"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Cliente y Beneficiario lado a lado -->
+                    <Grid ColumnDefinitions="*,16,*">
+                        <!-- Datos del Cliente -->
+                        <Border Grid.Column="0" Classes="card" Padding="20">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="DATOS DEL CLIENTE" 
+                                           FontSize="14" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                <Border Height="1" Background="#E0E0E0"/>
+                                <StackPanel Spacing="8">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Nombre:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoNombre}" 
+                                                   FontWeight="SemiBold" FontSize="15"/>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Documento:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoDocumento}" FontSize="14"/>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Telefono:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoTelefono}" FontSize="14"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Datos del Beneficiario -->
+                        <Border Grid.Column="2" Classes="card" Padding="20">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="DATOS DEL BENEFICIARIO" 
+                                           FontSize="14" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                <Border Height="1" Background="#E0E0E0"/>
+                                <StackPanel Spacing="8">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Nombre:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding BeneficiarioSeleccionadoNombre}" 
+                                                   FontWeight="SemiBold" FontSize="15"/>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Destino:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="#2E7D32">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0}, {1}">
+                                                    <Binding Path="BeneficiarioSeleccionadoCiudad"/>
+                                                    <Binding Path="BeneficiarioSeleccionadoPais"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Direccion:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding BeneficiarioSeleccionadoDireccion}" FontSize="13" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Lista de Packs en el Carrito -->
+                    <Border Classes="card" Padding="20">
+                        <StackPanel Spacing="16">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Grid.Column="0"
+                                           Text="PACKS SELECCIONADOS" 
+                                           FontSize="14" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding CantidadPacksEnCarrito, StringFormat={}{0} pack(s)}" 
+                                           FontSize="14" 
+                                           Foreground="#666666"/>
+                            </Grid>
+                            <Border Height="1" Background="#E0E0E0"/>
+                            
+                            <!-- Lista de packs -->
+                            <ItemsControl ItemsSource="{Binding PacksEnCarrito}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#F8F8F8" 
+                                                CornerRadius="8" 
+                                                Padding="16" 
+                                                Margin="0,0,0,12">
+                                            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                                <!-- Imagen circular -->
+                                                <Border Grid.Column="0"
+                                                        Width="60"
+                                                        Height="60"
+                                                        CornerRadius="30"
+                                                        ClipToBounds="True"
+                                                        Background="#E8F4FD"
+                                                        Margin="0,0,16,0">
+                                                    <Panel>
+                                                        <Image Source="{Binding ImagenPoster, Converter={StaticResource ByteArrayToImage}}"
+                                                               Stretch="UniformToFill"
+                                                               IsVisible="{Binding TieneImagen}"/>
+                                                        <Border Background="#0b5394" 
+                                                                CornerRadius="30"
+                                                                IsVisible="{Binding !TieneImagen}">
+                                                            <TextBlock Text="P" FontSize="24" FontWeight="Bold" Foreground="White"
+                                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                    </Panel>
+                                                </Border>
+                                                
+                                                <!-- Info del pack -->
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="4">
+                                                    <TextBlock Text="{Binding NombrePack}" 
+                                                               FontSize="16" 
+                                                               FontWeight="Bold" 
+                                                               Foreground="#333333"/>
+                                                    <TextBlock Text="{Binding Descripcion}" 
+                                                               FontSize="13" 
+                                                               Foreground="#666666"
+                                                               TextTrimming="CharacterEllipsis"/>
+                                                </StackPanel>
+                                                
+                                                <!-- Precio -->
+                                                <Border Grid.Column="2"
+                                                        Background="#ffd966" 
+                                                        CornerRadius="6" 
+                                                        Padding="16,8"
+                                                        VerticalAlignment="Center"
+                                                        Margin="16,0">
+                                                    <TextBlock Text="{Binding PrecioTotalFormateado}" 
+                                                               FontSize="16" 
+                                                               FontWeight="Bold" 
+                                                               Foreground="#333333"/>
+                                                </Border>
+                                                
+                                                <!-- Boton quitar -->
+                                                <Button Grid.Column="3"
+                                                        Content="Quitar"
+                                                        Background="#dc3545"
+                                                        Foreground="White"
+                                                        CornerRadius="6"
+                                                        Padding="12,8"
+                                                        FontSize="13"
+                                                        VerticalAlignment="Center"
+                                                        Command="{Binding $parent[UserControl].((vm:FoodPacksViewModel)DataContext).QuitarDelCarritoCommand}"
+                                                        CommandParameter="{Binding}"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Total -->
+                    <Border Classes="card" Padding="20" Background="#E8F5E9">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="TOTAL A PAGAR" 
+                                           FontSize="14" 
+                                           FontWeight="Bold" 
+                                           Foreground="#2E7D32"/>
+                                <TextBlock Text="{Binding CantidadPacksEnCarrito, StringFormat={}{0} pack(s) seleccionado(s)}" 
+                                           FontSize="13" 
+                                           Foreground="#666666"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" 
+                                    Background="#ffd966" 
+                                    CornerRadius="8" 
+                                    Padding="24,16">
+                                <TextBlock Text="{Binding TotalCarritoFormateado}" 
+                                           FontSize="28" 
+                                           FontWeight="Bold" 
+                                           Foreground="#333333"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- Botones de accion -->
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="*,*,*">
+                            <Button Grid.Column="0"
+                                    Content="Seguir Agregando Packs"
+                                    Classes="btn-outline"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="0,0,8,0"
+                                    Command="{Binding VolverDesdeResumenCommand}"/>
+                            
+                            <Button Grid.Column="1"
+                                    Content="Cancelar"
+                                    Background="#dc3545"
+                                    Foreground="White"
+                                    CornerRadius="6"
+                                    Padding="16,10"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="8,0"
+                                    Command="{Binding NuevaOperacionCommand}"/>
+                            
+                            <Button Grid.Column="2"
+                                    Content="Confirmar y Guardar"
+                                    Classes="btn-primary"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="8,0,0,0"
+                                    FontSize="15"
+                                    FontWeight="Bold"
+                                    Command="{Binding FinalizarCompraCommand}"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- VISTA 8: CONFIRMACION DE COMPRA (despues de guardar) -->
+        <Border IsVisible="{Binding VistaConfirmacionCompra}"
+                Background="#F5F5F5">
+            <ScrollViewer>
+                <StackPanel Spacing="20" Margin="24" MaxWidth="900" HorizontalAlignment="Center">
+                    
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <Button Grid.Column="0"
+                                    Content="Volver"
+                                    Classes="btn-outline"
+                                    Command="{Binding VolverASeleccionPackCommand}"/>
+                            
+                            <TextBlock Grid.Column="1"
+                                       Text="Confirmacion de Compra"
+                                       FontSize="22"
+                                       FontWeight="Bold"
+                                       Foreground="#0b5394"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- Cliente y Beneficiario lado a lado -->
+                    <Grid ColumnDefinitions="*,16,*">
+                        <!-- Datos del Cliente -->
+                        <Border Grid.Column="0" Classes="card" Padding="20">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="DATOS DEL CLIENTE" 
+                                           FontSize="14" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                <Border Height="1" Background="#E0E0E0"/>
+                                <StackPanel Spacing="8">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Nombre:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoNombre}" 
+                                                   FontWeight="SemiBold" FontSize="15"/>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Documento:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoDocumento}" FontSize="14"/>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Telefono:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding ClienteSeleccionadoTelefono}" FontSize="14"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Datos del Beneficiario -->
+                        <Border Grid.Column="2" Classes="card" Padding="20">
+                            <StackPanel Spacing="12">
+                                <TextBlock Text="DATOS DEL BENEFICIARIO" 
+                                           FontSize="14" 
+                                           FontWeight="Bold" 
+                                           Foreground="#0b5394"/>
+                                <Border Height="1" Background="#E0E0E0"/>
+                                <StackPanel Spacing="8">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Nombre:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding BeneficiarioSeleccionadoNombre}" 
+                                                   FontWeight="SemiBold" FontSize="15"/>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Destino:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Foreground="#2E7D32">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0}, {1}">
+                                                    <Binding Path="BeneficiarioSeleccionadoCiudad"/>
+                                                    <Binding Path="BeneficiarioSeleccionadoPais"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="Direccion:" FontSize="12" Foreground="#666666"/>
+                                        <TextBlock Text="{Binding BeneficiarioSeleccionadoDireccion}" FontSize="13" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <!-- Packs comprados -->
+                    <Border Classes="card" Padding="20">
+                        <StackPanel Spacing="12">
+                            <TextBlock Text="PACKS COMPRADOS" 
+                                       FontSize="14" 
+                                       FontWeight="Bold" 
+                                       Foreground="#0b5394"/>
+                            <Border Height="1" Background="#E0E0E0"/>
+                            
+                            <ItemsControl ItemsSource="{Binding PacksEnCarrito}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#F8F8F8" 
+                                                CornerRadius="6" 
+                                                Padding="12" 
+                                                Margin="0,0,0,8">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <TextBlock Grid.Column="0"
+                                                           Text="{Binding NombrePack}" 
+                                                           FontSize="15" 
+                                                           FontWeight="SemiBold" 
+                                                           VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding PrecioTotalFormateado}" 
+                                                           FontSize="15" 
+                                                           FontWeight="Bold" 
+                                                           Foreground="#0b5394"
+                                                           VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            
+                            <!-- Total -->
+                            <Border Background="#ffd966" 
+                                    CornerRadius="8" 
+                                    Padding="16"
+                                    Margin="0,8,0,0">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0"
+                                               Text="TOTAL PAGADO" 
+                                               FontSize="16" 
+                                               FontWeight="Bold" 
+                                               Foreground="#333333"
+                                               VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding TotalCarritoFormateado}" 
+                                               FontSize="24" 
+                                               FontWeight="Bold" 
+                                               Foreground="#333333"/>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Numero de operacion -->
+                    <Border Classes="card" 
+                            Padding="24" 
+                            Background="#E8F5E9">
+                        <StackPanel Spacing="12" HorizontalAlignment="Center">
+                            <TextBlock Text="Operacion Completada Exitosamente" 
+                                       FontSize="18" 
+                                       FontWeight="Bold" 
+                                       Foreground="#2E7D32"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock FontSize="28" FontWeight="Bold" Foreground="#1B5E20" HorizontalAlignment="Center">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="No. {0}">
+                                        <Binding Path="NumeroOperacion"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Botones finales -->
+                    <Border Classes="card" Padding="20">
+                        <Grid ColumnDefinitions="*,*">
+                            <Button Grid.Column="0"
+                                    Content="Imprimir Recibo"
+                                    Classes="btn-secondary"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="0,0,8,0"
+                                    Command="{Binding ImprimirReciboCommand}"
+                                    CommandParameter="{Binding $parent[Window]}"/>
+                            
+                            <Button Grid.Column="1"
+                                    Content="Nueva Operacion"
+                                    Classes="btn-primary"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="8,0,0,0"
+                                    Command="{Binding NuevaOperacionCommand}"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+    </Grid>
+</UserControl>

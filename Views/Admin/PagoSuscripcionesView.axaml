@@ -1,0 +1,418 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             xmlns:models="using:Allva.Desktop.Models.Admin"
+             x:Class="Allva.Desktop.Views.Admin.PagoSuscripcionesView"
+             x:DataType="vm:PagoSuscripcionesViewModel">
+
+    <Design.DataContext>
+        <vm:PagoSuscripcionesViewModel />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.section-title">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#1d4f8c"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style Selector="Button.btn-primary">
+            <Setter Property="Background" Value="#1d4f8c"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style Selector="Button.btn-primary:pointerover">
+            <Setter Property="Background" Value="#164578"/>
+        </Style>
+
+        <Style Selector="Border.card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="BoxShadow" Value="0 2 6 0 #14000000"/>
+        </Style>
+
+        <Style Selector="Border.list-item">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderBrush" Value="#EEEEEE"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        </Style>
+
+        <Style Selector="Border.list-item:pointerover">
+            <Setter Property="Background" Value="#F5F8FC"/>
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="7,6"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style Selector="Button.tab-btn">
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style Selector="Button.filter-btn">
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Background="#F2F4F7">
+        <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+
+            <!-- ============================================ -->
+            <!-- ROW 0: TOOLBAR -->
+            <!-- ============================================ -->
+            <Border Grid.Row="0" Classes="card" Margin="0,0,0,15" Padding="12">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+
+                    <!-- Precio mensual -->
+                    <TextBlock Text="Precio mensual por local:"
+                               FontSize="13" FontWeight="Bold"
+                               VerticalAlignment="Center"/>
+                    <TextBox Width="90"
+                             Text="{Binding NuevoPrecioTexto}"
+                             VerticalAlignment="Center"/>
+                    <Button Content="Guardar"
+                            Classes="btn-primary"
+                            Command="{Binding GuardarPrecioCommand}"
+                            VerticalAlignment="Center"/>
+
+                    <!-- Separador -->
+                    <Border Width="1" Height="28" Background="#DDD" Margin="10,0"/>
+
+                    <!-- Estado -->
+                    <TextBlock Text="Estado:" FontSize="13" FontWeight="Bold"
+                               VerticalAlignment="Center"/>
+                    <Border Background="#F5F5F5" CornerRadius="6" Padding="3">
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <Button Content="Todos" Classes="filter-btn"
+                                    Background="{Binding BtnTodosBackground}"
+                                    Foreground="{Binding BtnTodosForeground}"
+                                    Command="{Binding CambiarFiltroEstadoCommand}"
+                                    CommandParameter="Todos"/>
+                            <Button Content="Corriente" Classes="filter-btn"
+                                    Background="{Binding BtnCorrienteBackground}"
+                                    Foreground="{Binding BtnCorrienteForeground}"
+                                    Command="{Binding CambiarFiltroEstadoCommand}"
+                                    CommandParameter="Corriente"/>
+                            <Button Content="Deuda" Classes="filter-btn"
+                                    Background="{Binding BtnDeudaBackground}"
+                                    Foreground="{Binding BtnDeudaForeground}"
+                                    Command="{Binding CambiarFiltroEstadoCommand}"
+                                    CommandParameter="Deuda"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Separador -->
+                    <Border Width="1" Height="28" Background="#DDD" Margin="10,0"/>
+
+                    <!-- Busqueda -->
+                    <TextBox MinWidth="200"
+                             Watermark="{Binding PlaceholderBusqueda}"
+                             Text="{Binding TextoBusqueda}"
+                             VerticalAlignment="Center"/>
+                    <Button Content="Buscar"
+                            Classes="btn-primary"
+                            Command="{Binding BuscarCommand}"
+                            VerticalAlignment="Center"/>
+
+                </StackPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- ROW 1: TABLA CON TABS -->
+            <!-- ============================================ -->
+            <Border Grid.Row="1" Classes="card" Margin="0,0,0,15">
+                <DockPanel>
+
+                    <!-- TABS: Locales | Comercios -->
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="5" Margin="0,0,0,12">
+                        <Button Content="Locales" Classes="tab-btn"
+                                Background="{Binding TabLocalesBackground}"
+                                Foreground="{Binding TabLocalesForeground}"
+                                Command="{Binding CambiarTabCommand}"
+                                CommandParameter="locales"/>
+                        <Button Content="Comercios" Classes="tab-btn"
+                                Background="{Binding TabComerciosBackground}"
+                                Foreground="{Binding TabComerciosForeground}"
+                                Command="{Binding CambiarTabCommand}"
+                                CommandParameter="comercios"/>
+                    </StackPanel>
+
+                    <!-- Nota inferior -->
+                    <TextBlock DockPanel.Dock="Bottom"
+                               Text="Click en comercio o codigo para registrar pago recibido."
+                               FontSize="12" Foreground="#888888" Margin="0,8,0,0"/>
+
+                    <!-- ================================== -->
+                    <!-- TABLA LOCALES -->
+                    <!-- ================================== -->
+                    <Grid IsVisible="{Binding EsTabLocales}">
+                        <DockPanel>
+                            <!-- Header -->
+                            <Border DockPanel.Dock="Top" Background="#f7c948" CornerRadius="6" Padding="10,8" Margin="0,0,0,4">
+                                <Grid ColumnDefinitions="130,*,110,110,110,100,100">
+                                    <TextBlock Grid.Column="0" Text="Codigo / Comercio" FontSize="12" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="" />
+                                    <TextBlock Grid.Column="2" Text="Precio mes" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="Pagado hasta" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="Ultimo pago" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="Estado" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="6" Text="Deuda" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Lista con scroll -->
+                            <ScrollViewer>
+                                <ItemsControl ItemsSource="{Binding LocalesFiltrados}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="models:SuscripcionLocalModel">
+                                            <Button Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="0"
+                                                    HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    Cursor="Hand"
+                                                    Command="{Binding $parent[ItemsControl].((vm:PagoSuscripcionesViewModel)DataContext).SeleccionarLocalCommand}"
+                                                    CommandParameter="{Binding}">
+                                                <Border Classes="list-item">
+                                                    <Grid ColumnDefinitions="130,*,110,110,110,100,100">
+
+                                                        <!-- Codigo + Comercio -->
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock Text="{Binding CodigoLocal}"
+                                                                       FontWeight="Bold" FontSize="13"
+                                                                       Foreground="#1d4f8c"/>
+                                                            <TextBlock Text="{Binding NombreComercio}"
+                                                                       FontSize="11" Foreground="#888888"
+                                                                       TextTrimming="CharacterEllipsis"/>
+                                                        </StackPanel>
+
+                                                        <!-- Precio mes -->
+                                                        <TextBlock Grid.Column="2"
+                                                                   Text="{Binding PrecioMensualTexto}"
+                                                                   FontSize="13" Foreground="#444"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                        <!-- Pagado hasta -->
+                                                        <TextBlock Grid.Column="3"
+                                                                   Text="{Binding FechaPagadoHastaTexto}"
+                                                                   FontSize="13"
+                                                                   Foreground="{Binding EstadoColor}"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                        <!-- Ultimo pago -->
+                                                        <TextBlock Grid.Column="4"
+                                                                   Text="{Binding UltimoPagoTexto}"
+                                                                   FontSize="13" Foreground="#666"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                        <!-- Estado -->
+                                                        <Border Grid.Column="5"
+                                                                Background="{Binding EstadoBackgroundColor}"
+                                                                CornerRadius="4" Padding="8,3"
+                                                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <TextBlock Text="{Binding EstadoPago}"
+                                                                       FontSize="11" FontWeight="Bold"
+                                                                       Foreground="{Binding EstadoColor}"/>
+                                                        </Border>
+
+                                                        <!-- Deuda -->
+                                                        <TextBlock Grid.Column="6"
+                                                                   Text="{Binding MontoDeudaTexto}"
+                                                                   FontSize="13" FontWeight="SemiBold"
+                                                                   Foreground="{Binding EstadoColor}"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                    </Grid>
+                                                </Border>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Grid>
+
+                    <!-- ================================== -->
+                    <!-- TABLA COMERCIOS -->
+                    <!-- ================================== -->
+                    <Grid IsVisible="{Binding EsTabComercios}">
+                        <DockPanel>
+                            <!-- Header -->
+                            <Border DockPanel.Dock="Top" Background="#f7c948" CornerRadius="6" Padding="10,8" Margin="0,0,0,4">
+                                <Grid ColumnDefinitions="*,110,110,110,110,100,100">
+                                    <TextBlock Grid.Column="0" Text="Comercio" FontSize="12" FontWeight="SemiBold"/>
+                                    <TextBlock Grid.Column="1" Text="Precio mes" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="2" Text="Pagado hasta" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="Ultimo pago" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="4" Text="Imp. ult. pago" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="5" Text="Estado" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                    <TextBlock Grid.Column="6" Text="Deuda" FontSize="12" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                </Grid>
+                            </Border>
+
+                            <!-- Lista con scroll -->
+                            <ScrollViewer>
+                                <ItemsControl ItemsSource="{Binding ComerciosFiltrados}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="models:ComercioSuscripcionModel">
+                                            <Button Background="Transparent"
+                                                    BorderThickness="0"
+                                                    Padding="0"
+                                                    HorizontalAlignment="Stretch"
+                                                    HorizontalContentAlignment="Stretch"
+                                                    Cursor="Hand"
+                                                    Command="{Binding $parent[ItemsControl].((vm:PagoSuscripcionesViewModel)DataContext).SeleccionarComercioCommand}"
+                                                    CommandParameter="{Binding}">
+                                                <Border Classes="list-item">
+                                                    <Grid ColumnDefinitions="*,110,110,110,110,100,100">
+
+                                                        <!-- Comercio + num locales -->
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock Text="{Binding NombreComercio}"
+                                                                       FontWeight="Bold" FontSize="13"
+                                                                       Foreground="#1d4f8c"/>
+                                                            <TextBlock Text="{Binding NumLocales, StringFormat='{}{0} locales'}"
+                                                                       FontSize="11" Foreground="#888888"/>
+                                                        </StackPanel>
+
+                                                        <!-- Precio mes -->
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="{Binding PrecioMesCuotaTexto}"
+                                                                   FontSize="13" Foreground="#444"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                        <!-- Pagado hasta -->
+                                                        <TextBlock Grid.Column="2"
+                                                                   Text="{Binding FechaPagadoHastaTexto}"
+                                                                   FontSize="13"
+                                                                   Foreground="{Binding EstadoColor}"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                        <!-- Ultimo pago -->
+                                                        <TextBlock Grid.Column="3"
+                                                                   Text="{Binding UltimoPagoTexto}"
+                                                                   FontSize="13" Foreground="#666"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                        <!-- Importe ultimo pago -->
+                                                        <TextBlock Grid.Column="4"
+                                                                   Text="{Binding ImporteUltimoPagoTexto}"
+                                                                   FontSize="13" Foreground="#666"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                        <!-- Estado -->
+                                                        <Border Grid.Column="5"
+                                                                Background="{Binding EstadoBackgroundColor}"
+                                                                CornerRadius="4" Padding="8,3"
+                                                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <TextBlock Text="{Binding EstadoPago}"
+                                                                       FontSize="11" FontWeight="Bold"
+                                                                       Foreground="{Binding EstadoColor}"/>
+                                                        </Border>
+
+                                                        <!-- Deuda -->
+                                                        <TextBlock Grid.Column="6"
+                                                                   Text="{Binding DeudaTotalTexto}"
+                                                                   FontSize="13" FontWeight="SemiBold"
+                                                                   Foreground="{Binding EstadoColor}"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                                                    </Grid>
+                                                </Border>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </Grid>
+
+                </DockPanel>
+            </Border>
+
+            <!-- ============================================ -->
+            <!-- ROW 2: CARD REGISTRAR PAGO -->
+            <!-- ============================================ -->
+            <Border Grid.Row="2" Classes="card" IsVisible="{Binding MostrarPanelPago}">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Registrar pago recibido" Classes="section-title"/>
+                    <Border Height="3" Background="#f7c948" HorizontalAlignment="Left" Width="60" Margin="0,-8,0,4"/>
+
+                    <!-- Formulario horizontal -->
+                    <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto">
+                        <TextBlock Grid.Column="0" Text="Comercio / Codigo:"
+                                   FontSize="13" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding PagoIdentificador}"
+                                 IsReadOnly="True"
+                                 Background="#F5F5F5"
+                                 Margin="0,0,16,0"/>
+
+                        <TextBlock Grid.Column="2" Text="Importe recibido:"
+                                   FontSize="13" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <TextBox Grid.Column="3" Width="120"
+                                 Text="{Binding PagoImporteTexto}"
+                                 Watermark="Ej: 100"
+                                 Margin="0,0,16,0"/>
+
+                        <Button Grid.Column="4" Content="Registrar pago"
+                                Classes="btn-primary"
+                                Command="{Binding RegistrarPagoCommand}"/>
+                    </Grid>
+
+                    <!-- Nota explicativa -->
+                    <TextBlock Text="{Binding PagoNota}"
+                               FontSize="12" Foreground="#777"
+                               TextWrapping="Wrap"/>
+                    <TextBlock Text="Se registra solo el importe recibido. El sistema calcula automaticamente meses pagados, fecha 'Pagado hasta' y locales desbloqueados segun actividad y antiguedad."
+                               FontSize="11" Foreground="#999"
+                               TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        <!-- ============================================ -->
+        <!-- OVERLAY CARGANDO -->
+        <!-- ============================================ -->
+        <Border Background="#80000000" IsVisible="{Binding Cargando}">
+            <Border Background="White" CornerRadius="8" Padding="24"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    BoxShadow="0 4 16 0 #30000000">
+                <TextBlock Text="Cargando..." FontSize="16" FontWeight="SemiBold" Foreground="#1d4f8c"/>
+            </Border>
+        </Border>
+
+        <!-- ============================================ -->
+        <!-- TOAST MENSAJE -->
+        <!-- ============================================ -->
+        <Border CornerRadius="8" Padding="20,12"
+                HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                Margin="0,0,0,20"
+                IsVisible="{Binding MostrarMensaje}"
+                Background="#1d4f8c">
+            <TextBlock Text="{Binding Mensaje}" Foreground="White" FontWeight="SemiBold"/>
+        </Border>
+
+    </Grid>
+
+</UserControl>

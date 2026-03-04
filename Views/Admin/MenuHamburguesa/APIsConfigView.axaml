@@ -1,0 +1,316 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.APIsConfigView"
+             x:DataType="vm:APIsConfigViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBox.api-input">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#D0D0D0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        
+        <Style Selector="TextBox.api-input:focus">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+
+        <Style Selector="TextBlock.field-label">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#444444"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+        </Style>
+
+        <Style Selector="Button.btn-primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        
+        <Style Selector="Button.btn-primary:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+
+        <Style Selector="Button.btn-secondary">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+        
+        <Style Selector="Button.btn-secondary:pointerover">
+            <Setter Property="Background" Value="#F0F5FA"/>
+        </Style>
+
+        <Style Selector="Button.btn-test">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        
+        <Style Selector="Button.btn-test:pointerover">
+            <Setter Property="Background" Value="#FFCD39"/>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="30" Spacing="24">
+
+            <!-- Encabezado -->
+            <StackPanel Spacing="4">
+                <TextBlock Text="Configuración de APIs"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"/>
+                <TextBlock Text="Administra las APIs externas utilizadas por el sistema"
+                           FontSize="14"
+                           Foreground="#666666"/>
+            </StackPanel>
+
+            <!-- Mensaje de estado éxito -->
+            <Border IsVisible="{Binding MostrarMensajeExito}"
+                    Background="#E8F5E9"
+                    BorderBrush="#4CAF50"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16,12">
+                <TextBlock Text="{Binding MensajeEstado}"
+                           Foreground="#2E7D32"
+                           FontWeight="Medium"/>
+            </Border>
+
+            <!-- Mensaje de estado error -->
+            <Border IsVisible="{Binding MostrarMensajeError}"
+                    Background="#FFEBEE"
+                    BorderBrush="#F44336"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="16,12">
+                <TextBlock Text="{Binding MensajeEstado}"
+                           Foreground="#C62828"
+                           FontWeight="Medium"/>
+            </Border>
+
+            <!-- Sección: API de Divisas -->
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="24"
+                    BoxShadow="0 2 8 0 #10000000">
+                <StackPanel Spacing="20">
+                    
+                    <!-- Título de sección -->
+                    <StackPanel Spacing="2">
+                        <TextBlock Text="API de Divisas"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="#333333"/>
+                        <TextBlock Text="Configuración para obtener tasas de cambio en tiempo real"
+                                   FontSize="13"
+                                   Foreground="#888888"/>
+                    </StackPanel>
+
+                    <Border Height="1" Background="#EEEEEE"/>
+
+                    <!-- Toggle Activa -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="2">
+                            <TextBlock Text="API Activa"
+                                       FontSize="14"
+                                       FontWeight="Medium"
+                                       Foreground="#333333"/>
+                            <TextBlock Text="Habilita o deshabilita el uso de esta API"
+                                       FontSize="12"
+                                       Foreground="#888888"/>
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" 
+                                      IsChecked="{Binding ApiActiva}"
+                                      OnContent="Activa"
+                                      OffContent="Inactiva"/>
+                    </Grid>
+
+                    <Border Height="1" Background="#EEEEEE"/>
+
+                    <!-- URL Principal -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="URL Principal" Classes="field-label"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBox Grid.Column="0"
+                                     Classes="api-input"
+                                     Text="{Binding UrlPrincipal}"
+                                     Watermark="https://api.ejemplo.com/divisas"/>
+                            <Button Grid.Column="1"
+                                    Classes="btn-test"
+                                    Margin="10,0,0,0"
+                                    Command="{Binding ProbarConexionCommand}"
+                                    IsEnabled="{Binding !IsTesting}">
+                                <TextBlock Text="Probar"/>
+                            </Button>
+                        </Grid>
+                        <TextBlock Text="URL del endpoint principal para obtener las tasas de cambio"
+                                   FontSize="12"
+                                   Foreground="#999999"/>
+                    </StackPanel>
+
+                    <!-- URL Fallback -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="URL de Respaldo (Fallback)" Classes="field-label"/>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBox Grid.Column="0"
+                                     Classes="api-input"
+                                     Text="{Binding UrlFallback}"
+                                     Watermark="https://api-backup.ejemplo.com/divisas"/>
+                            <Button Grid.Column="1"
+                                    Classes="btn-test"
+                                    Margin="10,0,0,0"
+                                    Command="{Binding ProbarUrlFallbackCommand}"
+                                    IsEnabled="{Binding !IsTesting}">
+                                <TextBlock Text="Probar"/>
+                            </Button>
+                        </Grid>
+                        <TextBlock Text="URL alternativa en caso de que la principal falle"
+                                   FontSize="12"
+                                   Foreground="#999999"/>
+                    </StackPanel>
+
+                    <!-- Resultado de prueba -->
+                    <Border IsVisible="{Binding ResultadoPrueba, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            Background="{Binding PruebaExitosa, Converter={StaticResource BoolToApiResultColorConverter}}"
+                            CornerRadius="6"
+                            Padding="12,10">
+                        <TextBlock Text="{Binding ResultadoPrueba}"
+                                   FontSize="13"/>
+                    </Border>
+
+                    <Border Height="1" Background="#EEEEEE"/>
+
+                    <!-- Autenticación -->
+                    <StackPanel Spacing="12">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="2">
+                                <TextBlock Text="Requiere API Key"
+                                           FontSize="14"
+                                           FontWeight="Medium"
+                                           Foreground="#333333"/>
+                                <TextBlock Text="Marcar si la API necesita una clave de autenticación"
+                                           FontSize="12"
+                                           Foreground="#888888"/>
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="1" 
+                                          IsChecked="{Binding RequiereApiKey}"
+                                          OnContent="Sí"
+                                          OffContent="No"/>
+                        </Grid>
+
+                        <!-- Campo API Key (visible solo si requiere) -->
+                        <StackPanel Spacing="6" IsVisible="{Binding RequiereApiKey}">
+                            <TextBlock Text="API Key" Classes="field-label"/>
+                            <TextBox Classes="api-input"
+                                     Text="{Binding ApiKey}"
+                                     PasswordChar="*"
+                                     Watermark="Ingrese su API Key"/>
+                            <TextBlock Text="La clave se guardará de forma segura"
+                                       FontSize="12"
+                                       Foreground="#999999"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Border Height="1" Background="#EEEEEE"/>
+
+                    <!-- Configuración adicional -->
+                    <Grid ColumnDefinitions="*,20,*">
+                        <!-- Moneda Base -->
+                        <StackPanel Grid.Column="0" Spacing="6">
+                            <TextBlock Text="Moneda Base" Classes="field-label"/>
+                            <ComboBox SelectedItem="{Binding MonedaBase}"
+                                      HorizontalAlignment="Stretch"
+                                      Padding="12,10"
+                                      CornerRadius="6">
+                                <ComboBoxItem Content="eur" Tag="eur"/>
+                                <ComboBoxItem Content="usd" Tag="usd"/>
+                                <ComboBoxItem Content="gbp" Tag="gbp"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Tiempo de caché -->
+                        <StackPanel Grid.Column="2" Spacing="6">
+                            <TextBlock Text="Tiempo de Caché (minutos)" Classes="field-label"/>
+                            <NumericUpDown Value="{Binding TiempoCacheMinutos}"
+                                           Minimum="1"
+                                           Maximum="60"
+                                           Increment="1"
+                                           Padding="12,10"
+                                           CornerRadius="6"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Notas adicionales -->
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Notas Adicionales" Classes="field-label"/>
+                        <TextBox Classes="api-input"
+                                 Text="{Binding NotasAdicionales}"
+                                 AcceptsReturn="True"
+                                 TextWrapping="Wrap"
+                                 Height="80"
+                                 Watermark="Notas opcionales sobre esta configuración..."/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Botones de acción -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0"
+                        Classes="btn-secondary"
+                        Command="{Binding RestaurarValoresPorDefectoCommand}"
+                        IsEnabled="{Binding !IsLoading}">
+                    <TextBlock Text="Restaurar Valores por Defecto"/>
+                </Button>
+
+                <Button Grid.Column="2"
+                        Classes="btn-primary"
+                        Command="{Binding GuardarConfiguracionCommand}"
+                        IsEnabled="{Binding !IsLoading}">
+                    <TextBlock Text="Guardar Cambios"/>
+                </Button>
+            </Grid>
+
+            <!-- Indicador de carga -->
+            <Border IsVisible="{Binding IsLoading}"
+                    Background="#80FFFFFF"
+                    CornerRadius="8"
+                    Padding="20">
+                <StackPanel HorizontalAlignment="Center" Spacing="10">
+                    <TextBlock Text="Procesando..."
+                               FontSize="14"
+                               Foreground="#666666"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,472 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.AltaInscripcionView"
+             x:DataType="vm:AltaInscripcionViewModel">
+
+    <UserControl.Styles>
+        <!-- Botón primario - Azul oficial -->
+        <Style Selector="Button.primary-btn">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style Selector="Button.primary-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#094270"/>
+        </Style>
+
+        <Style Selector="Button.primary-btn:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#595959"/>
+            <Setter Property="Opacity" Value="0.5"/>
+        </Style>
+
+        <!-- Botón secundario - Amarillo oficial -->
+        <Style Selector="Button.secondary-btn">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style Selector="Button.secondary-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#ffcd33"/>
+        </Style>
+
+        <!-- Botón de éxito - Verde -->
+        <Style Selector="Button.success-btn">
+            <Setter Property="Background" Value="#28a745"/>
+            <Setter Property="Foreground" Value="#ffffff"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style Selector="Button.success-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#218838"/>
+        </Style>
+
+        <!-- TextBox de búsqueda -->
+        <Style Selector="TextBox.search-box">
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="BorderBrush" Value="#595959"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style Selector="TextBox.search-box:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+
+        <!-- Items de comercio -->
+        <Style Selector="Border.comercio-item">
+            <Setter Property="Background" Value="#ffffff"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="0,0,0,12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style Selector="Border.comercio-item:pointerover">
+            <Setter Property="Background" Value="#f3f3f3"/>
+            <Setter Property="BorderBrush" Value="#ffd966"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header con título y botón de modo -->
+        <Grid Grid.Row="0" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Spacing="8">
+                <TextBlock Text="Alta de Inscripciones"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"/>
+                <TextBlock Text="Generar contraseñas de activación para comercios y locales"
+                           FontSize="14"
+                           Foreground="#595959"/>
+            </StackPanel>
+
+            <Button Grid.Column="1"
+                    Command="{Binding CambiarModoCommand}"
+                    Classes="secondary-btn"
+                    VerticalAlignment="Center">
+                <TextBlock Text="{Binding TextoBotonCambiarModo}"/>
+            </Button>
+        </Grid>
+
+        <!-- Mensaje de estado -->
+        <Border Grid.Row="1"
+                IsVisible="{Binding MostrarMensaje}"
+                Background="{Binding ColorMensaje}"
+                CornerRadius="8"
+                Padding="16,12"
+                Margin="0,0,0,20">
+            <TextBlock Text="{Binding Mensaje}"
+                       Foreground="#ffffff"
+                       FontWeight="SemiBold"
+                       TextWrapping="Wrap"/>
+        </Border>
+
+        <!-- Contenido principal -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="24">
+
+                <!-- Loader -->
+                <Border IsVisible="{Binding Cargando}"
+                        Background="#f3f3f3"
+                        BorderBrush="#ffd966"
+                        BorderThickness="2"
+                        CornerRadius="12"
+                        Padding="40"
+                        HorizontalAlignment="Center">
+                    <StackPanel Spacing="12" HorizontalAlignment="Center">
+                        <TextBlock Text="Cargando datos..."
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#0b5394"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Panel para Comercio Completo -->
+                <Border IsVisible="{Binding ModoComercioCompleto}"
+                        Background="#ffffff"
+                        BorderBrush="#0b5394"
+                        BorderThickness="2"
+                        CornerRadius="12"
+                        Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="Seleccionar Comercio"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#0b5394"/>
+
+                        <TextBlock Text="Haga clic en un comercio para generar contraseñas para todos sus locales"
+                                   FontSize="13"
+                                   Foreground="#595959"
+                                   TextWrapping="Wrap"/>
+
+                        <!-- Lista de comercios con conteo de locales -->
+                        <ScrollViewer MaxHeight="400" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Comercios}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Classes="comercio-item"
+                                                PointerPressed="ComercioItem_Click"
+                                                Tag="{Binding}">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <StackPanel Grid.Column="0" Spacing="6">
+                                                    <TextBlock Text="{Binding NombreComercio}"
+                                                               FontSize="16"
+                                                               FontWeight="Bold"
+                                                               Foreground="#0b5394"/>
+                                                    <TextBlock Foreground="#595959" FontSize="13">
+                                                        <Run Text="País:"/>
+                                                        <Run Text="{Binding Pais}" FontWeight="SemiBold"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+
+                                                <Border Grid.Column="1"
+                                                        Background="#ffd966"
+                                                        CornerRadius="20"
+                                                        Padding="12,6"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock FontWeight="Bold" Foreground="#0b5394">
+                                                        <Run Text="{Binding CantidadLocales}"/>
+                                                        <Run Text="locales"/>
+                                                    </TextBlock>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+
+                        <!-- Información del comercio seleccionado -->
+                        <Border IsVisible="{Binding ComercioSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                Background="#f3f3f3"
+                                BorderBrush="#ffd966"
+                                BorderThickness="2"
+                                CornerRadius="8"
+                                Padding="16">
+                            <StackPanel Spacing="12">
+                                <TextBlock FontSize="15" FontWeight="Bold" Foreground="#0b5394">
+                                    <Run Text="Comercio seleccionado:"/>
+                                    <Run Text="{Binding ComercioSeleccionado.NombreComercio}"/>
+                                </TextBlock>
+
+                                <TextBlock Text="Locales incluidos:"
+                                           FontWeight="SemiBold"
+                                           FontSize="13"
+                                           Foreground="#0b5394"/>
+
+                                <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl ItemsSource="{Binding Locales}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#ffffff"
+                                                        BorderBrush="#0b5394"
+                                                        BorderThickness="1"
+                                                        CornerRadius="6"
+                                                        Padding="10,6"
+                                                        Margin="0,0,0,6">
+                                                    <TextBlock>
+                                                        <Run Text="{Binding CodigoLocal}" FontWeight="Bold" Foreground="#0b5394"/>
+                                                        <Run Text=" - "/>
+                                                        <Run Text="{Binding NombreLocal}"/>
+                                                    </TextBlock>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+
+                        <Button Command="{Binding GenerarActivacionComercioCommand}"
+                                Classes="primary-btn"
+                                IsEnabled="{Binding !Procesando}"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="Generar Contraseñas para Todos los Locales"/>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Panel para Local Único -->
+                <Border IsVisible="{Binding !ModoComercioCompleto}"
+                        Background="#ffffff"
+                        BorderBrush="#0b5394"
+                        BorderThickness="2"
+                        CornerRadius="12"
+                        Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="Buscar Local Específico"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#0b5394"/>
+
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Buscar por código o nombre de local"
+                                       FontWeight="SemiBold"
+                                       Foreground="#0b5394"/>
+                            <TextBox Text="{Binding TextoBusqueda}"
+                                     Classes="search-box"
+                                     Watermark="Escriba para buscar..."
+                                     HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+
+                        <!-- Resultados de búsqueda -->
+                        <Border IsVisible="{Binding LocalesFiltrados.Count}"
+                                Background="#f3f3f3"
+                                BorderBrush="#0b5394"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="12"
+                                MaxHeight="300">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding LocalesFiltrados}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#ffffff"
+                                                    BorderBrush="#ffd966"
+                                                    BorderThickness="2"
+                                                    CornerRadius="6"
+                                                    Padding="12,8"
+                                                    Margin="0,0,0,8"
+                                                    Cursor="Hand"
+                                                    PointerPressed="LocalItem_Click"
+                                                    Tag="{Binding}">
+                                                <Border.Styles>
+                                                    <Style Selector="Border:pointerover">
+                                                        <Setter Property="Background" Value="#f3f3f3"/>
+                                                    </Style>
+                                                </Border.Styles>
+                                                <StackPanel Spacing="4">
+                                                    <TextBlock FontWeight="Bold" FontSize="14" Foreground="#0b5394">
+                                                        <Run Text="{Binding CodigoLocal}"/>
+                                                        <Run Text=" - "/>
+                                                        <Run Text="{Binding NombreLocal}"/>
+                                                    </TextBlock>
+                                                    <TextBlock FontSize="12" Foreground="#595959">
+                                                        <Run Text="Comercio:"/>
+                                                        <Run Text="{Binding NombreComercio}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+
+                        <!-- Local seleccionado -->
+                        <Border IsVisible="{Binding LocalSeleccionado, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                Background="#f3f3f3"
+                                BorderBrush="#ffd966"
+                                BorderThickness="2"
+                                CornerRadius="8"
+                                Padding="16">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Local seleccionado:"
+                                           FontWeight="Bold"
+                                           FontSize="13"
+                                           Foreground="#0b5394"/>
+                                <TextBlock FontSize="15" FontWeight="SemiBold">
+                                    <Run Text="{Binding LocalSeleccionado.CodigoLocal}" Foreground="#0b5394"/>
+                                    <Run Text=" - "/>
+                                    <Run Text="{Binding LocalSeleccionado.NombreLocal}"/>
+                                </TextBlock>
+                                <TextBlock FontSize="12" Foreground="#595959">
+                                    <Run Text="Comercio:"/>
+                                    <Run Text="{Binding LocalSeleccionado.NombreComercio}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <Button Command="{Binding GenerarActivacionLocalCommand}"
+                                Classes="primary-btn"
+                                IsEnabled="{Binding !Procesando}"
+                                HorizontalAlignment="Center">
+                            <TextBlock Text="Generar Contraseña de Activación"/>
+                        </Button>
+                    </StackPanel>
+                </Border>
+
+                <!-- Panel de Resultados y Exportación -->
+                <Border Background="#ffffff"
+                        BorderBrush="#ffd966"
+                        BorderThickness="3"
+                        CornerRadius="12"
+                        Padding="24">
+                    <StackPanel Spacing="20">
+                        <TextBlock Text="Contraseñas Generadas Exitosamente"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#28a745"/>
+
+                        <!-- Tabla de resultados -->
+                        <Border Background="#f3f3f3"
+                                BorderBrush="#0b5394"
+                                BorderThickness="1"
+                                CornerRadius="8"
+                                Padding="16"
+                                MaxHeight="300">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding UltimasActivacionesGeneradas}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#ffffff"
+                                                    BorderBrush="#ffd966"
+                                                    BorderThickness="2"
+                                                    CornerRadius="8"
+                                                    Padding="16"
+                                                    Margin="0,0,0,12">
+                                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                                    <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,20,0">
+                                                        <TextBlock Text="{Binding CodigoLocal}"
+                                                                   FontWeight="Bold"
+                                                                   FontSize="16"
+                                                                   Foreground="#0b5394"/>
+                                                        <TextBlock Text="{Binding NombreLocal}"
+                                                                   FontSize="13"
+                                                                   Foreground="#595959"/>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Center">
+                                                        <TextBlock Text="Contraseña de Activación:"
+                                                                   FontSize="11"
+                                                                   Foreground="#595959"/>
+                                                        <TextBlock Text="{Binding ContrasenaTemporal}"
+                                                                   FontFamily="Consolas, Menlo, monospace"
+                                                                   FontSize="18"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#dc3545"/>
+                                                    </StackPanel>
+
+                                                    <TextBlock Grid.Column="2"
+                                                               Text="{Binding FechaGeneracion, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"
+                                                               FontSize="12"
+                                                               Foreground="#595959"
+                                                               VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+
+                        <!-- Botones de exportación -->
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="16"
+                                    HorizontalAlignment="Center">
+                            <Button Command="{Binding ExportarCSVCommand}"
+                                    Classes="success-btn">
+                                <TextBlock Text="Exportar a CSV"/>
+                            </Button>
+
+                            <Button Command="{Binding ExportarExcelCommand}"
+                                    Classes="success-btn">
+                                <TextBlock Text="Exportar a Excel"/>
+                            </Button>
+                        </StackPanel>
+
+                        <Border Background="#fff3cd"
+                                BorderBrush="#ffc107"
+                                BorderThickness="1"
+                                CornerRadius="6"
+                                Padding="16">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Importante"
+                                           FontWeight="Bold"
+                                           Foreground="#856404"/>
+                                <TextBlock TextWrapping="Wrap"
+                                           Foreground="#856404"
+                                           FontSize="13">
+                                    <Run Text="• Las contraseñas son de un solo uso y se eliminarán automáticamente después de ser utilizadas."/>
+                                    <LineBreak/>
+                                    <Run Text="• Exporte los archivos CSV/Excel antes de cerrar esta ventana."/>
+                                    <LineBreak/>
+                                    <Run Text="• Entregue las contraseñas de forma segura a cada local correspondiente."/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Ocultar el panel si no hay activaciones generadas -->
+                    <Border.IsVisible>
+                        <Binding Path="MostrarResultados"/>
+                    </Border.IsVisible>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+
+</UserControl>

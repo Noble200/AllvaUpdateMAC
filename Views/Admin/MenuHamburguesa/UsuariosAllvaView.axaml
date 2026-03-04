@@ -1,0 +1,863 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.UsuariosAllvaView"
+             x:DataType="vm:ManageAdministradoresAllvaViewModel">
+
+    <UserControl.Styles>
+        <!-- Estilo para boton primario -->
+        <Style Selector="Button.btn-primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-primary:pointerover">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+        </Style>
+
+        <!-- Estilo para boton secundario -->
+        <Style Selector="Button.btn-secondary">
+            <Setter Property="Background" Value="#6c757d"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <!-- Estilo para botones de accion -->
+        <Style Selector="Button.btn-action">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-action:pointerover">
+            <Setter Property="Background" Value="#ffd966"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+        </Style>
+
+        <Style Selector="Button.btn-danger">
+            <Setter Property="Background" Value="#dc3545"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-danger:pointerover">
+            <Setter Property="Background" Value="#c82333"/>
+        </Style>
+
+        <!-- Estilo para boton exportar (amarillo pastel) -->
+        <Style Selector="Button.btn-export">
+            <Setter Property="Background" Value="#fff3c4"/>
+            <Setter Property="Foreground" Value="#5c4a00"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#ffd966"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-export:pointerover">
+            <Setter Property="Background" Value="#ffe799"/>
+        </Style>
+
+        <Style Selector="Border.admin-card">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#e0e0e0"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="28"/>
+            <Setter Property="Margin" Value="0,0,0,20"/>
+            <Setter Property="BoxShadow" Value="0 2 8 0 #15000000"/>
+        </Style>
+        <Style Selector="Border.admin-card:pointerover">
+            <Setter Property="BoxShadow" Value="0 4 16 0 #25000000"/>
+        </Style>
+
+        <Style Selector="TextBox, ComboBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style Selector="CheckBox">
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="0,10"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header eliminado - contenido movido a la sección de filtros -->
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Grid.Row="1">
+            <!-- ÁREA DE FILTROS Y LISTA -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="32,28" Spacing="28">
+
+                    <!-- FILTROS DE BÚSQUEDA -->
+                    <Border Background="White" CornerRadius="10" Padding="24"
+                            BoxShadow="0 2 8 0 #10000000">
+                        <StackPanel Spacing="16">
+
+                            <TextBlock Text="FILTROS DE BUSQUEDA"
+                                       FontSize="14" FontWeight="Bold" Foreground="#003366"
+                                       LetterSpacing="0.5"/>
+
+                            <!-- Fila de filtros -->
+                            <Grid ColumnDefinitions="*,180,180" RowDefinitions="Auto,Auto">
+                                <!-- Labels -->
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Buscar" FontSize="13" FontWeight="SemiBold" Foreground="#666" Margin="0,0,12,6"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="Nivel de acceso" FontSize="13" FontWeight="SemiBold" Foreground="#666" Margin="0,0,12,6"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Estado" FontSize="13" FontWeight="SemiBold" Foreground="#666" Margin="0,0,0,6"/>
+
+                                <!-- Controles -->
+                                <TextBox Grid.Row="1" Grid.Column="0"
+                                         Text="{Binding FiltroBusqueda}"
+                                         Watermark="Nombre, usuario o correo..."
+                                         FontSize="15"
+                                         Margin="0,0,12,0"/>
+
+                                <ComboBox Grid.Row="1" Grid.Column="1"
+                                          SelectedIndex="{Binding FiltroNivelSeleccionado}"
+                                          HorizontalAlignment="Stretch"
+                                          FontSize="15"
+                                          Margin="0,0,12,0">
+                                    <ComboBoxItem Content="Todos"/>
+                                    <ComboBoxItem Content="Nivel 1"/>
+                                    <ComboBoxItem Content="Nivel 2"/>
+                                    <ComboBoxItem Content="Nivel 3"/>
+                                    <ComboBoxItem Content="Nivel 4"/>
+                                </ComboBox>
+
+                                <ComboBox Grid.Row="1" Grid.Column="2"
+                                          SelectedIndex="{Binding FiltroEstadoSeleccionado}"
+                                          HorizontalAlignment="Stretch"
+                                          FontSize="15">
+                                    <ComboBoxItem Content="Todos"/>
+                                    <ComboBoxItem Content="Activo"/>
+                                    <ComboBoxItem Content="Inactivo"/>
+                                </ComboBox>
+                            </Grid>
+
+                            <!-- Fila inferior: Totales pequeños a la izquierda, Botones a la derecha -->
+                            <Grid ColumnDefinitions="Auto,*">
+                                <!-- Totales pequeños + Exportar -->
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                                    <TextBlock FontSize="11" Foreground="#666" VerticalAlignment="Center">
+                                        <Run Text="Total:" FontWeight="SemiBold"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding TotalAdministradores}" FontWeight="Bold" Foreground="#003366"/>
+                                    </TextBlock>
+                                    <TextBlock FontSize="11" Foreground="#666" VerticalAlignment="Center">
+                                        <Run Text="Activos:" FontWeight="SemiBold"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding AdministradoresActivos}" FontWeight="Bold" Foreground="#28a745"/>
+                                    </TextBlock>
+                                    <TextBlock FontSize="11" Foreground="#666" VerticalAlignment="Center">
+                                        <Run Text="Super:" FontWeight="SemiBold"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding SuperAdministradores}" FontWeight="Bold" Foreground="#f5c94b"/>
+                                    </TextBlock>
+                                    <TextBlock FontSize="11" Foreground="#666" VerticalAlignment="Center">
+                                        <Run Text="Inactivos:" FontWeight="SemiBold"/>
+                                        <Run Text=" "/>
+                                        <Run Text="{Binding AdministradoresInactivos}" FontWeight="Bold" Foreground="#dc3545"/>
+                                    </TextBlock>
+                                    <!-- Botón Exportar datos (amarillo pastel) -->
+                                    <Button Classes="btn-export"
+                                            VerticalAlignment="Center"
+                                            ToolTip.Tip="Exportar datos a Excel">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <PathIcon Data="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M12,19L8,15H10.5V12H13.5V15H16L12,19Z"
+                                                      Width="14" Height="14" Foreground="#5c4a00"/>
+                                            <TextBlock Text="Exportar datos" FontSize="13" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+
+                                <!-- Botones: Nuevo, Limpiar, Aplicar a la derecha -->
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                                    <Button Classes="btn-primary"
+                                            Padding="12,8"
+                                            Command="{Binding MostrarFormularioCrearCommand}">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Text="+" FontSize="13" FontWeight="Bold" VerticalAlignment="Center"/>
+                                            <TextBlock Text="NUEVO ADMIN" FontSize="13" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button>
+
+                                    <Button Classes="btn-secondary"
+                                            Padding="12,8"
+                                            Command="{Binding LimpiarFiltrosCommand}">
+                                        <TextBlock Text="LIMPIAR" FontSize="13" FontWeight="SemiBold"/>
+                                    </Button>
+
+                                    <Button Classes="btn-primary"
+                                            Padding="12,8"
+                                            Command="{Binding AplicarFiltrosCommand}">
+                                        <TextBlock Text="BUSCAR" FontSize="13" FontWeight="SemiBold"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+
+                        </StackPanel>
+                    </Border>
+
+                    <!-- LISTA DE ADMINISTRADORES -->
+                    <ItemsControl ItemsSource="{Binding AdministradoresFiltrados}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes="admin-card">
+                                    <Grid ColumnDefinitions="*,Auto">
+
+                                        <!-- Contenido principal -->
+                                        <StackPanel Grid.Column="0" Spacing="12">
+
+                                            <!-- Fila 1: Usuario y Nombre -->
+                                            <StackPanel Spacing="2">
+                                                <TextBlock Text="{Binding NombreUsuario}"
+                                                           FontSize="16" FontWeight="Bold"
+                                                           Foreground="#0b5394"/>
+                                                <TextBlock Text="{Binding NombreCompleto}"
+                                                           FontSize="14" Foreground="#595959"/>
+                                            </StackPanel>
+
+                                            <!-- Fila 2: Tres columnas - Contacto, Actividad, Nivel de acceso -->
+                                            <Grid ColumnDefinitions="*,*,*">
+
+                                                <!-- Columna 1: Contacto -->
+                                                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,20,0">
+                                                    <TextBlock Text="Contacto"
+                                                               FontSize="14" FontWeight="Bold"
+                                                               Foreground="#0b5394"/>
+                                                    <Border Background="#ffd966" Height="2" Width="100" HorizontalAlignment="Left" Margin="0,2,0,6"/>
+                                                    <TextBlock FontSize="13" Foreground="#595959">
+                                                        <Run Text="Móvil:" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                                        <Run Text=" "/>
+                                                        <Run Text="{Binding Telefono}"/>
+                                                    </TextBlock>
+                                                    <TextBlock FontSize="13" Foreground="#595959">
+                                                        <Run Text="Email:" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                                        <Run Text=" "/>
+                                                        <Run Text="{Binding Correo}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+
+                                                <!-- Columna 2: Actividad -->
+                                                <StackPanel Grid.Column="1" Spacing="4" Margin="0,0,20,0">
+                                                    <TextBlock Text="Actividad"
+                                                               FontSize="14" FontWeight="Bold"
+                                                               Foreground="#0b5394"/>
+                                                    <Border Background="#ffd966" Height="2" Width="100" HorizontalAlignment="Left" Margin="0,2,0,6"/>
+                                                    <TextBlock FontSize="13" Foreground="#595959">
+                                                        <Run Text="Última operación:" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                                        <Run Text=" "/>
+                                                        <Run Text="{Binding UltimaOperacionTexto}"/>
+                                                    </TextBlock>
+                                                    <TextBlock FontSize="13" Foreground="#595959">
+                                                        <Run Text="Última conexión:" FontWeight="SemiBold" Foreground="#0b5394"/>
+                                                        <Run Text=" "/>
+                                                        <Run Text="{Binding UltimoAccesoTexto}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+
+                                                <!-- Columna 3: Nivel de acceso -->
+                                                <StackPanel Grid.Column="2" Spacing="4">
+                                                    <TextBlock Text="Nivel de acceso"
+                                                               FontSize="14" FontWeight="Bold"
+                                                               Foreground="#0b5394"/>
+                                                    <Border Background="#ffd966" Height="2" Width="100" HorizontalAlignment="Left" Margin="0,2,0,6"/>
+                                                    <TextBlock FontSize="13" Foreground="#595959">
+                                                        <Run Text="{Binding NombreNivel}" FontWeight="SemiBold"/>
+                                                    </TextBlock>
+
+                                                    <!-- Badges de módulos -->
+                                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
+                                                        <!-- DIVISAS -->
+                                                        <Border Background="#fff3cd" BorderBrush="#ffc107" BorderThickness="1"
+                                                                CornerRadius="4" Padding="8,4"
+                                                                IsVisible="{Binding ModuloDivisas}">
+                                                            <TextBlock Text="DIVISAS" FontSize="11" FontWeight="Bold" Foreground="#856404"/>
+                                                        </Border>
+                                                        <!-- ALIMENTOS -->
+                                                        <Border Background="#d4edda" BorderBrush="#28a745" BorderThickness="1"
+                                                                CornerRadius="4" Padding="8,4"
+                                                                IsVisible="{Binding ModuloAlimentos}">
+                                                            <TextBlock Text="ALIMENTOS" FontSize="11" FontWeight="Bold" Foreground="#155724"/>
+                                                        </Border>
+                                                        <!-- AVIÓN -->
+                                                        <Border Background="#cce5ff" BorderBrush="#007bff" BorderThickness="1"
+                                                                CornerRadius="4" Padding="8,4"
+                                                                IsVisible="{Binding ModuloAvion}">
+                                                            <TextBlock Text="AVIÓN" FontSize="11" FontWeight="Bold" Foreground="#004085"/>
+                                                        </Border>
+                                                        <!-- VIAJES -->
+                                                        <Border Background="#e2d5f1" BorderBrush="#6f42c1" BorderThickness="1"
+                                                                CornerRadius="4" Padding="8,4"
+                                                                IsVisible="{Binding ModuloViajes}">
+                                                            <TextBlock Text="VIAJES" FontSize="11" FontWeight="Bold" Foreground="#4a235a"/>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <!-- Columna de botones a la derecha -->
+                                        <StackPanel Grid.Column="1" Orientation="Vertical" Spacing="8"
+                                                    VerticalAlignment="Center" Margin="20,0,0,0">
+
+                                            <!-- Botón X Eliminar -->
+                                            <Button Background="Transparent"
+                                                    BorderThickness="2"
+                                                    BorderBrush="#0b5394"
+                                                    Width="40" Height="40"
+                                                    CornerRadius="20"
+                                                    Padding="0"
+                                                    Cursor="Hand"
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    ToolTip.Tip="Eliminar administrador"
+                                                    Command="{Binding $parent[ItemsControl].((vm:ManageAdministradoresAllvaViewModel)DataContext).EliminarAdministradorCommand}"
+                                                    CommandParameter="{Binding}">
+                                                <Canvas Width="16" Height="16">
+                                                    <Line StartPoint="3,3" EndPoint="13,13" Stroke="#0b5394" StrokeThickness="2.5" StrokeLineCap="Round"/>
+                                                    <Line StartPoint="13,3" EndPoint="3,13" Stroke="#0b5394" StrokeThickness="2.5" StrokeLineCap="Round"/>
+                                                </Canvas>
+                                            </Button>
+
+                                            <!-- Botón Editar (círculo amarillo con lápiz) -->
+                                            <Button Background="#ffd966"
+                                                    BorderThickness="0"
+                                                    Width="40" Height="40"
+                                                    CornerRadius="20"
+                                                    Padding="0"
+                                                    Cursor="Hand"
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    ToolTip.Tip="Editar administrador"
+                                                    Command="{Binding $parent[ItemsControl].((vm:ManageAdministradoresAllvaViewModel)DataContext).EditarAdministradorCommand}"
+                                                    CommandParameter="{Binding}">
+                                                <Canvas Width="20" Height="20">
+                                                    <!-- Cuadrado/documento -->
+                                                    <Rectangle Canvas.Left="2" Canvas.Top="6" Width="12" Height="12"
+                                                               Fill="Transparent" Stroke="White" StrokeThickness="2" RadiusX="1" RadiusY="1"/>
+                                                    <!-- Lápiz -->
+                                                    <Line StartPoint="8,4" EndPoint="16,12" Stroke="White" StrokeThickness="2" StrokeLineCap="Round"/>
+                                                    <Line StartPoint="14,6" EndPoint="18,2" Stroke="White" StrokeThickness="2" StrokeLineCap="Round"/>
+                                                    <Ellipse Canvas.Left="16" Canvas.Top="0" Width="4" Height="4" Fill="White"/>
+                                                </Canvas>
+                                            </Button>
+
+                                            <!-- Botón ON/OFF Toggle -->
+                                            <Button Background="{Binding EstadoBotonColor}"
+                                                    BorderThickness="0"
+                                                    Width="40" Height="40"
+                                                    CornerRadius="20"
+                                                    Padding="0"
+                                                    Cursor="Hand"
+                                                    HorizontalContentAlignment="Center"
+                                                    VerticalContentAlignment="Center"
+                                                    ToolTip.Tip="{Binding EstadoBotonTexto}"
+                                                    Command="{Binding $parent[ItemsControl].((vm:ManageAdministradoresAllvaViewModel)DataContext).CambiarEstadoAdministradorCommand}"
+                                                    CommandParameter="{Binding}">
+                                                <TextBlock Text="{Binding EstadoToggleTexto}"
+                                                           FontSize="11" FontWeight="Bold"
+                                                           Foreground="White"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Mensaje sin resultados -->
+                    <Border IsVisible="{Binding !AdministradoresFiltrados.Count}"
+                            Background="#f8f9fa"
+                            CornerRadius="10"
+                            Padding="50"
+                            MinHeight="200">
+                        <StackPanel Spacing="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="No se encontraron administradores"
+                                       FontSize="20" FontWeight="SemiBold" Foreground="#666"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock Text="Intenta ajustar los filtros de búsqueda"
+                                       FontSize="17" Foreground="#999"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- PANEL LATERAL DERECHO - OVERLAY RESPONSIVO -->
+            <Border IsVisible="{Binding MostrarPanelDerecho}"
+                    Background="#80000000"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    ZIndex="100">
+                <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                    <Border Background="White"
+                            BorderThickness="1,0,0,0"
+                            BorderBrush="#e0e0e0"
+                            MinWidth="500"
+                            MaxWidth="700"
+                            Width="650"
+                            VerticalAlignment="Stretch">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Header del panel -->
+                    <Border Grid.Row="0" Background="#0b5394" Padding="24,20">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding TituloPanelDerecho}"
+                                       FontSize="18" FontWeight="Bold"
+                                       Foreground="White"
+                                       VerticalAlignment="Center"/>
+                            <Button Grid.Column="1"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding CerrarPanelDerechoCommand}"
+                                    Cursor="Hand"
+                                    VerticalAlignment="Center">
+                                <TextBlock Text="X" FontSize="18" Foreground="White" FontWeight="Bold"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+
+                    <!-- Contenido del panel -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <Panel>
+
+                        <!-- FORMULARIO -->
+                        <StackPanel IsVisible="{Binding MostrarFormulario}" Margin="28" Spacing="24">
+
+                            <!-- Información Personal -->
+                            <Border Background="#f8f9fa" CornerRadius="8" Padding="24">
+                                <StackPanel Spacing="18">
+                                    <TextBlock Text="Información Personal"
+                                               FontSize="18" FontWeight="Bold" Foreground="#003366"/>
+
+                                    <!-- Nombre y Apellidos -->
+                                    <Grid ColumnDefinitions="*,*">
+                                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                            <TextBlock Text="Nombre" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                            <TextBox Text="{Binding FormNombre}"
+                                                     Watermark="Ingrese el nombre..."/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                            <TextBlock Text="Apellidos" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                            <TextBox Text="{Binding FormApellidos}"
+                                                     Watermark="Ingrese los apellidos..."/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Nombre de Usuario -->
+                                    <StackPanel>
+                                        <TextBlock Text="Nombre de Usuario" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                        <TextBox Text="{Binding FormNombreUsuario}"
+                                                 IsReadOnly="{Binding ModoEdicion}"
+                                                 Watermark="Se genera automáticamente"/>
+                                    </StackPanel>
+
+                                    <!-- Correo y Teléfono -->
+                                    <Grid ColumnDefinitions="*,*">
+                                        <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                            <TextBlock Text="Correo Electrónico" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                            <TextBox Text="{Binding FormCorreo}"
+                                                     Watermark="admin@allva.com"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                            <TextBlock Text="Móvil" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                            <TextBox x:Name="TxtTelefono"
+                                                     Text="{Binding FormTelefono}"
+                                                     Watermark="600.000.000"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Contraseña (CREAR) -->
+                                    <StackPanel IsVisible="{Binding !ModoEdicion}">
+                                        <TextBlock Text="Contraseña" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                        <TextBox Text="{Binding FormPassword}"
+                                                 PasswordChar="●"
+                                                 Watermark="Mínimo 8 caracteres"/>
+                                    </StackPanel>
+
+                                    <!-- Contraseña (EDITAR) -->
+                                    <StackPanel IsVisible="{Binding ModoEdicion}">
+                                        <TextBlock Text="Cambiar Contraseña" FontSize="16" FontWeight="Bold" Margin="0,0,0,8"/>
+                                        <TextBox Text="{Binding FormPassword}"
+                                                 PasswordChar="●"
+                                                 Watermark="Nueva contraseña (dejar vacío para mantener la actual)"/>
+                                        <TextBlock Text="Deja este campo vacío si no deseas cambiar la contraseña"
+                                                   FontSize="13" Foreground="#666" FontStyle="Italic" Margin="0,6,0,0"/>
+                                    </StackPanel>
+
+                                    <CheckBox IsChecked="{Binding FormActivo}"
+                                              Content="Administrador Activo"
+                                              FontSize="16" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Sistema de Niveles de Acceso -->
+                            <Border Background="#e8f4f8" CornerRadius="8" Padding="24">
+                                <StackPanel Spacing="18">
+                                    <TextBlock Text="Nivel de Acceso"
+                                               FontSize="18" FontWeight="Bold" Foreground="#003366"/>
+
+                                    <!-- Selector de Nivel -->
+                                    <StackPanel>
+                                        <TextBlock Text="Selecciona nivel:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <ComboBox SelectedIndex="{Binding FormNivelAccesoIndex}"
+                                                  Height="48" HorizontalAlignment="Stretch"
+                                                  FontSize="16">
+                                            <ComboBoxItem Content="Nivel 1 - Visualizador"/>
+                                            <ComboBoxItem Content="Nivel 2 - Admin Limitado"/>
+                                            <ComboBoxItem Content="Nivel 3 - Admin Completo"/>
+                                            <ComboBoxItem Content="Nivel 4 - Super Admin"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <!-- Descripción del nivel -->
+                                    <Border Background="White" CornerRadius="6" Padding="18"
+                                            BorderBrush="#0b5394" BorderThickness="1">
+                                        <TextBlock Text="{Binding FormDescripcionNivel}"
+                                                   FontSize="15" Foreground="#333"
+                                                   TextWrapping="Wrap"/>
+                                    </Border>
+
+                                    <!-- Módulos Habilitados -->
+                                    <StackPanel Spacing="14">
+                                        <TextBlock Text="Módulos habilitados:" FontSize="16" FontWeight="Bold"/>
+
+                                        <ItemsControl ItemsSource="{Binding FormModulosSeleccionables}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <CheckBox IsChecked="{Binding Seleccionado}"
+                                                              Content="{Binding Nombre}"
+                                                              FontSize="15"
+                                                              Margin="0,6"/>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+
+                                        <!-- Nota informativa -->
+                                        <Border Background="#e3f2fd"
+                                                BorderBrush="#2196F3"
+                                                BorderThickness="1"
+                                                CornerRadius="6"
+                                                Padding="14">
+                                            <TextBlock Text="Nota: Los módulos para nivel 3 y 4 se asignan automáticamente"
+                                                       FontSize="14" Foreground="#1565C0"
+                                                       TextWrapping="Wrap"/>
+                                        </Border>
+                                    </StackPanel>
+
+                                    <!-- Advertencia -->
+                                    <Border Background="#fff3cd"
+                                            BorderBrush="#ffc107"
+                                            BorderThickness="1"
+                                            CornerRadius="6"
+                                            Padding="18">
+                                        <StackPanel Spacing="10">
+                                            <TextBlock Text="Información de Niveles"
+                                                       FontSize="16" FontWeight="Bold" Foreground="#856404"/>
+                                            <TextBlock Text="Nivel 4 (Super Admin) podrá gestionar otros administradores."
+                                                       FontSize="15" Foreground="#856404" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+
+                        <!-- VER DETALLES -->
+                        <StackPanel IsVisible="{Binding !MostrarFormulario}" Margin="28" Spacing="28">
+
+                            <!-- Información General -->
+                            <Border Background="#f8f9fa" CornerRadius="8" Padding="24">
+                                <StackPanel Spacing="18">
+                                    <TextBlock Text="Información General"
+                                               FontSize="18" FontWeight="Bold" Foreground="#003366"/>
+
+                                    <Grid ColumnDefinitions="160,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Nombre:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding AdministradorSeleccionado.NombreCompleto}" FontSize="16" Margin="0,0,0,10"/>
+
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Usuario:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding AdministradorSeleccionado.NombreUsuario}" FontSize="16" Margin="0,0,0,10"/>
+
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Correo:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding AdministradorSeleccionado.Correo}" FontSize="16" Margin="0,0,0,10"/>
+
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Móvil:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding AdministradorSeleccionado.Telefono}" FontSize="16" Margin="0,0,0,10"/>
+
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Nivel:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding AdministradorSeleccionado.NombreNivel}" FontSize="16" Margin="0,0,0,10"/>
+
+                                        <TextBlock Grid.Row="5" Grid.Column="0" Text="Tipo:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding AdministradorSeleccionado.TipoAdministrador}" FontSize="16" Margin="0,0,0,10"/>
+
+                                        <TextBlock Grid.Row="6" Grid.Column="0" Text="Último Acceso:" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding AdministradorSeleccionado.UltimoAccesoTexto}" FontSize="16" Margin="0,0,0,10"/>
+
+                                        <TextBlock Grid.Row="7" Grid.Column="0" Text="Estado:" FontSize="16" FontWeight="Bold"/>
+                                        <TextBlock Grid.Row="7" Grid.Column="1"
+                                                   Text="{Binding AdministradorSeleccionado.EstadoTexto}"
+                                                   Foreground="{Binding AdministradorSeleccionado.EstadoColor}"
+                                                   FontSize="16" FontWeight="Bold"/>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Descripción del Nivel -->
+                            <Border Background="#e8f4f8" CornerRadius="8" Padding="24">
+                                <StackPanel Spacing="14">
+                                    <TextBlock Text="Descripción del Nivel"
+                                               FontSize="18" FontWeight="Bold" Foreground="#003366"/>
+
+                                    <TextBlock Text="{Binding AdministradorSeleccionado.DescripcionNivel}"
+                                               FontSize="16" Foreground="#333" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Módulos Asignados -->
+                            <Border Background="#f8f9fa" CornerRadius="8" Padding="24">
+                                <StackPanel Spacing="14">
+                                    <TextBlock Text="Módulos Asignados"
+                                               FontSize="18" FontWeight="Bold" Foreground="#003366"/>
+
+                                    <TextBlock Text="{Binding AdministradorSeleccionado.ModulosHabilitadosTexto}"
+                                               FontSize="16" Foreground="#333" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Boton cerrar al final del panel de informacion -->
+                            <Button Classes="btn-secondary"
+                                    Command="{Binding CerrarPanelDerechoCommand}"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="0,20,0,0">
+                                <TextBlock Text="CERRAR" FontSize="13" FontWeight="Bold"/>
+                            </Button>
+                        </StackPanel>
+                    </Panel>
+                    </ScrollViewer>
+
+                    <!-- Footer con botones -->
+                    <Border Grid.Row="2"
+                            IsVisible="{Binding MostrarFormulario}"
+                            Background="#f8f9fa"
+                            BorderThickness="0,1,0,0"
+                            BorderBrush="#e0e0e0"
+                            Padding="28,22">
+                        <Grid ColumnDefinitions="*,Auto,Auto">
+                            <Button Grid.Column="1"
+                                    Classes="btn-secondary"
+                                    Command="{Binding CerrarPanelDerechoCommand}"
+                                    Margin="0,0,14,0"
+                                    MinWidth="130">
+                                <TextBlock Text="Cancelar"/>
+                            </Button>
+                            <Button Grid.Column="2"
+                                    Classes="btn-primary"
+                                    Command="{Binding GuardarAdministradorCommand}"
+                                    MinWidth="150">
+                                <TextBlock Text="{Binding TituloBotonGuardar}"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- ============================================ -->
+        <!-- VENTANA DE CONFIRMACION PARA ELIMINAR ADMINISTRADOR -->
+        <!-- ============================================ -->
+        <Border Grid.Row="1"
+                IsVisible="{Binding MostrarDialogoConfirmacion}"
+                Background="#80000000"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ZIndex="1001">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="32"
+                    MaxWidth="550"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BoxShadow="0 8 24 0 #40000000">
+                <StackPanel Spacing="24">
+                    <!-- Titulo -->
+                    <TextBlock Text="CONFIRMAR ELIMINACIÓN"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#dc3545"
+                               HorizontalAlignment="Center"/>
+
+                    <!-- Contenido -->
+                    <StackPanel Spacing="16">
+                        <TextBlock Text="¿Estás seguro de que deseas eliminar este administrador?"
+                                   FontSize="17"
+                                   Foreground="#333"
+                                   TextWrapping="Wrap"
+                                   HorizontalAlignment="Center"/>
+
+                        <!-- Cuadro con datos del administrador -->
+                        <Border Background="#fff3cd"
+                                BorderThickness="2"
+                                BorderBrush="#ffc107"
+                                CornerRadius="8"
+                                Padding="20">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="Administrador a eliminar:"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="#856404"/>
+                                <TextBlock Text="{Binding AdministradorAEliminar.NombreCompleto}"
+                                           FontSize="20"
+                                           FontWeight="Bold"
+                                           Foreground="#003366"
+                                           TextWrapping="Wrap"/>
+                                <TextBlock FontSize="14" Foreground="#856404">
+                                    <Run Text="Usuario: "/>
+                                    <Run Text="{Binding AdministradorAEliminar.NombreUsuario}" FontWeight="SemiBold"/>
+                                </TextBlock>
+                                <TextBlock FontSize="14" Foreground="#856404">
+                                    <Run Text="Nivel: "/>
+                                    <Run Text="{Binding AdministradorAEliminar.NombreNivel}" FontWeight="SemiBold"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Advertencia -->
+                        <Border Background="#f8d7da"
+                                BorderThickness="1"
+                                BorderBrush="#dc3545"
+                                CornerRadius="6"
+                                Padding="16">
+                            <StackPanel Spacing="8">
+                                <TextBlock Text="ADVERTENCIA:"
+                                           FontSize="14"
+                                           FontWeight="Bold"
+                                           Foreground="#721c24"/>
+                                <TextBlock FontSize="14"
+                                           Foreground="#721c24"
+                                           TextWrapping="Wrap">
+                                    <Run Text="Esta acción NO se puede deshacer."/>
+                                    <LineBreak/>
+                                    <Run Text="Se eliminará permanentemente:"/>
+                                    <LineBreak/>
+                                    <Run Text="• La cuenta del administrador"/>
+                                    <LineBreak/>
+                                    <Run Text="• Todos sus módulos asignados"/>
+                                    <LineBreak/>
+                                    <Run Text="• Su historial de acceso"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Botones -->
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0"
+                                Classes="btn-secondary"
+                                Command="{Binding CancelarEliminarAdministradorCommand}"
+                                HorizontalAlignment="Stretch"
+                                Margin="0,0,8,0">
+                            <TextBlock Text="CANCELAR" FontSize="15" FontWeight="Bold"/>
+                        </Button>
+                        <Button Grid.Column="1"
+                                Classes="btn-danger"
+                                Command="{Binding ConfirmarEliminarAdministradorCommand}"
+                                HorizontalAlignment="Stretch"
+                                Margin="8,0,0,0">
+                            <TextBlock Text="SÍ, ELIMINAR" FontSize="15" FontWeight="Bold"/>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!-- INDICADOR DE CARGA -->
+        <Border IsVisible="{Binding Cargando}"
+                Background="#80000000"
+                Grid.Row="1"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ZIndex="1000">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BoxShadow="0 8 24 0 #40000000">
+                <StackPanel Spacing="24" HorizontalAlignment="Center">
+                    <TextBlock Text="Procesando..."
+                               FontSize="20" FontWeight="SemiBold"
+                               Foreground="#003366"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Por favor espere..."
+                               FontSize="16" Foreground="#666"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!-- MENSAJES DE ÉXITO -->
+        <Border IsVisible="{Binding MostrarMensajeExito}"
+                Background="#28a745"
+                CornerRadius="8"
+                Padding="28,20"
+                Margin="32"
+                BoxShadow="0 4 12 0 #40000000"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Grid.Row="0"
+                Grid.RowSpan="2">
+            <TextBlock Text="{Binding MensajeExito}"
+                       FontSize="18" FontWeight="SemiBold"
+                       Foreground="White"
+                       TextWrapping="Wrap"
+                       MaxWidth="700"
+                       VerticalAlignment="Center"/>
+        </Border>
+    </Grid>
+</UserControl>

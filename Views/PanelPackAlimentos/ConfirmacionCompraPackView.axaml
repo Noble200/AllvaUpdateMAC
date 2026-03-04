@@ -1,0 +1,169 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             xmlns:conv="using:Allva.Desktop.Converters"
+             x:Class="Allva.Desktop.Views.PanelPackAlimentos.ConfirmacionCompraPackView"
+             x:DataType="vm:FoodPacksViewModel">
+    
+    <UserControl.Resources>
+        <conv:ByteArrayToImageConverter x:Key="ByteArrayToImage"/>
+    </UserControl.Resources>
+
+    <Border Background="#80000000">
+        <Border Background="White" 
+                CornerRadius="12" 
+                Width="550"
+                Margin="40"
+                BoxShadow="0 8 32 0 #40000000"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center">
+            <Grid RowDefinitions="Auto,*,Auto">
+                
+                <!-- Header -->
+                <Border Grid.Row="0" 
+                        Background="#0b5394" 
+                        Padding="24,18" 
+                        CornerRadius="12,12,0,0">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Grid.Column="0"
+                                   Text="Confirmar Compra"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
+                        <Button Grid.Column="1"
+                                Content="X"
+                                Background="Transparent"
+                                Foreground="White"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Padding="8"
+                                Cursor="Hand"
+                                Command="{Binding CancelarCompraCommand}"/>
+                    </Grid>
+                </Border>
+                
+                <!-- Contenido -->
+                <StackPanel Grid.Row="1" Spacing="20" Margin="28">
+                    
+                    <!-- Info del Pack -->
+                    <Border Background="#F8F9FA" CornerRadius="10" Padding="20">
+                        <Grid ColumnDefinitions="Auto,*">
+                            
+                            <!-- Imagen del pack -->
+                            <Border Grid.Column="0"
+                                    Width="100"
+                                    Height="100"
+                                    CornerRadius="8"
+                                    Background="#E8F4FD"
+                                    Margin="0,0,16,0"
+                                    ClipToBounds="True">
+                                <Panel>
+                                    <Image Source="{Binding PackSeleccionado.ImagenPoster, Converter={StaticResource ByteArrayToImage}}"
+                                           Stretch="UniformToFill"
+                                           IsVisible="{Binding PackSeleccionado.TieneImagen}"/>
+                                    <Border Width="50" Height="50" 
+                                            Background="#0b5394" 
+                                            CornerRadius="25"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            IsVisible="{Binding !PackSeleccionado.TieneImagen}">
+                                        <TextBlock Text="P" FontSize="24" FontWeight="Bold" Foreground="White"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </Panel>
+                            </Border>
+                            
+                            <!-- Info -->
+                            <StackPanel Grid.Column="1" Spacing="8" VerticalAlignment="Center">
+                                <TextBlock Text="Pack seleccionado:" FontSize="12" Foreground="#666666"/>
+                                <TextBlock Text="{Binding PackSeleccionado.NombrePack}" 
+                                           FontSize="18" 
+                                           FontWeight="Bold"
+                                           Foreground="#333333"
+                                           TextWrapping="Wrap"/>
+                                <Border Background="#ffd966" CornerRadius="6" Padding="14,8" HorizontalAlignment="Left">
+                                    <TextBlock Text="{Binding PackSeleccionado.PrecioFormateado}" 
+                                               FontSize="22" 
+                                               FontWeight="Bold"
+                                               Foreground="#0b5394"/>
+                                </Border>
+                                <TextBlock FontSize="12" Foreground="#888888">
+                                    <Run Text="{Binding PackSeleccionado.CantidadProductos}"/>
+                                    <Run Text=" productos incluidos"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Info del Cliente -->
+                    <Border Background="#E8F4FD" CornerRadius="10" Padding="20">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Cliente:" FontSize="12" Foreground="#666666"/>
+                            <TextBlock Text="{Binding ClienteSeleccionadoNombre}" 
+                                       FontSize="17" 
+                                       FontWeight="SemiBold"
+                                       Foreground="#0b5394"/>
+                            <TextBlock Text="{Binding ClienteSeleccionadoDocumento}" 
+                                       FontSize="14"
+                                       Foreground="#555555"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Resumen -->
+                    <Border Background="#E8F5E9" CornerRadius="8" Padding="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Total a pagar:"
+                                       FontSize="16"
+                                       Foreground="#2E7D32"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding PackSeleccionado.PrecioFormateado}"
+                                       FontSize="24"
+                                       FontWeight="Bold"
+                                       Foreground="#1B5E20"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+                
+                <!-- Footer con botones -->
+                <Border Grid.Row="2" 
+                        Padding="28,20" 
+                        Background="#FAFAFA"
+                        BorderBrush="#E0E0E0" 
+                        BorderThickness="0,1,0,0"
+                        CornerRadius="0,0,12,12">
+                    <Grid ColumnDefinitions="*,*">
+                        <Button Grid.Column="0"
+                                Content="Cancelar"
+                                Background="#E0E0E0"
+                                Foreground="#333333"
+                                Padding="20,14"
+                                CornerRadius="8"
+                                Margin="0,0,10,0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                FontSize="15"
+                                Cursor="Hand"
+                                Command="{Binding CancelarCompraCommand}"/>
+                        <Button Grid.Column="1"
+                                Content="Confirmar Compra"
+                                Background="#28a745"
+                                Foreground="White"
+                                Padding="20,14"
+                                CornerRadius="8"
+                                Margin="10,0,0,0"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Center"
+                                FontWeight="Bold"
+                                FontSize="15"
+                                Cursor="Hand"
+                                Command="{Binding ConfirmarCompraCommand}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+    </Border>
+
+</UserControl>

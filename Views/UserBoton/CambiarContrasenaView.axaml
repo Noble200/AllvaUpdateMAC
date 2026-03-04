@@ -1,0 +1,127 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="520"
+        x:Class="Allva.Desktop.Views.UserBoton.CambiarContrasenaView"
+        Title="Cambiar Contrasena"
+        Width="550"
+        Height="520"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        Background="#F5F5F5">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" Background="#0b5394" Padding="20,16">
+            <TextBlock Text="Cambiar Contrasena"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="White"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <StackPanel Grid.Row="1" Margin="40" Spacing="25" VerticalAlignment="Center">
+
+            <!-- Icono de email -->
+            <Border Background="#E3F2FD"
+                    Width="100" Height="100"
+                    CornerRadius="50"
+                    HorizontalAlignment="Center">
+                <TextBlock Text="@"
+                           FontSize="48"
+                           FontWeight="Bold"
+                           Foreground="#0b5394"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+            </Border>
+
+            <!-- Mensaje -->
+            <StackPanel Spacing="14" HorizontalAlignment="Center">
+                <TextBlock Text="Recuperacion por correo electronico"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="#333333"
+                           HorizontalAlignment="Center"/>
+
+                <TextBlock Text="Se enviara un codigo de verificacion a tu correo registrado para que puedas cambiar tu contrasena."
+                           FontSize="15"
+                           Foreground="#666666"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"
+                           MaxWidth="420"/>
+            </StackPanel>
+
+            <!-- Email destino -->
+            <Border Background="White"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="20">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Correo de destino:"
+                               FontSize="14"
+                               Foreground="#808080"/>
+                    <TextBlock x:Name="EmailDestinoText"
+                               Text="usuario@ejemplo.com"
+                               FontSize="18"
+                               FontWeight="SemiBold"
+                               Foreground="#0b5394"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Mensaje de estado -->
+            <TextBlock x:Name="MensajeEstado"
+                       Text=""
+                       FontSize="15"
+                       Foreground="#008800"
+                       HorizontalAlignment="Center"
+                       IsVisible="False"/>
+
+            <!-- Indicador de carga -->
+            <StackPanel x:Name="LoadingPanel"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="10"
+                        IsVisible="False">
+                <TextBlock Text="Enviando correo..."
+                           FontSize="15"
+                           Foreground="#666666"/>
+            </StackPanel>
+
+        </StackPanel>
+
+        <!-- BOTONES -->
+        <Border Grid.Row="2" Background="White" Padding="25,20" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <Button x:Name="CancelarBtn"
+                        Grid.Column="1"
+                        Content="Cancelar"
+                        Background="White"
+                        Foreground="#666666"
+                        BorderBrush="#CCCCCC"
+                        BorderThickness="1"
+                        Padding="28,14"
+                        FontSize="15"
+                        CornerRadius="6"
+                        Margin="0,0,15,0"
+                        Click="Cancelar_Click"
+                        Cursor="Hand"/>
+
+                <Button x:Name="EnviarBtn"
+                        Grid.Column="2"
+                        Content="Enviar Codigo"
+                        Background="#0b5394"
+                        Foreground="White"
+                        BorderThickness="0"
+                        Padding="28,14"
+                        FontSize="15"
+                        CornerRadius="6"
+                        Click="Enviar_Click"
+                        Cursor="Hand"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

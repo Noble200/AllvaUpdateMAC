@@ -1,0 +1,230 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels"
+             xmlns:models="using:Allva.Desktop.Models"
+             x:Class="Allva.Desktop.Views.PanelBilletes.BusquedaVuelosView"
+             x:DataType="vm:FlightTicketsViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button.btn-buscar">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="30,12"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style Selector="Button.btn-buscar:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+        <Style Selector="Button.btn-swap">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="Button.btn-swap:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+        <Style Selector="AutoCompleteBox">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="MinimumPrefixLength" Value="1"/>
+            <Setter Property="FilterMode" Value="Contains"/>
+            <Setter Property="MaxDropDownHeight" Value="200"/>
+        </Style>
+        <Style Selector="Button.btn-pasajero">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#0b5394"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Width" Value="32"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style Selector="Button.btn-pasajero:pointerover">
+            <Setter Property="Background" Value="#E8F0FE"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Border Background="#FFD966" Padding="0">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel VerticalAlignment="Center" MinHeight="600">
+
+                <!-- ============ CONTENEDOR CENTRAL ============ -->
+                <StackPanel Spacing="0" HorizontalAlignment="Center" Width="820" Margin="0,40,0,40">
+
+                    <!-- ============ HERO IMAGE ============ -->
+                    <Border Background="#3B2A1A" CornerRadius="12,12,0,0" Height="240"
+                            BoxShadow="0 2 8 0 #20000000">
+                        <Grid>
+                            <Border Background="#50000000" CornerRadius="12,12,0,0"/>
+                            <TextBlock Text="&#x2708;" FontSize="50" Foreground="#40FFFFFF"
+                                       HorizontalAlignment="Right" VerticalAlignment="Top"
+                                       Margin="0,20,30,0" Opacity="0.3"/>
+                            <TextBlock Text="&#x2708;" FontSize="35" Foreground="#40FFFFFF"
+                                       HorizontalAlignment="Left" VerticalAlignment="Bottom"
+                                       Margin="30,0,0,40" Opacity="0.2"
+                                       RenderTransformOrigin="50%,50%">
+                                <TextBlock.RenderTransform>
+                                    <RotateTransform Angle="-20"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="6">
+                                <TextBlock Text="&#x2708;" FontSize="36" Foreground="#FFC600"
+                                           HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                                <TextBlock Text="Gestiona la compra de vuelos"
+                                           FontSize="24" FontWeight="Bold" Foreground="White"
+                                           TextAlignment="Center"/>
+                                <TextBlock Text="con nosotros: la opcion mas sencilla"
+                                           FontSize="24" FontWeight="Bold" Foreground="White"
+                                           TextAlignment="Center"/>
+                                <TextBlock Text="para tu negocio."
+                                           FontSize="14" Foreground="#CCCCCC"
+                                           TextAlignment="Center" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ============ BARRA DE BUSQUEDA ============ -->
+                    <Border Background="White" CornerRadius="0,0,12,12" Padding="24,20"
+                            BoxShadow="0 4 16 0 #30000000">
+                        <StackPanel Spacing="16">
+
+                            <!-- Fila 1: Origen + Swap + Destino -->
+                            <Grid ColumnDefinitions="*,60,*" RowDefinitions="Auto,Auto">
+
+                                <!-- Label Origen -->
+                                <TextBlock Grid.Column="0" Grid.Row="0"
+                                           Text="&#x2708;  Desde donde" FontSize="12" Foreground="#0b5394"
+                                           FontWeight="Bold" Margin="0,0,0,4"/>
+
+                                <!-- Label Destino -->
+                                <TextBlock Grid.Column="2" Grid.Row="0"
+                                           Text="&#x1F4CD;  Elegir destino" FontSize="12" Foreground="#0b5394"
+                                           FontWeight="Bold" Margin="0,0,0,4"/>
+
+                                <!-- AutoCompleteBox Origen -->
+                                <AutoCompleteBox Grid.Column="0" Grid.Row="1"
+                                                 ItemsSource="{Binding Aeropuertos}"
+                                                 SelectedItem="{Binding OrigenSeleccionado}"
+                                                 Watermark="Escribe ciudad o pais..."
+                                                 FilterMode="Contains"
+                                                 MinimumPrefixLength="1"
+                                                 Height="40"/>
+
+                                <!-- Boton SWAP centrado entre los inputs -->
+                                <Button Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Classes="btn-swap"
+                                        Command="{Binding IntercambiarOrigenDestinoCommand}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        Content="&#x21C4;"/>
+
+
+                                <!-- AutoCompleteBox Destino -->
+                                <AutoCompleteBox Grid.Column="2" Grid.Row="1"
+                                                 ItemsSource="{Binding Aeropuertos}"
+                                                 SelectedItem="{Binding DestinoSeleccionado}"
+                                                 Watermark="Escribe ciudad o pais..."
+                                                 FilterMode="Contains"
+                                                 MinimumPrefixLength="1"
+                                                 Height="40"/>
+                            </Grid>
+
+                            <!-- Separador -->
+                            <Border Height="1" Background="#E8E8E8"/>
+
+                            <!-- Fila 2: Personas + Buscar -->
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <StackPanel Grid.Column="0" Spacing="4">
+                                    <TextBlock Text="&#x1F464;  Pasajeros" FontSize="12" Foreground="#0b5394"
+                                               FontWeight="Bold"/>
+                                    <Panel>
+                                        <Button Background="White" BorderBrush="#CCCCCC" BorderThickness="1"
+                                                CornerRadius="6" Height="40" Padding="12,0" MinWidth="160"
+                                                Command="{Binding ToggleSelectorPasajerosCommand}" Cursor="Hand">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding TextoPasajeros, FallbackValue='1 Persona'}" FontSize="13"
+                                                           Foreground="#333333" VerticalAlignment="Center"/>
+                                                <TextBlock Text="&#x25BE;" FontSize="12" VerticalAlignment="Center"
+                                                           Foreground="#0b5394"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Popup IsOpen="{Binding MostrarSelectorPasajeros}"
+                                               PlacementTarget="{Binding $parent[Panel]}"
+                                               Placement="Bottom"
+                                               IsLightDismissEnabled="True">
+                                            <Border Background="White" BorderBrush="#CCCCCC" BorderThickness="1"
+                                                    CornerRadius="10" BoxShadow="0 4 16 0 #20000000"
+                                                    Padding="20" Width="300">
+                                                <StackPanel Spacing="14">
+                                                    <TextBlock Text="Seleccionar pasajeros" FontSize="14" FontWeight="Bold"
+                                                               Foreground="#0b5394"/>
+                                                    <Border Height="1" Background="#E8E8E8"/>
+                                                    <Grid ColumnDefinitions="*,Auto">
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock Text="Adulto" FontSize="14" FontWeight="Bold" Foreground="#333333"/>
+                                                            <TextBlock Text="Mayor de 11 anos" FontSize="11" Foreground="#999999"/>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                                            <Button Classes="btn-pasajero" Content="&#x2212;" Command="{Binding DecrementarAdultosCommand}"/>
+                                                            <TextBlock Text="{Binding Adultos, FallbackValue='1'}" FontSize="16" FontWeight="SemiBold"
+                                                                       Foreground="#0b5394" VerticalAlignment="Center" Width="24" TextAlignment="Center"/>
+                                                            <Button Classes="btn-pasajero" Content="+" Command="{Binding IncrementarAdultosCommand}"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <Border Height="1" Background="#F0F0F0"/>
+                                                    <Grid ColumnDefinitions="*,Auto">
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock Text="Ninos" FontSize="14" FontWeight="Bold" Foreground="#333333"/>
+                                                            <TextBlock Text="De 2 a 11 anos" FontSize="11" Foreground="#999999"/>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                                            <Button Classes="btn-pasajero" Content="&#x2212;" Command="{Binding DecrementarNinosCommand}"/>
+                                                            <TextBlock Text="{Binding Ninos, FallbackValue='0'}" FontSize="16" FontWeight="SemiBold"
+                                                                       Foreground="#0b5394" VerticalAlignment="Center" Width="24" TextAlignment="Center"/>
+                                                            <Button Classes="btn-pasajero" Content="+" Command="{Binding IncrementarNinosCommand}"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                    <Border Height="1" Background="#F0F0F0"/>
+                                                    <Grid ColumnDefinitions="*,Auto">
+                                                        <StackPanel Grid.Column="0">
+                                                            <TextBlock Text="Bebes" FontSize="14" FontWeight="Bold" Foreground="#333333"/>
+                                                            <TextBlock Text="Menor de 2 anos" FontSize="11" Foreground="#999999"/>
+                                                        </StackPanel>
+                                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                                            <Button Classes="btn-pasajero" Content="&#x2212;" Command="{Binding DecrementarBebesCommand}"/>
+                                                            <TextBlock Text="{Binding Bebes, FallbackValue='0'}" FontSize="16" FontWeight="SemiBold"
+                                                                       Foreground="#0b5394" VerticalAlignment="Center" Width="24" TextAlignment="Center"/>
+                                                            <Button Classes="btn-pasajero" Content="+" Command="{Binding IncrementarBebesCommand}"/>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Border>
+                                        </Popup>
+                                    </Panel>
+                                </StackPanel>
+
+                                <Button Grid.Column="2" Classes="btn-buscar" Content="&#x1F50D;  Buscar vuelos"
+                                        Command="{Binding IrACalendarioCommand}"
+                                        VerticalAlignment="Bottom" Padding="30,10"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+
+</UserControl>

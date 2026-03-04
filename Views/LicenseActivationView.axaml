@@ -1,0 +1,108 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Allva.Desktop.ViewModels"
+        x:Class="Allva.Desktop.Views.LicenseActivationView"
+        x:DataType="vm:LicenseActivationViewModel"
+        Title="Activación de Allva System"
+        Width="600" Height="500"
+        WindowStartupLocation="CenterScreen"
+        CanResize="False"
+        Background="#F5F5F5">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource PrimaryBlue}" Padding="30,40">
+            <StackPanel Spacing="10">
+                <TextBlock Text="Allva" 
+                           FontFamily="Lobster"
+                           FontSize="48" 
+                           FontWeight="Bold" 
+                           Foreground="{StaticResource PrimaryYellow}"
+                           HorizontalAlignment="Center"/>
+                <TextBlock Text="Sistema de Gestión Empresarial" 
+                           FontSize="14" 
+                           Foreground="White"
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Grid.Row="1" Margin="40,30" Spacing="20">
+            <TextBlock Text="Activación de Licencia" 
+                       FontSize="24" 
+                       FontWeight="SemiBold" 
+                       Foreground="{StaticResource PrimaryBlue}"/>
+
+            <TextBlock Text="Por favor, ingrese su código de licencia para activar Allva System en este equipo." 
+                       TextWrapping="Wrap" 
+                       Foreground="#666666"
+                       FontSize="14"/>
+
+            <StackPanel Spacing="8">
+                <TextBlock Text="Código de Licencia" 
+                           FontWeight="Medium" 
+                           Foreground="#333333"/>
+                <TextBox Text="{Binding CodigoLicencia}"
+                         Watermark="ALLVA-XXXX-XXXX-XXXX"
+                         FontSize="16"
+                         Padding="12"
+                         CornerRadius="4"
+                         BorderBrush="{StaticResource PrimaryBlue}"
+                         BorderThickness="2"/>
+            </StackPanel>
+
+            <Border IsVisible="{Binding MostrarMensaje}"
+                    Background="{Binding ColorMensaje}"
+                    CornerRadius="4"
+                    Padding="12">
+                <TextBlock Text="{Binding Mensaje}" 
+                           Foreground="White"
+                           TextWrapping="Wrap"
+                           FontSize="14"/>
+            </Border>
+
+            <StackPanel Orientation="Horizontal" 
+                        Spacing="10"
+                        HorizontalAlignment="Center"
+                        IsVisible="{Binding Validando}">
+                <TextBlock Text="⏳" FontSize="20"/>
+                <TextBlock Text="Validando licencia..." 
+                           Foreground="{StaticResource PrimaryBlue}"
+                           FontSize="14"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Border Grid.Row="2" Background="White" Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                        Content="Salir"
+                        Command="{Binding SalirCommand}"
+                        Background="{StaticResource DangerRed}"
+                        Foreground="White"
+                        Padding="20,10"
+                        CornerRadius="4"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Left"/>
+
+                <Button Grid.Column="1"
+                        Content="Activar"
+                        Command="{Binding ActivarCommand}"
+                        Background="{StaticResource PrimaryBlue}"
+                        Foreground="White"
+                        Padding="30,10"
+                        CornerRadius="4"
+                        FontWeight="SemiBold"
+                        IsEnabled="{Binding !Validando}"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

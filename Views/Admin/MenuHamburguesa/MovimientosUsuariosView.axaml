@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.MovimientosUsuariosView">
+
+    <Grid>
+        <StackPanel VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Spacing="16">
+            <TextBlock Text="Movimientos Usuarios"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#0b5394"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Text="Panel en desarrollo"
+                       FontSize="16"
+                       Foreground="#888888"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+
+</UserControl>

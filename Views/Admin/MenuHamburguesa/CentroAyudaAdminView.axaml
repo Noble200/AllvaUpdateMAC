@@ -1,0 +1,396 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.CentroAyudaAdminView"
+             x:DataType="vm:CentroAyudaAdminViewModel">
+
+    <UserControl.DataContext>
+        <vm:CentroAyudaAdminViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#F8F9FA"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style Selector="TextBox:focus">
+            <Setter Property="BorderBrush" Value="#0b5394"/>
+        </Style>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+        <Style Selector="Button.primary-small">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.primary-small:pointerover">
+            <Setter Property="Background" Value="#084171"/>
+        </Style>
+        <Style Selector="Button.secondary-small">
+            <Setter Property="Background" Value="#F3F4F6"/>
+            <Setter Property="Foreground" Value="#374151"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#D1D5DB"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.secondary-small:pointerover">
+            <Setter Property="Background" Value="#E5E7EB"/>
+        </Style>
+        <Style Selector="Button.danger">
+            <Setter Property="Background" Value="#FEE2E2"/>
+            <Setter Property="Foreground" Value="#DC2626"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.danger:pointerover">
+            <Setter Property="Background" Value="#FECACA"/>
+        </Style>
+        <Style Selector="Button.danger-small">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#DC2626"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.danger-small:pointerover">
+            <Setter Property="Background" Value="#FEE2E2"/>
+        </Style>
+        <Style Selector="Button.expand-btn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.expand-btn:pointerover">
+            <Setter Property="Background" Value="#E5E7EB"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0"
+                Background="#F8F9FA"
+                Padding="24,16"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,0,0,1">
+            <StackPanel Spacing="4">
+                <TextBlock Text="Centro de Ayuda"
+                           FontSize="20"
+                           FontWeight="SemiBold"
+                           Foreground="#0b5394"/>
+                <TextBlock Text="Configura los telefonos de contacto, preguntas frecuentes y el manual de usuario para el Front Office"
+                           FontSize="13"
+                           Foreground="#666666"/>
+            </StackPanel>
+        </Border>
+
+        <!-- CONTENIDO -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="24" Spacing="24">
+
+                <!-- Seccion Manual PDF -->
+                <Border Background="White"
+                        CornerRadius="10"
+                        Padding="20"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="Manual de Usuario"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="#333333"/>
+                        <TextBlock Text="Sube el archivo PDF del manual de usuario"
+                                   FontSize="13"
+                                   Foreground="#666666"/>
+
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                            <!-- Nombre del archivo o mensaje -->
+                            <Border Grid.Column="0"
+                                    Background="#F8F9FA"
+                                    BorderBrush="#E0E0E0"
+                                    BorderThickness="1"
+                                    CornerRadius="6"
+                                    Padding="12,10"
+                                    Margin="0,0,12,0">
+                                <TextBlock Text="{Binding NombreArchivoPdf}"
+                                           FontSize="14"
+                                           Foreground="#666666"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Boton seleccionar archivo -->
+                            <Button Grid.Column="1"
+                                    Content="Seleccionar PDF"
+                                    Classes="primary"
+                                    Command="{Binding SeleccionarPdfCommand}"/>
+                        </Grid>
+
+                        <!-- Boton eliminar PDF si existe -->
+                        <Button Content="Eliminar PDF"
+                                Classes="danger"
+                                HorizontalAlignment="Left"
+                                Padding="12,8"
+                                FontSize="13"
+                                IsVisible="{Binding TienePdf}"
+                                Command="{Binding EliminarPdfCommand}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Seccion Telefonos -->
+                <Border Background="White"
+                        CornerRadius="10"
+                        Padding="20"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1">
+                    <StackPanel Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Telefonos de Contacto"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="#333333"/>
+                                <TextBlock Text="Telefonos visibles en el Centro de Ayuda del Front Office"
+                                           FontSize="13"
+                                           Foreground="#666666"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Content="+ Agregar Telefono"
+                                    Classes="primary"
+                                    Command="{Binding AgregarTelefonoCommand}"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Lista de telefonos -->
+                        <ItemsControl ItemsSource="{Binding Telefonos}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#F8F9FA"
+                                            CornerRadius="8"
+                                            Padding="16"
+                                            Margin="0,0,0,8">
+                                        <StackPanel Spacing="16">
+                                            <!-- Fila 1: Nombre -->
+                                            <StackPanel Spacing="4">
+                                                <TextBlock Text="Nombre" FontSize="12" Foreground="#666666"/>
+                                                <TextBox Text="{Binding Nombre, Mode=TwoWay}"
+                                                         Watermark="Ej: Soporte General"/>
+                                            </StackPanel>
+
+                                            <!-- Fila 2: Movil + Boton Eliminar -->
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <StackPanel Grid.Column="0" Spacing="4">
+                                                    <TextBlock Text="Movil" FontSize="12" Foreground="#666666"/>
+                                                    <TextBox Text="{Binding Numero, Mode=TwoWay}"
+                                                             Watermark="Ej: +34 900 123 456"/>
+                                                </StackPanel>
+                                                <Button Grid.Column="1"
+                                                        Content="Eliminar"
+                                                        Classes="danger"
+                                                        VerticalAlignment="Bottom"
+                                                        Margin="16,0,0,0"
+                                                        Padding="12,8"
+                                                        FontSize="13"
+                                                        Command="{Binding $parent[ItemsControl].((vm:CentroAyudaAdminViewModel)DataContext).EliminarTelefonoCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Mensaje si no hay telefonos -->
+                        <Border Background="#FFF8E8"
+                                CornerRadius="8"
+                                Padding="16"
+                                IsVisible="{Binding !Telefonos.Count}">
+                            <TextBlock Text="No hay telefonos configurados. Agrega uno usando el boton de arriba."
+                                       FontSize="13"
+                                       Foreground="#B45309"
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Seccion Preguntas Frecuentes -->
+                <Border Background="White"
+                        CornerRadius="10"
+                        Padding="20"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1">
+                    <StackPanel Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Grid.Column="0" Spacing="4">
+                                <TextBlock Text="Preguntas Frecuentes (FAQ)"
+                                           FontSize="16"
+                                           FontWeight="SemiBold"
+                                           Foreground="#333333"/>
+                                <TextBlock Text="Agrega preguntas con sus respuestas. Cada pregunta puede tener multiples respuestas."
+                                           FontSize="13"
+                                           Foreground="#666666"/>
+                            </StackPanel>
+                            <Button Grid.Column="1"
+                                    Content="+ Agregar Pregunta"
+                                    Classes="primary"
+                                    Command="{Binding AgregarPreguntaCommand}"
+                                    VerticalAlignment="Center"/>
+                        </Grid>
+
+                        <!-- Lista de preguntas -->
+                        <ItemsControl ItemsSource="{Binding PreguntasFrecuentes}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:PreguntaFrecuenteEditable">
+                                    <Border Background="#F8F9FA"
+                                            CornerRadius="8"
+                                            Padding="16"
+                                            Margin="0,0,0,12"
+                                            BorderBrush="#E0E0E0"
+                                            BorderThickness="1">
+                                        <StackPanel Spacing="12">
+                                            <!-- Header de la pregunta -->
+                                            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                                                <!-- Boton expandir/colapsar -->
+                                                <Button Grid.Column="0"
+                                                        Classes="expand-btn"
+                                                        Command="{Binding $parent[ItemsControl].((vm:CentroAyudaAdminViewModel)DataContext).ToggleExpandirPreguntaCommand}"
+                                                        CommandParameter="{Binding Id}"
+                                                        Margin="0,0,8,0">
+                                                    <TextBlock Text="{Binding EstaExpandida, Converter={StaticResource BoolToExpandIconConverter}}"
+                                                               FontSize="10"
+                                                               Foreground="#666666"/>
+                                                </Button>
+
+                                                <!-- Campo de pregunta -->
+                                                <StackPanel Grid.Column="1" Spacing="4">
+                                                    <TextBlock Text="Pregunta" FontSize="11" Foreground="#666666"/>
+                                                    <TextBox Text="{Binding Pregunta, Mode=TwoWay}"
+                                                             Watermark="Escribe la pregunta..."
+                                                             FontWeight="Medium"/>
+                                                </StackPanel>
+
+                                                <!-- Boton agregar respuesta -->
+                                                <Button Grid.Column="2"
+                                                        Content="+ Respuesta"
+                                                        Classes="primary-small"
+                                                        Margin="12,0,8,0"
+                                                        VerticalAlignment="Bottom"
+                                                        Command="{Binding $parent[ItemsControl].((vm:CentroAyudaAdminViewModel)DataContext).AgregarRespuestaCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+
+                                                <!-- Boton eliminar pregunta -->
+                                                <Button Grid.Column="3"
+                                                        Content="Eliminar"
+                                                        Classes="danger-small"
+                                                        VerticalAlignment="Bottom"
+                                                        Command="{Binding $parent[ItemsControl].((vm:CentroAyudaAdminViewModel)DataContext).EliminarPreguntaCommand}"
+                                                        CommandParameter="{Binding Id}"/>
+                                            </Grid>
+
+                                            <!-- Contador de respuestas (siempre visible) -->
+                                            <TextBlock Text="{Binding Respuestas.Count, StringFormat='({0} respuesta(s))'}"
+                                                       FontSize="11"
+                                                       Foreground="#9CA3AF"
+                                                       Margin="28,0,0,0"/>
+
+                                            <!-- Lista de respuestas (expandible) -->
+                                            <Border IsVisible="{Binding EstaExpandida}"
+                                                    Background="#FFFFFF"
+                                                    CornerRadius="6"
+                                                    Padding="12"
+                                                    Margin="28,0,0,0"
+                                                    BorderBrush="#E5E7EB"
+                                                    BorderThickness="1">
+                                                <StackPanel Spacing="8">
+                                                    <TextBlock Text="Respuestas:"
+                                                               FontSize="12"
+                                                               FontWeight="Medium"
+                                                               Foreground="#374151"/>
+
+                                                    <ItemsControl ItemsSource="{Binding Respuestas}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate x:DataType="vm:RespuestaEditable">
+                                                                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                                                                    <TextBox Grid.Column="0"
+                                                                             Text="{Binding Respuesta, Mode=TwoWay}"
+                                                                             Watermark="Escribe la respuesta..."
+                                                                             TextWrapping="Wrap"
+                                                                             AcceptsReturn="True"
+                                                                             MinHeight="60"/>
+                                                                    <Button Grid.Column="1"
+                                                                            Content="X"
+                                                                            Classes="danger-small"
+                                                                            Margin="8,0,0,0"
+                                                                            VerticalAlignment="Top"
+                                                                            Command="{Binding $parent[ItemsControl;1].((vm:CentroAyudaAdminViewModel)DataContext).EliminarRespuestaCommand}"
+                                                                            CommandParameter="{Binding}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+
+                                                    <!-- Mensaje si no hay respuestas -->
+                                                    <TextBlock Text="No hay respuestas. Agrega una usando el boton '+ Respuesta'."
+                                                               FontSize="12"
+                                                               Foreground="#9CA3AF"
+                                                               FontStyle="Italic"
+                                                               IsVisible="{Binding !Respuestas.Count}"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Mensaje si no hay preguntas -->
+                        <Border Background="#FFF8E8"
+                                CornerRadius="8"
+                                Padding="16"
+                                IsVisible="{Binding !PreguntasFrecuentes.Count}">
+                            <TextBlock Text="No hay preguntas frecuentes configuradas. Agrega una usando el boton de arriba."
+                                       FontSize="13"
+                                       Foreground="#B45309"
+                                       HorizontalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Boton guardar -->
+                <Button Content="Guardar Cambios"
+                        Classes="primary"
+                        HorizontalAlignment="Right"
+                        Command="{Binding GuardarCommand}"/>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+
+</UserControl>

@@ -1,0 +1,404 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             xmlns:i="https://github.com/avaloniaui"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+             x:Class="Allva.Desktop.Views.Admin.MenuHamburguesa.ContrasenaAdminFrontView"
+             x:DataType="vm:ContrasenaAdminFrontViewModel">
+
+    <UserControl.Styles>
+        <!-- Estilos de botones -->
+        <Style Selector="Button.btn-primary">
+            <Setter Property="Background" Value="#003366"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-primary:pointerover">
+            <Setter Property="Background" Value="#f5c94b"/>
+            <Setter Property="Foreground" Value="#003366"/>
+        </Style>
+
+        <Style Selector="Button.btn-secondary">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#003366"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#003366"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-secondary:pointerover">
+            <Setter Property="Background" Value="#003366"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+        <Style Selector="Button.btn-action">
+            <Setter Property="Background" Value="#003366"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-action:pointerover">
+            <Setter Property="Background" Value="#f5c94b"/>
+            <Setter Property="Foreground" Value="#003366"/>
+        </Style>
+
+        <Style Selector="Button.btn-copy">
+            <Setter Property="Background" Value="#28a745"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.btn-copy:pointerover">
+            <Setter Property="Background" Value="#218838"/>
+        </Style>
+
+        <!-- Estilos de items de lista -->
+        <Style Selector="Border.comercio-item">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#e0e0e0"/>
+            <Setter Property="Padding" Value="20,16"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Border.comercio-item:pointerover">
+            <Setter Property="Background" Value="#f8f9fa"/>
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="14"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#ccc"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER CON ESTADÍSTICAS -->
+        <Border Grid.Row="0" Background="White"
+                BorderThickness="0,0,0,1" BorderBrush="#e0e0e0"
+                Padding="32,28">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Estadísticas -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="50">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Total Comercios"
+                                   FontSize="16" FontWeight="SemiBold" Foreground="#666"/>
+                        <TextBlock Text="{Binding TotalComercios}"
+                                   FontSize="36" FontWeight="Bold" Foreground="#003366"/>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Con Contraseña"
+                                   FontSize="16" FontWeight="SemiBold" Foreground="#666"/>
+                        <TextBlock Text="{Binding ComerciosConContrasena}"
+                                   FontSize="36" FontWeight="Bold" Foreground="#28a745"/>
+                    </StackPanel>
+
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="Sin Contraseña"
+                                   FontSize="16" FontWeight="SemiBold" Foreground="#666"/>
+                        <TextBlock Text="{Binding ComerciosSinContrasena}"
+                                   FontSize="36" FontWeight="Bold" Foreground="#dc3545"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Botón Recargar -->
+                <Button Grid.Column="1"
+                        Classes="btn-primary"
+                        Command="{Binding CargarComerciosCommand}">
+                    <TextBlock Text="RECARGAR" FontSize="16"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <Grid Grid.Row="1">
+            <!-- ÁREA DE LISTA -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="32,28" Spacing="28">
+
+                    <!-- BUSCADOR -->
+                    <Border Background="White" CornerRadius="10" Padding="28"
+                            BoxShadow="0 2 8 0 #10000000">
+                        <StackPanel Spacing="16">
+                            <TextBlock Text="Buscar Comercio"
+                                       FontSize="20" FontWeight="Bold" Foreground="#003366"/>
+                            <TextBox Text="{Binding FiltroBusqueda}"
+                                     Watermark="Buscar por nombre de comercio..."
+                                     Height="48"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- LISTA DE COMERCIOS -->
+                    <Border Background="White" CornerRadius="10"
+                            BoxShadow="0 2 8 0 #10000000">
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding ComerciosFiltrados}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button Background="Transparent"
+                                                BorderThickness="0"
+                                                Padding="0"
+                                                HorizontalAlignment="Stretch"
+                                                HorizontalContentAlignment="Stretch"
+                                                Command="{Binding $parent[UserControl].((vm:ContrasenaAdminFrontViewModel)DataContext).SeleccionarComercioCommand}"
+                                                CommandParameter="{Binding}">
+                                            <Border Classes="comercio-item">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <!-- Información del comercio -->
+                                                <StackPanel Grid.Column="0" Spacing="6">
+                                                    <TextBlock Text="{Binding NombreComercio}"
+                                                               FontSize="18" FontWeight="Bold"
+                                                               Foreground="#003366"/>
+                                                    <TextBlock FontSize="14" Foreground="#666">
+                                                        <Run Text="País:" FontWeight="SemiBold"/>
+                                                        <Run Text="{Binding Pais}"/>
+                                                    </TextBlock>
+                                                </StackPanel>
+
+                                                <!-- Indicador -->
+                                                <Border Grid.Column="1"
+                                                        Background="{Binding ColorEstado}"
+                                                        Width="12" Height="12"
+                                                        CornerRadius="6"
+                                                        VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Mensaje sin resultados -->
+                            <StackPanel IsVisible="{Binding !ComerciosFiltrados.Count}"
+                                        Spacing="20"
+                                        Margin="50"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="No se encontraron comercios"
+                                           FontSize="18" FontWeight="SemiBold" Foreground="#666"
+                                           HorizontalAlignment="Center"/>
+                                <TextBlock Text="Intenta ajustar la búsqueda"
+                                           FontSize="15" Foreground="#999"
+                                           HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- PANEL LATERAL DERECHO -->
+            <Border IsVisible="{Binding MostrarPanelDetalle}"
+                    Background="#80000000"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <Grid HorizontalAlignment="Right" VerticalAlignment="Stretch">
+                    <Border Background="White"
+                            BorderThickness="1,0,0,0"
+                            BorderBrush="#e0e0e0"
+                            MinWidth="500"
+                            MaxWidth="600"
+                            Width="550"
+                            VerticalAlignment="Stretch">
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Header del panel -->
+                            <Border Grid.Row="0" Background="#003366" Padding="24,20">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0"
+                                               Text="Gestión de Contraseña"
+                                               FontSize="18" FontWeight="Bold"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"/>
+                                    <Button Grid.Column="1"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Command="{Binding CerrarPanelDetalleCommand}"
+                                            Cursor="Hand"
+                                            VerticalAlignment="Center">
+                                        <TextBlock Text="✕" FontSize="20" Foreground="White" FontWeight="Bold"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+
+                            <!-- Contenido del panel -->
+                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <StackPanel Margin="28" Spacing="28">
+
+                                    <!-- Información del comercio -->
+                                    <Border Background="#f8f9fa" CornerRadius="8" Padding="24">
+                                        <StackPanel Spacing="16">
+                                            <TextBlock Text="{Binding ComercioSeleccionado.NombreComercio}"
+                                                       FontSize="22" FontWeight="Bold"
+                                                       Foreground="#003366"/>
+
+                                            <StackPanel Spacing="8">
+                                                <TextBlock FontSize="15" Foreground="#666">
+                                                    <Run Text="País:" FontWeight="SemiBold"/>
+                                                    <Run Text="{Binding ComercioSeleccionado.Pais}"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="15" Foreground="#666">
+                                                    <Run Text="Correo:" FontWeight="SemiBold"/>
+                                                    <Run Text="{Binding ComercioSeleccionado.MailContacto}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Contraseña -->
+                                    <Border Background="#f8f9fa"
+                                            BorderBrush="#003366"
+                                            BorderThickness="2"
+                                            CornerRadius="8"
+                                            Padding="24">
+                                        <StackPanel Spacing="16">
+                                            <TextBlock Text="Contraseña"
+                                                       FontSize="18" FontWeight="Bold"
+                                                       Foreground="#003366"/>
+
+                                            <!-- Campo de texto para contraseña -->
+                                            <TextBox Text="{Binding ContrasenaEditando}"
+                                                     FontSize="20"
+                                                     Padding="16"
+                                                     Watermark="Ingrese o genere una contraseña..."
+                                                     MaxLength="50"/>
+
+                                            <!-- Botón Generar Aleatoria -->
+                                            <Button Classes="btn-secondary"
+                                                    Command="{Binding GenerarContrasenaAleatoriaCommand}"
+                                                    HorizontalAlignment="Stretch">
+                                                <TextBlock Text="GENERAR ALEATORIA"
+                                                           FontSize="14"
+                                                           FontWeight="Bold"/>
+                                            </Button>
+
+                                            <!-- Fechas -->
+                                            <StackPanel Spacing="6"
+                                                        Margin="0,8,0,0"
+                                                        IsVisible="{Binding ComercioSeleccionado.TieneContrasena}">
+                                                <TextBlock Text="Contraseña actual guardada:"
+                                                           FontSize="14"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#28a745"/>
+                                                <TextBlock FontSize="13" Foreground="#666">
+                                                    <Run Text="Creada:" FontWeight="SemiBold"/>
+                                                    <Run Text="{Binding ComercioSeleccionado.FechaCreacionTexto}"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="13" Foreground="#666">
+                                                    <Run Text="Última modificación:" FontWeight="SemiBold"/>
+                                                    <Run Text="{Binding ComercioSeleccionado.FechaModificacionTexto}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Botón Guardar -->
+                                    <Button Classes="btn-primary"
+                                            Command="{Binding GuardarContrasenaCommand}"
+                                            HorizontalAlignment="Stretch">
+                                        <TextBlock Text="GUARDAR CONTRASEÑA"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"/>
+                                    </Button>
+
+                                </StackPanel>
+                            </ScrollViewer>
+
+                            <!-- Footer -->
+                            <Border Grid.Row="2"
+                                    Background="#f8f9fa"
+                                    BorderThickness="0,1,0,0"
+                                    BorderBrush="#e0e0e0"
+                                    Padding="28,20">
+                                <Button Classes="btn-secondary"
+                                        Command="{Binding CerrarPanelDetalleCommand}"
+                                        HorizontalAlignment="Center"
+                                        MinWidth="150">
+                                    <TextBlock Text="CERRAR"/>
+                                </Button>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- INDICADOR DE CARGA -->
+        <Border IsVisible="{Binding Cargando}"
+                Background="#80000000"
+                Grid.Row="0"
+                Grid.RowSpan="2">
+            <Border Background="White"
+                    CornerRadius="12"
+                    Padding="50"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    BoxShadow="0 8 24 0 #40000000">
+                <StackPanel Spacing="24" HorizontalAlignment="Center">
+                    <TextBlock Text="Procesando..."
+                               FontSize="20" FontWeight="SemiBold"
+                               Foreground="#003366"
+                               HorizontalAlignment="Center"/>
+                    <TextBlock Text="Por favor espere..."
+                               FontSize="16" Foreground="#666"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!-- MENSAJES DE ÉXITO -->
+        <Border IsVisible="{Binding MostrarMensajeExito}"
+                Background="#28a745"
+                CornerRadius="8"
+                Padding="28,20"
+                Margin="32"
+                BoxShadow="0 4 12 0 #40000000"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Grid.Row="0"
+                Grid.RowSpan="2">
+            <TextBlock Text="{Binding MensajeExito}"
+                       FontSize="18" FontWeight="SemiBold"
+                       Foreground="White"
+                       TextWrapping="Wrap"
+                       MaxWidth="700"
+                       VerticalAlignment="Center"/>
+        </Border>
+    </Grid>
+</UserControl>

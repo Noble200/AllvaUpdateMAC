@@ -1,0 +1,661 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Allva.Desktop.ViewModels.Admin"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="900"
+             x:Class="Allva.Desktop.Views.Admin.BalanceAdminView"
+             x:DataType="vm:BalanceAdminViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="Button.tab-button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#595959"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="BorderThickness" Value="1,1,1,0"/>
+            <Setter Property="BorderBrush" Value="#E8E8E8"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="CornerRadius" Value="8,8,0,0"/>
+            <Setter Property="Margin" Value="0,0,4,0"/>
+        </Style>
+        <Style Selector="Button.tab-button:pointerover">
+            <Setter Property="Background" Value="#F5F5F5"/>
+        </Style>
+        <Style Selector="TextBox.filtro-input">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Button.toggle-filtros">
+            <Setter Property="Background" Value="#0b5394"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.toggle-filtros:pointerover">
+            <Setter Property="Background" Value="#084170"/>
+        </Style>
+        <Style Selector="Button.sugerencia-btn">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.sugerencia-btn:pointerover">
+            <Setter Property="Background" Value="#F5F5F5"/>
+        </Style>
+        <Style Selector="Button.local-deposito-btn">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="MinWidth" Value="100"/>
+        </Style>
+        <Style Selector="Button.local-deposito-btn:pointerover">
+            <Setter Property="Background" Value="#E3F2FD"/>
+        </Style>
+        <Style Selector="Button.anular-btn">
+            <Setter Property="Background" Value="#dc3545"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.anular-btn:pointerover">
+            <Setter Property="Background" Value="#c82333"/>
+        </Style>
+        <Style Selector="Button.local-link">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.local-link:pointerover TextBlock">
+            <Setter Property="TextDecorations" Value="Underline"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="0">
+        <Grid RowDefinitions="Auto,*" Margin="8">
+            <!-- Tabs horizontales arriba -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                <Button Classes="tab-button" Background="{Binding TabAlimentosBackground}" Foreground="{Binding TabAlimentosForeground}" Command="{Binding CambiarPanelCommand}" CommandParameter="alimentos">
+                    <TextBlock Text="Productos" FontWeight="SemiBold" FontSize="13"/>
+                </Button>
+                <Button Classes="tab-button" Background="{Binding TabBilletesBackground}" Foreground="{Binding TabBilletesForeground}" Command="{Binding CambiarPanelCommand}" CommandParameter="billetes">
+                    <TextBlock Text="Billetes Avion" FontWeight="SemiBold" FontSize="13"/>
+                </Button>
+                <Button Classes="tab-button" Background="{Binding TabViajeBackground}" Foreground="{Binding TabViajeForeground}" Command="{Binding CambiarPanelCommand}" CommandParameter="viaje">
+                    <TextBlock Text="Pack Viaje" FontWeight="SemiBold" FontSize="13"/>
+                </Button>
+            </StackPanel>
+
+            <!-- Contenido con filtros a la izquierda -->
+            <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+                <!-- Filtros verticales (columna angosta) -->
+                <Border Grid.Column="0" Background="#F8F9FA" CornerRadius="8" Margin="0,0,8,0" Padding="8" VerticalAlignment="Top" IsVisible="{Binding EsPanelAlimentos}">
+                    <StackPanel Spacing="4" Width="140">
+                        <TextBlock Text="FILTROS" FontSize="10" FontWeight="Bold" Foreground="#0b5394" Margin="0,0,0,4"/>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="Desde" FontSize="9" Foreground="#666666"/>
+                            <TextBox Text="{Binding FechaDesdeTexto}" Watermark="dd/mm/aa" FontSize="10" Padding="4,2" Height="24"/>
+                        </StackPanel>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="Hasta" FontSize="9" Foreground="#666666"/>
+                            <TextBox Text="{Binding FechaHastaTexto}" Watermark="dd/mm/aa" FontSize="10" Padding="4,2" Height="24"/>
+                        </StackPanel>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="N. Global" FontSize="9" Foreground="#666666"/>
+                            <TextBox Text="{Binding FiltroNumeroOperacionGlobal}" Watermark="..." FontSize="10" Padding="4,2" Height="24"/>
+                        </StackPanel>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="N. Operacion" FontSize="9" Foreground="#666666"/>
+                            <TextBox Text="{Binding FiltroNumeroOperacion}" Watermark="..." FontSize="10" Padding="4,2" Height="24"/>
+                        </StackPanel>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="Comercio" FontSize="9" Foreground="#666666"/>
+                            <Panel>
+                                <TextBox Text="{Binding FiltroComercioTexto}" Watermark="..." FontSize="10" Padding="4,2" Height="24"/>
+                                <Popup IsOpen="{Binding MostrarSugerenciasComercio}" PlacementTarget="{Binding $parent[Panel]}" Placement="Bottom" IsLightDismissEnabled="True">
+                                    <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" BoxShadow="0 4 12 0 #20000000" MaxHeight="150" MinWidth="130">
+                                        <ScrollViewer>
+                                            <ItemsControl ItemsSource="{Binding SugerenciasComercio}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button Classes="sugerencia-btn" Command="{Binding $parent[UserControl].((vm:BalanceAdminViewModel)DataContext).SeleccionarComercioCommand}" CommandParameter="{Binding}" Padding="4,3">
+                                                            <TextBlock Text="{Binding}" FontSize="10"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Panel>
+                        </StackPanel>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="Local" FontSize="9" Foreground="#666666"/>
+                            <Panel>
+                                <TextBox Text="{Binding FiltroLocalTexto}" Watermark="..." FontSize="10" Padding="4,2" Height="24"/>
+                                <Popup IsOpen="{Binding MostrarSugerenciasLocal}" PlacementTarget="{Binding $parent[Panel]}" Placement="Bottom" IsLightDismissEnabled="True">
+                                    <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" BoxShadow="0 4 12 0 #20000000" MaxHeight="150" MinWidth="130">
+                                        <ScrollViewer>
+                                            <ItemsControl ItemsSource="{Binding SugerenciasLocal}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button Classes="sugerencia-btn" Command="{Binding $parent[UserControl].((vm:BalanceAdminViewModel)DataContext).SeleccionarLocalCommand}" CommandParameter="{Binding}" Padding="4,3">
+                                                            <TextBlock Text="{Binding}" FontSize="10"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Panel>
+                        </StackPanel>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="Pais" FontSize="9" Foreground="#666666"/>
+                            <Panel>
+                                <TextBox Text="{Binding TextoBusquedaPaisDestino}" Watermark="..." FontSize="10" Padding="4,2" Height="24"/>
+                                <Popup IsOpen="{Binding MostrarListaPaises}" PlacementTarget="{Binding $parent[Panel]}" Placement="Bottom" IsLightDismissEnabled="True">
+                                    <Border Background="White" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="4" BoxShadow="0 4 12 0 #20000000" MaxHeight="150" MinWidth="130">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl ItemsSource="{Binding PaisesFiltrados}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button Classes="sugerencia-btn" Command="{Binding $parent[UserControl].((vm:BalanceAdminViewModel)DataContext).SeleccionarPaisDestinoCommand}" CommandParameter="{Binding}" Padding="4,3">
+                                                            <TextBlock Text="{Binding}" FontSize="10"/>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Panel>
+                        </StackPanel>
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="Estado" FontSize="9" Foreground="#666666"/>
+                            <ComboBox ItemsSource="{Binding EstadosDisponibles}" SelectedItem="{Binding FiltroEstado}" HorizontalAlignment="Stretch" Height="24" FontSize="10"/>
+                        </StackPanel>
+                        <StackPanel Spacing="3" Margin="0,6,0,0">
+                            <Button Background="#0b5394" Foreground="White" HorizontalAlignment="Stretch" Padding="6,4" CornerRadius="4" Cursor="Hand" Command="{Binding BuscarOperacionesCommand}">
+                                <TextBlock Text="Buscar" FontWeight="SemiBold" FontSize="10" HorizontalAlignment="Center"/>
+                            </Button>
+                            <Button Background="#6c757d" Foreground="White" HorizontalAlignment="Stretch" Padding="4,3" CornerRadius="4" Cursor="Hand" Command="{Binding LimpiarFiltrosCommand}">
+                                <TextBlock Text="Limpiar" FontSize="9" HorizontalAlignment="Center"/>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Contenido principal -->
+                <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="8">
+                    <!-- Tabla de operaciones (visible solo en panel Productos) -->
+                    <Grid RowDefinitions="*,Auto" IsVisible="{Binding EsPanelAlimentos}">
+                                <Border Grid.Row="0" BorderBrush="#E8E8E8" BorderThickness="1" CornerRadius="8,8,0,0" ClipToBounds="True">
+                                    <Grid RowDefinitions="Auto,*">
+                                        <Border Grid.Row="0" Background="#0b5394">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50"/><ColumnDefinition Width="75"/><ColumnDefinition Width="45"/><ColumnDefinition Width="75"/><ColumnDefinition Width="110"/><ColumnDefinition Width="85"/><ColumnDefinition Width="85"/><ColumnDefinition Width="*"/><ColumnDefinition Width="85"/><ColumnDefinition Width="120"/><ColumnDefinition Width="90"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="Hora" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                                <Button Grid.Column="1" Background="Transparent" BorderThickness="0" Padding="4,8" HorizontalAlignment="Center" Cursor="Hand" Command="{Binding CambiarOrdenCommand}" ToolTip.Tip="{Binding TooltipOrden}">
+                                                    <StackPanel Orientation="Horizontal" Spacing="4">
+                                                        <TextBlock Text="Fecha" Foreground="White" FontWeight="SemiBold" FontSize="11"/>
+                                                        <TextBlock Text="{Binding IconoOrden}" Foreground="#ffd966" FontWeight="Bold" FontSize="10" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <TextBlock Grid.Column="2" Text="N. Global" Foreground="White" FontWeight="SemiBold" FontSize="10" Padding="4,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="3" Text="N. Operacion" Foreground="White" FontWeight="SemiBold" FontSize="10" Padding="4,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="4" Text="Comercio" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="5" Text="Local" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="6" Text="Destino" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="7" Text="Descripcion" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="8" Text="Importe" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="9" Text="Cliente" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                                <TextBlock Grid.Column="10" Text="Estado" Foreground="White" FontWeight="SemiBold" FontSize="11" Padding="6,10" HorizontalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                        <ItemsControl Grid.Row="1" ItemsSource="{Binding OperacionesAlimentos}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="{Binding BackgroundColor}" BorderBrush="#E8E8E8" BorderThickness="0,0,0,1">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="50"/><ColumnDefinition Width="75"/><ColumnDefinition Width="45"/><ColumnDefinition Width="75"/><ColumnDefinition Width="110"/><ColumnDefinition Width="85"/><ColumnDefinition Width="85"/><ColumnDefinition Width="*"/><ColumnDefinition Width="85"/><ColumnDefinition Width="120"/><ColumnDefinition Width="90"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Hora}" FontSize="11" Foreground="#444444" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding Fecha}" FontSize="11" Foreground="#444444" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="2" Text="{Binding NumeroOperacionGlobal}" FontSize="10" Foreground="#888888" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="3" Text="{Binding NumeroOperacion}" FontSize="11" Foreground="#0b5394" FontWeight="SemiBold" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="4" Text="{Binding Comercio}" FontSize="11" Foreground="#444444" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                            <Button Grid.Column="5" Classes="local-link" Command="{Binding $parent[UserControl].((vm:BalanceAdminViewModel)DataContext).AbrirDetalleLocalCommand}" CommandParameter="{Binding}">
+                                                                <TextBlock Text="{Binding CodigoLocal}" FontSize="11" Foreground="#0b5394" FontWeight="SemiBold" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            </Button>
+                                                            <TextBlock Grid.Column="6" Text="{Binding PaisDestino}" FontSize="11" Foreground="#444444" FontWeight="Medium" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="7" Text="{Binding Descripcion}" FontSize="11" Foreground="#444444" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                            <TextBlock Grid.Column="8" Text="{Binding Importe}" FontSize="11" Foreground="#28a745" FontWeight="SemiBold" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="9" Text="{Binding Cliente}" FontSize="11" Foreground="#444444" Padding="4,8" HorizontalAlignment="Center" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                                            <Border Grid.Column="10" Background="{Binding EstadoColor}" CornerRadius="4" Padding="8,4" Margin="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Estado}" FontSize="10" Foreground="White" FontWeight="SemiBold"/>
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </Border>
+                                <Border Grid.Row="1" Background="#F8F9FA" Padding="12" BorderBrush="#E8E8E8" BorderThickness="1,0,1,1" CornerRadius="0,0,8,8">
+                                    <Grid ColumnDefinitions="Auto,*,Auto">
+                                        <TextBlock Grid.Column="0" Text="{Binding TotalOperacionesAlimentos, StringFormat='Mostrando {0} operaciones'}" FontSize="13" Foreground="#666666" VerticalAlignment="Center"/>
+                                        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                                <TextBlock Text="Pendientes" FontSize="10" Foreground="#666666" HorizontalAlignment="Center"/>
+                                                <Border Background="#ffc107" CornerRadius="4" Padding="12,6" MinWidth="50" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding TotalPendientes}" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                                <TextBlock Text="Pagados" FontSize="10" Foreground="#666666" HorizontalAlignment="Center"/>
+                                                <Border Background="#17a2b8" CornerRadius="4" Padding="12,6" MinWidth="50" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding TotalPagados}" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                                <TextBlock Text="Enviados" FontSize="10" Foreground="#666666" HorizontalAlignment="Center"/>
+                                                <Border Background="#28a745" CornerRadius="4" Padding="12,6" MinWidth="50" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding TotalEnviados}" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </StackPanel>
+                                            <StackPanel Spacing="2" HorizontalAlignment="Center">
+                                                <TextBlock Text="Anulados" FontSize="10" Foreground="#666666" HorizontalAlignment="Center"/>
+                                                <Border Background="#dc3545" CornerRadius="4" Padding="12,6" MinWidth="50" HorizontalAlignment="Center">
+                                                    <TextBlock Text="{Binding TotalAnulados}" FontSize="14" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2" Spacing="2">
+                                            <TextBlock Text="Total" FontSize="10" Foreground="#666666" HorizontalAlignment="Center" FontWeight="Medium"/>
+                                            <Border Background="#dc3545" CornerRadius="4" Padding="16,8" MinWidth="120" HorizontalAlignment="Center">
+                                                <TextBlock Text="{Binding TotalDebidoAlimentosTexto}" FontSize="16" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                    </Grid>
+
+                    <!-- DEPOSITOS (visible solo en panel Productos) -->
+                    <Border IsVisible="{Binding EsPanelAlimentos}" Background="White" BorderBrush="#E8E8E8" BorderThickness="1" CornerRadius="8" MinHeight="200">
+                        <Grid RowDefinitions="Auto,*" ColumnDefinitions="*,320">
+                            <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#dc3545" CornerRadius="8,8,0,0" Padding="12,8">
+                                <Grid>
+                                    <TextBlock Text="DEPOSITOS - Seleccione un local para ver operaciones pendientes" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
+                                    <TextBlock HorizontalAlignment="Right" Foreground="White" FontSize="12">
+                                        <Run Text="Deuda Total: "/><Run Text="{Binding TotalDeudaGlobal}" FontWeight="Bold"/><Run Text=" EUR"/>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                            <Grid Grid.Row="1" Grid.Column="0" RowDefinitions="Auto,*">
+                                <Border Grid.Row="0" Background="#F5F5F5" Padding="8">
+                                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                                        <ItemsControl ItemsSource="{Binding LocalesConDeuda}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel Orientation="Horizontal" Spacing="8"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Background="{Binding BackgroundColor}" BorderBrush="{Binding BorderColor}" BorderThickness="2" CornerRadius="6" Padding="12,8" Cursor="Hand" MinWidth="100" Command="{Binding $parent[UserControl].((vm:BalanceAdminViewModel)DataContext).SeleccionarLocalDepositoCommand}" CommandParameter="{Binding}">
+                                                        <StackPanel Spacing="2">
+                                                            <TextBlock Text="{Binding CodigoLocal}" FontSize="12" Foreground="#0b5394" FontWeight="Bold" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding DeudaTexto}" FontSize="11" Foreground="#dc3545" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="{Binding BeneficioTexto}" FontSize="10" Foreground="#28a745" FontWeight="SemiBold" HorizontalAlignment="Center" IsVisible="{Binding TieneBeneficio}"/>
+                                                            <TextBlock FontSize="10" Foreground="#666666" HorizontalAlignment="Center">
+                                                                <Run Text="{Binding TotalOperaciones}"/><Run Text=" ops"/>
+                                                            </TextBlock>
+                                                        </StackPanel>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Border>
+                                <Border Grid.Row="1" Margin="8,8,8,8" Background="#FAFAFA" CornerRadius="4">
+                                    <Grid>
+                                        <Grid RowDefinitions="Auto,*" IsVisible="{Binding MostrarVistaDeposito}">
+                                            <Border Grid.Row="0" Background="#0b5394" CornerRadius="4,4,0,0" Padding="10,8">
+                                                <Grid>
+                                                    <StackPanel Orientation="Horizontal" Spacing="8">
+                                                        <TextBlock Text="Operaciones de" Foreground="White" FontSize="12"/>
+                                                        <TextBlock Text="{Binding LocalSeleccionadoDeposito.CodigoLocal}" Foreground="#ffd966" FontWeight="Bold" FontSize="12"/>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12">
+                                                        <TextBlock Foreground="White" FontSize="12" VerticalAlignment="Center">
+                                                            <Run Text="{Binding CantidadOpsPendientesLocal}"/><Run Text=" pendientes - Total: "/><Run Text="{Binding TotalPendienteLocalSeleccionado}" FontWeight="Bold"/><Run Text=" EUR"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                                <ItemsControl ItemsSource="{Binding OperacionesLocalSeleccionado}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Background="{Binding BackgroundColor}" Padding="10,6" BorderBrush="#EEEEEE" BorderThickness="0,0,0,1">
+                                                                <Grid MinWidth="500">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="70"/><ColumnDefinition Width="60"/><ColumnDefinition Width="80"/><ColumnDefinition Width="*"/><ColumnDefinition Width="90"/><ColumnDefinition Width="80"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock Grid.Column="0" Text="{Binding Fecha}" FontSize="11" Foreground="#666666" VerticalAlignment="Center"/>
+                                                                    <TextBlock Grid.Column="1" Text="{Binding Hora}" FontSize="11" Foreground="#888888" VerticalAlignment="Center"/>
+                                                                    <TextBlock Grid.Column="2" Text="{Binding NumeroOperacion}" FontSize="11" Foreground="#0b5394" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                                    <TextBlock Grid.Column="3" Text="{Binding Descripcion}" FontSize="11" Foreground="#444444" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"/>
+                                                                    <TextBlock Grid.Column="4" Text="{Binding ImporteTexto}" FontSize="11" Foreground="#28a745" FontWeight="SemiBold" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                                                    <Border Grid.Column="5" Background="{Binding EstadoPagoColor}" CornerRadius="3" Padding="6,2" Margin="8,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                        <TextBlock Text="{Binding EstadoPago}" FontSize="9" Foreground="White" FontWeight="SemiBold"/>
+                                                                    </Border>
+                                                                </Grid>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </ScrollViewer>
+                                        </Grid>
+                                        <Grid RowDefinitions="Auto,*" IsVisible="{Binding MostrarVistaHistorial}">
+                                            <Border Grid.Row="0" Background="#0b5394" CornerRadius="4,4,0,0" Padding="10,8">
+                                                <Grid RowDefinitions="Auto,Auto">
+                                                    <Grid Grid.Row="0">
+                                                        <StackPanel Orientation="Horizontal" Spacing="12">
+                                                            <TextBlock Text="{Binding LocalSeleccionadoDeposito.CodigoLocal}" Foreground="#ffd966" FontWeight="Bold" FontSize="14"/>
+                                                            <TextBlock Text="- Historial ultimo mes" Foreground="White" FontSize="12" VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                        <Button HorizontalAlignment="Right" Background="#ffd966" Foreground="#0b5394" Padding="8,4" CornerRadius="4" FontSize="10" FontWeight="Bold" Cursor="Hand" Command="{Binding VolverVistaDepositoCommand}">
+                                                            <TextBlock Text="Volver"/>
+                                                        </Button>
+                                                    </Grid>
+                                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="20" Margin="0,6,0,0">
+                                                        <TextBlock Foreground="White" FontSize="12">
+                                                            <Run Text="Deuda: "/><Run Text="{Binding LocalSeleccionadoDeposito.DeudaTexto}" FontWeight="Bold" Foreground="#ff6b6b"/>
+                                                        </TextBlock>
+                                                        <TextBlock Foreground="White" FontSize="12">
+                                                            <Run Text="A favor: "/><Run Text="{Binding LocalSeleccionadoDeposito.BeneficioTexto}" FontWeight="Bold" Foreground="#69db7c"/>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                                <Grid RowDefinitions="Auto,Auto">
+                                                    <Border Grid.Row="0" Background="#E8E8E8" Padding="10,6">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="80"/><ColumnDefinition Width="60"/><ColumnDefinition Width="100"/><ColumnDefinition Width="90"/><ColumnDefinition Width="100"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="Fecha" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                                            <TextBlock Grid.Column="1" Text="Hora" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                                            <TextBlock Grid.Column="2" Text="Nº Operación" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                                            <TextBlock Grid.Column="3" Text="Estado" FontSize="11" FontWeight="SemiBold" Foreground="#444444" HorizontalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="4" Text="Acción" FontSize="11" FontWeight="SemiBold" Foreground="#444444" HorizontalAlignment="Center"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <ItemsControl Grid.Row="1" ItemsSource="{Binding HistorialLocalMes}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Background="{Binding BackgroundColor}" Padding="10,6" BorderBrush="#EEEEEE" BorderThickness="0,0,0,1">
+                                                                    <Grid>
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="80"/><ColumnDefinition Width="60"/><ColumnDefinition Width="100"/><ColumnDefinition Width="90"/><ColumnDefinition Width="100"/>
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <TextBlock Grid.Column="0" Text="{Binding Fecha}" FontSize="11" Foreground="#666666" VerticalAlignment="Center"/>
+                                                                        <TextBlock Grid.Column="1" Text="{Binding Hora}" FontSize="11" Foreground="#888888" VerticalAlignment="Center"/>
+                                                                        <TextBlock Grid.Column="2" Text="{Binding NumeroOperacion}" FontSize="11" Foreground="#0b5394" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                                        <Border Grid.Column="3" Background="{Binding EstadoColor}" CornerRadius="3" Padding="6,2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                            <TextBlock Text="{Binding Estado}" FontSize="9" Foreground="White" FontWeight="SemiBold"/>
+                                                                        </Border>
+                                                                        <Button Grid.Column="4" Classes="anular-btn" IsVisible="{Binding PuedeAnular}" Command="{Binding $parent[UserControl].((vm:BalanceAdminViewModel)DataContext).AnularOperacionCommand}" CommandParameter="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                            <TextBlock Text="Anular"/>
+                                                                        </Button>
+                                                                    </Grid>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </Grid>
+                                            </ScrollViewer>
+                                        </Grid>
+                                        <TextBlock IsVisible="{Binding LocalSeleccionadoDeposito, Converter={x:Static ObjectConverters.IsNull}}" Text="Seleccione un local de la lista superior para ver sus operaciones pendientes" FontSize="13" Foreground="#888888" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"/>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                            <Border Grid.Row="1" Grid.Column="1" Background="#F8F9FA" Padding="12" BorderBrush="#E8E8E8" BorderThickness="1,0,0,0">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Text="REGISTRAR DEPOSITO" FontSize="13" FontWeight="Bold" Foreground="#28a745"/>
+                                    <StackPanel IsVisible="{Binding LocalSeleccionadoDeposito, Converter={x:Static ObjectConverters.IsNull}}">
+                                        <TextBlock FontSize="12" Foreground="#888888" TextWrapping="Wrap">Seleccione un local de la lista para registrar un deposito</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel IsVisible="{Binding LocalSeleccionadoDeposito, Converter={x:Static ObjectConverters.IsNotNull}}" Spacing="10">
+                                        <Border Background="#FFF3CD" CornerRadius="4" Padding="10">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock FontSize="12" Foreground="#856404" FontWeight="SemiBold">
+                                                    <Run Text="Local: "/><Run Text="{Binding LocalSeleccionadoDeposito.CodigoLocal}"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="14" Foreground="#dc3545" FontWeight="Bold">
+                                                    <Run Text="Deuda: "/><Run Text="{Binding TotalPendienteLocalSeleccionado}"/><Run Text=" EUR"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="12" Foreground="#28a745" FontWeight="Bold" IsVisible="{Binding LocalSeleccionadoDeposito.TieneBeneficio}">
+                                                    <Run Text="A favor disponible: "/><Run Text="{Binding BeneficioDisponibleTexto}"/>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Monto Depositado (EUR)" FontSize="11" Foreground="#666666"/>
+                                            <TextBox Text="{Binding MontoDeposito}" Watermark="0.00" Height="36" FontSize="14"/>
+                                        </StackPanel>
+                                        <Border Background="#E8F5E9" CornerRadius="4" Padding="10" IsVisible="{Binding MostrarPrevisualizacion}">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="PREVISUALIZACION" FontSize="10" Foreground="#2E7D32" FontWeight="Bold"/>
+                                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Operaciones a pagar:" FontSize="11" Foreground="#444444"/>
+                                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding OperacionesAPagar}" FontSize="11" FontWeight="Bold" Foreground="#0b5394"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Monto a aplicar:" FontSize="11" Foreground="#444444" Margin="0,4,0,0"/>
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" FontSize="11" FontWeight="Bold" Foreground="#28a745" Margin="0,4,0,0">
+                                                        <Run Text="{Binding MontoAPagar}"/><Run Text=" EUR"/>
+                                                    </TextBlock>
+                                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Deuda restante:" FontSize="11" Foreground="#444444" Margin="0,4,0,0"/>
+                                                    <TextBlock Grid.Row="2" Grid.Column="1" FontSize="11" FontWeight="Bold" Foreground="#dc3545" Margin="0,4,0,0">
+                                                        <Run Text="{Binding DeudaRestante}"/><Run Text=" EUR"/>
+                                                    </TextBlock>
+                                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Excedente (a favor):" FontSize="11" Foreground="#444444" Margin="0,4,0,0"/>
+                                                    <TextBlock Grid.Row="3" Grid.Column="1" FontSize="11" FontWeight="Bold" Foreground="#17a2b8" Margin="0,4,0,0">
+                                                        <Run Text="{Binding Excedente}"/><Run Text=" EUR"/>
+                                                    </TextBlock>
+                                                </Grid>
+                                            </StackPanel>
+                                        </Border>
+                                        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" Margin="0,4,0,0">
+                                            <Button Background="#28a745" Foreground="White" Padding="20,10" CornerRadius="6" Cursor="Hand" Command="{Binding ConfirmarDepositoCommand}" IsEnabled="{Binding MostrarPrevisualizacion}">
+                                                <TextBlock Text="Confirmar Deposito" FontSize="12" FontWeight="SemiBold"/>
+                                            </Button>
+                                            <Button Background="#6c757d" Foreground="White" Padding="16,10" CornerRadius="6" Cursor="Hand" Command="{Binding CancelarDepositoCommand}">
+                                                <TextBlock Text="Cancelar" FontSize="12" FontWeight="SemiBold"/>
+                                            </Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Panel Billetes (placeholder) - en Grid.Column="1" del grid interior -->
+                <Border Grid.Column="1" IsVisible="{Binding EsPanelBilletes}" Background="#FFF8E1" CornerRadius="8" Padding="30" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Spacing="12" HorizontalAlignment="Center">
+                        <TextBlock Text="Modulo en desarrollo" FontSize="20" FontWeight="Bold" Foreground="#F57C00" HorizontalAlignment="Center"/>
+                        <TextBlock Text="El balance de Billetes de Avion estara disponible proximamente." FontSize="14" Foreground="#666666" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Panel Viaje (placeholder) -->
+                <Border Grid.Column="1" IsVisible="{Binding EsPanelViaje}" Background="#FFF8E1" CornerRadius="8" Padding="30" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Spacing="12" HorizontalAlignment="Center">
+                        <TextBlock Text="Modulo en desarrollo" FontSize="20" FontWeight="Bold" Foreground="#F57C00" HorizontalAlignment="Center"/>
+                        <TextBlock Text="El balance de Pack de Viajes estara disponible proximamente." FontSize="14" Foreground="#666666" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#80FFFFFF" IsVisible="{Binding IsLoading}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="12">
+                <TextBlock Text="Procesando..." FontSize="16" FontWeight="SemiBold" Foreground="#0b5394"/>
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" Background="#FFE8E8" Padding="16" Margin="20" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Center" IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Text="{Binding ErrorMessage}" Foreground="#dc3545" FontWeight="SemiBold"/>
+        </Border>
+        <Border Grid.Row="1" Background="#D4EDDA" Padding="16" Margin="20" CornerRadius="8" VerticalAlignment="Top" HorizontalAlignment="Center" IsVisible="{Binding SuccessMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Text="{Binding SuccessMessage}" Foreground="#155724" FontWeight="SemiBold"/>
+        </Border>
+        
+        <!-- POPUP DETALLE LOCAL -->
+        <Border Grid.Row="0" Grid.RowSpan="2" Background="#80000000" IsVisible="{Binding MostrarPopupLocal}">
+            <Border Background="White" CornerRadius="12" Width="700" MaxHeight="600" VerticalAlignment="Center" HorizontalAlignment="Center" BoxShadow="0 8 32 0 #40000000">
+                <Grid RowDefinitions="Auto,Auto,*,Auto">
+                    <!-- Header del popup -->
+                    <Border Grid.Row="0" Background="#0b5394" CornerRadius="12,12,0,0" Padding="20,16" MinHeight="60">
+                        <Grid>
+                            <StackPanel Orientation="Vertical" Spacing="2" HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding PopupLocalCodigo}" Foreground="#ffd966" FontWeight="Bold" FontSize="20" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding PopupLocalComercio}" Foreground="White" FontSize="13" Opacity="0.9" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" Cursor="Hand" Command="{Binding CerrarPopupLocalCommand}">
+                                <TextBlock Text="✕" Foreground="White" FontSize="18" FontWeight="Bold"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Info de deuda y a favor -->
+                    <Border Grid.Row="1" Background="#F8F9FA" Padding="20,12">
+                        <StackPanel Orientation="Horizontal" Spacing="40" HorizontalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="Deuda:" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
+                                <Border Background="#dc3545" CornerRadius="4" Padding="12,6">
+                                    <TextBlock Text="{Binding PopupLocalDeuda}" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                                </Border>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="A favor:" FontSize="14" Foreground="#666666" VerticalAlignment="Center"/>
+                                <Border Background="#28a745" CornerRadius="4" Padding="12,6">
+                                    <TextBlock Text="{Binding PopupLocalBeneficio}" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                                </Border>
+                                <Button Background="#0b5394" Foreground="White" Padding="8,6" CornerRadius="4" Cursor="Hand" Command="{Binding AbrirAgregarAFavorCommand}" ToolTip.Tip="Agregar monto a favor">
+                                    <TextBlock Text="+" FontSize="16" FontWeight="Bold"/>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Panel para agregar monto a favor -->
+                    <Border Grid.Row="1" Background="#E3F2FD" Padding="16,12" IsVisible="{Binding MostrarPanelAgregarAFavor}">
+                        <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center">
+                            <TextBlock Text="Agregar monto a favor:" FontSize="13" Foreground="#333333" VerticalAlignment="Center" FontWeight="SemiBold"/>
+                            <TextBox Text="{Binding MontoAgregarAFavor}" Width="120" Watermark="0.00" VerticalContentAlignment="Center"/>
+                            <Button Background="#28a745" Foreground="White" Padding="12,6" CornerRadius="4" Cursor="Hand" Command="{Binding ConfirmarAgregarAFavorCommand}">
+                                <TextBlock Text="Confirmar" FontSize="12" FontWeight="SemiBold"/>
+                            </Button>
+                            <Button Background="#6c757d" Foreground="White" Padding="12,6" CornerRadius="4" Cursor="Hand" Command="{Binding CancelarAgregarAFavorCommand}">
+                                <TextBlock Text="Cancelar" FontSize="12"/>
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Tabla de historial -->
+                    <Grid Grid.Row="2" Margin="20,10,20,10">
+                        <Grid RowDefinitions="Auto,*">
+                            <TextBlock Grid.Row="0" Text="Historial del ultimo mes (Operaciones y Depositos)" FontSize="13" FontWeight="SemiBold" Foreground="#444444" Margin="0,0,0,10"/>
+                            <Border Grid.Row="1" BorderBrush="#E8E8E8" BorderThickness="1" CornerRadius="6" ClipToBounds="True">
+                                <Grid RowDefinitions="Auto,*">
+                                    <!-- Header tabla -->
+                                    <Border Grid.Row="0" Background="#E8E8E8" Padding="12,8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="55"/>
+                                                <ColumnDefinition Width="95"/>
+                                                <ColumnDefinition Width="90"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="85"/>
+                                                <ColumnDefinition Width="80"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="Fecha" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                            <TextBlock Grid.Column="1" Text="Hora" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                            <TextBlock Grid.Column="2" Text="Referencia" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                            <TextBlock Grid.Column="3" Text="Importe" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                            <TextBlock Grid.Column="4" Text="Detalle" FontSize="11" FontWeight="SemiBold" Foreground="#444444"/>
+                                            <TextBlock Grid.Column="5" Text="Estado" FontSize="11" FontWeight="SemiBold" Foreground="#444444" HorizontalAlignment="Center"/>
+                                            <TextBlock Grid.Column="6" Text="Acción" FontSize="11" FontWeight="SemiBold" Foreground="#444444" HorizontalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                    <!-- Filas -->
+                                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" MaxHeight="300">
+                                        <ItemsControl ItemsSource="{Binding HistorialLocalMes}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="{Binding BackgroundColor}" Padding="12,8" BorderBrush="#EEEEEE" BorderThickness="0,0,0,1">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="75"/>
+                                                                <ColumnDefinition Width="55"/>
+                                                                <ColumnDefinition Width="95"/>
+                                                                <ColumnDefinition Width="90"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="85"/>
+                                                                <ColumnDefinition Width="80"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBlock Grid.Column="0" Text="{Binding Fecha}" FontSize="11" Foreground="#666666" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="1" Text="{Binding Hora}" FontSize="11" Foreground="#888888" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="2" Text="{Binding NumeroOperacion}" FontSize="11" Foreground="#0b5394" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                                            <TextBlock Grid.Column="3" Text="{Binding ImporteTexto}" FontSize="11" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{Binding ImporteColor}"/>
+                                                            <TextBlock Grid.Column="4" Text="{Binding Descripcion}" FontSize="10" Foreground="#666666" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding NumerosOperacionesPagadas}"/>
+                                                            <Border Grid.Column="5" Background="{Binding EstadoColor}" CornerRadius="4" Padding="6,3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <TextBlock Text="{Binding Estado}" FontSize="9" Foreground="White" FontWeight="SemiBold"/>
+                                                            </Border>
+                                                            <Button Grid.Column="6" Classes="anular-btn" IsVisible="{Binding PuedeAnular}" Command="{Binding $parent[UserControl].((vm:BalanceAdminViewModel)DataContext).AnularOperacionCommand}" CommandParameter="{Binding}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                                <TextBlock Text="Anular"/>
+                                                            </Button>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                    
+                    <!-- Footer -->
+                    <Border Grid.Row="3" Background="#F8F9FA" CornerRadius="0,0,12,12" Padding="20,12">
+                        <Button HorizontalAlignment="Center" Background="#6c757d" Foreground="White" Padding="24,10" CornerRadius="6" Cursor="Hand" Command="{Binding CerrarPopupLocalCommand}">
+                            <TextBlock Text="Cerrar" FontSize="13" FontWeight="SemiBold"/>
+                        </Button>
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>
